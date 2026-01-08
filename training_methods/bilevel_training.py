@@ -11,6 +11,7 @@ from tqdm import tqdm
 from deepinv.loss.metric import PSNR
 from deepinv.optim.utils import minres
 from evaluation import reconstruct_nmAPG
+from evaluation.reconstruct_reversible import reconstruct_reversible
 import copy
 from .utils.adabelief import AdaBelief
 
@@ -23,7 +24,7 @@ def bilevel_training(
     train_dataloader,  # torch.utils.data.DataLoader object for loading the training data
     val_dataloader,  # torch.utils.data.DataLoader object for loading the validation data
     epochs=100,  # number of epochs
-    mode="IFT",  # hypergradient computation mode. Choices are "IFT" and "JFB"
+    mode="IFT",  # hypergradient computation mode. Choices are "IFT", "JFB", and "RevDEQ"
     lower_level_step_size=1e-1,  # initial step size for the lower level problem
     lower_level_max_iter=1000,  # maximal number of iterations in the lower level problem
     lower_level_tol_train=1e-4,  # convergence tolerance for the lower level solver during training
@@ -177,19 +178,36 @@ def bilevel_training(
             y = physics(x)
             x_noisy = physics.A_dagger(y)
 
-            x_recon, x_stats = reconstruct_nmAPG(
-                y,
-                physics,
-                data_fidelity,
-                regularizer,
-                lmbd,
-                lower_level_step_size,
-                lower_level_max_iter,
-                lower_level_tol_train,
-                verbose=verbose,
-                x_init=x_noisy,
-                return_stats=True,
-            )
+            # Use reversible solver for RevDEQ mode, otherwise use nmAPG
+            if mode == "RevDEQ":
+                x_recon, x_stats = reconstruct_reversible(
+                    y,
+                    physics,
+                    data_fidelity,
+                    regularizer,
+                    lmbd,
+                    lower_level_step_size,
+                    lower_level_max_iter,
+                    lower_level_tol_train,
+                    x_init=x_noisy,
+                    beta=0.8,  # reversible relaxation parameter
+                    verbose=verbose,
+                    return_stats=True,
+                )
+            else:
+                x_recon, x_stats = reconstruct_nmAPG(
+                    y,
+                    physics,
+                    data_fidelity,
+                    regularizer,
+                    lmbd,
+                    lower_level_step_size,
+                    lower_level_max_iter,
+                    lower_level_tol_train,
+                    verbose=verbose,
+                    x_init=x_noisy,
+                    return_stats=True,
+                )
 
             optimizer.zero_grad()
             loss_fn = lambda x_in: upper_loss(x, x_in).mean()
@@ -197,13 +215,13 @@ def bilevel_training(
             train_psnr_epoch += psnr(x_recon, x).mean().item()
             progress_bar.set_description(
                 "used {0} of {1} steps, Loss: {2:.2E}, PSNR: {3:.2f}".format(
-                    x_stats["steps"] + 1,
+                    x_stats["steps"],
                     lower_level_max_iter,
                     train_loss_epoch / train_step,
                     train_psnr_epoch / train_step,
                 )
             )
-            if x_stats["steps"] + 1 == lower_level_max_iter:
+            if x_stats["steps"] == lower_level_max_iter:
                 print("maxiter hit...")
                 if logger is not None:
                     logger.info(f"maxiter hit in iteration {train_step}")
@@ -246,6 +264,40 @@ def bilevel_training(
                 x_recon = x_recon - jfb_step_size_factor / L * grad
                 loss = upper_loss(x_recon, x).mean()
                 loss.backward()
+            elif mode == "RevDEQ":
+                # Use reversible solver for hypergradient computation
+                # The reversible solver uses reversible fixed-point iterations
+                # We compute hypergradients using the implicit function theorem
+                # adapted for reversible fixed-point structure
+                
+                # x_recon is already computed using reversible solver above
+                # Now compute hypergradients using IFT (similar to IFT mode)
+                x_recon = x_recon.requires_grad_(True)
+                grad_loss = torch.autograd.grad(
+                    loss_fn(x_recon), x_recon, create_graph=False
+                )[0].detach()
+
+                # Solve the linear system H * q = grad_loss
+                # where H is the Hessian at the fixed point
+                q = minres(
+                    lambda input: hessian_vector_product(
+                        x_recon.detach(),
+                        input,
+                        data_fidelity,
+                        y,
+                        regularizer,
+                        lmbd,
+                        physics,
+                    ),
+                    grad_loss,
+                    max_iter=minres_max_iter,
+                    tol=minres_tol,
+                )
+
+                # Compute hypergradient using Jacobian vector product
+                regularizer = jac_vector_product(
+                    x_recon, q, data_fidelity, y, regularizer, lmbd, physics
+                )
             else:
                 raise NameError("unknwon mode!")
             optimizer.step()
@@ -278,18 +330,35 @@ def bilevel_training(
                     y_val = physics(x_val)
                     x_val_noisy = physics.A_dagger(y_val)
 
-                    x_recon_val = reconstruct_nmAPG(
-                        y_val,
-                        physics,
-                        data_fidelity,
-                        regularizer,
-                        lmbd,
-                        lower_level_step_size,
-                        lower_level_max_iter,
-                        lower_level_tol_val,
-                        verbose=verbose,
-                        x_init=x_val_noisy,
-                    )
+                    # Use reversible solver for RevDEQ mode, otherwise use nmAPG
+                    if mode == "RevDEQ":
+                        x_recon_val = reconstruct_reversible(
+                            y_val,
+                            physics,
+                            data_fidelity,
+                            regularizer,
+                            lmbd,
+                            lower_level_step_size,
+                            lower_level_max_iter,
+                            lower_level_tol_val,
+                            x_init=x_val_noisy,
+                            beta=0.8,  # reversible relaxation parameter
+                            verbose=verbose,
+                            return_stats=False,
+                        )
+                    else:
+                        x_recon_val = reconstruct_nmAPG(
+                            y_val,
+                            physics,
+                            data_fidelity,
+                            regularizer,
+                            lmbd,
+                            lower_level_step_size,
+                            lower_level_max_iter,
+                            lower_level_tol_val,
+                            verbose=verbose,
+                            x_init=x_val_noisy,
+                        )
 
                     val_loss_epoch += upper_loss(x_val, x_recon_val).mean().item()
                     val_psnr_epoch += psnr(x_recon_val, x_val).mean().item()

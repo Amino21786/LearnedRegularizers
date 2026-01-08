@@ -1,7 +1,9 @@
 # evaluates the DRUNet for Denoising
+#import site
 
+#site.addsitedir("../")
 from deepinv.models import DRUNet
-from operators import get_evaluation_setting
+from operators.settings import get_evaluation_setting
 from deepinv.loss.metric import PSNR
 import torch
 import numpy as np
