@@ -215,13 +215,13 @@ def bilevel_training(
             train_psnr_epoch += psnr(x_recon, x).mean().item()
             progress_bar.set_description(
                 "used {0} of {1} steps, Loss: {2:.2E}, PSNR: {3:.2f}".format(
-                    x_stats["steps"],
+                    x_stats["steps"] if mode == "RevDEQ" else x_stats["steps"] + 1,
                     lower_level_max_iter,
                     train_loss_epoch / train_step,
                     train_psnr_epoch / train_step,
                 )
             )
-            if x_stats["steps"] == lower_level_max_iter:
+            if (x_stats["steps"] == lower_level_max_iter if mode == "RevDEQ" else x_stats["steps"] + 1 == lower_level_max_iter):
                 print("maxiter hit...")
                 if logger is not None:
                     logger.info(f"maxiter hit in iteration {train_step}")

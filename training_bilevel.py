@@ -287,8 +287,8 @@ else:
             lmbd,
             fitting_dataloader,
             val_dataloader,
-            epochs=20 if problem == "Denoising" else 100,
-            mode=hypergradient_computation[:3],
+            epochs=1 if problem == "Denoising" else 100, # 1 epoch for testing out revDEQ, 100 epochs for other modes (usually 20 epochs for Denoising and 100 epochs for CT)
+            mode="IFT" if hypergradient_computation == "IFT-MAID" else hypergradient_computation,
             lower_level_step_size=1e-1,
             lower_level_max_iter=1500,
             lower_level_tol_train=1e-4,

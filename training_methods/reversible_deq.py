@@ -72,24 +72,25 @@ class ReversibleSolver:
         Returns:
             Tuple of (z1, new_state, error) where:
             - z1: Updated z value
-            - new_state: Updated state (y1, f1)
+            - new_state: Updated state (y1, f1) where f1 = function(y1, args)
             - error: Relative error estimate
         """
         y0, f0 = solver_state
         
         # Reversible update: y1 = (1 - beta) * y0 + beta * f0
         y1 = (1 - self.beta) * y0 + self.beta * f0
-        f1 = function(y1, args)
+        f_y1 = function(y1, args)  # f1 for the state
         
-        # Reversible update: z1 = (1 - beta) * z0 + beta * f1
-        z1 = (1 - self.beta) * z0 + self.beta * f1
-        f1 = function(z1, args)
+        # Reversible update: z1 = (1 - beta) * z0 + beta * f_y1
+        z1 = (1 - self.beta) * z0 + self.beta * f_y1
+        f_z1 = function(z1, args)  # For error computation only
         
-        # Compute relative error
-        error = torch.norm(z1 - f1) / (1e-5 + torch.norm(f1))
+        # Compute relative error using z1 and f_z1
+        error = torch.norm(z1 - f_z1) / (1e-5 + torch.norm(f_z1))
         error = error.item()
         
-        return z1, (y1, f1), error
+        # Return state with (y1, f_y1) to maintain reversible scheme consistency
+        return z1, (y1, f_y1), error
 
 
 def solve_reversible(
@@ -118,10 +119,12 @@ def solve_reversible(
     solver_state = solver.init(function, z0, args)
     z = z0.clone()
     
+    steps_taken = 0
     for step in range(max_steps):
         z, solver_state, error = solver.step(function, z, args, solver_state)
+        steps_taken = step + 1
         
         if error < tol:
             break
     
-    return Solution(z1=z, steps=step + 1, error=error)
+    return Solution(z1=z, steps=steps_taken, error=error)
