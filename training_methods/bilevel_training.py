@@ -216,14 +216,27 @@ def bilevel_training(
             loss_fn = lambda x_in: upper_loss(x, x_in).mean()
             train_loss_epoch += loss_fn(x_recon).item()
             train_psnr_epoch += psnr(x_recon, x).mean().item()
-            progress_bar.set_description(
-                "used {0} of {1} steps, Loss: {2:.2E}, PSNR: {3:.2f}".format(
-                    x_stats["steps"] if mode == "RevDEQ" else x_stats["steps"] + 1,
-                    lower_level_max_iter,
-                    train_loss_epoch / train_step,
-                    train_psnr_epoch / train_step,
+            # Display progress. For RevDEQ we also show the fixed-point residual.
+            if mode == "RevDEQ":
+                err = x_stats.get("error", float("nan"))
+                progress_bar.set_description(
+                    "used {0} of {1} steps, err: {2:.2E}, Loss: {3:.2E}, PSNR: {4:.2f}".format(
+                        x_stats["steps"],
+                        lower_level_max_iter,
+                        float(err),
+                        train_loss_epoch / train_step,
+                        train_psnr_epoch / train_step,
+                    )
                 )
-            )
+            else:
+                progress_bar.set_description(
+                    "used {0} of {1} steps, Loss: {2:.2E}, PSNR: {3:.2f}".format(
+                        x_stats["steps"] + 1,
+                        lower_level_max_iter,
+                        train_loss_epoch / train_step,
+                        train_psnr_epoch / train_step,
+                    )
+                )
             if (x_stats["steps"] == lower_level_max_iter if mode == "RevDEQ" else x_stats["steps"] + 1 == lower_level_max_iter):
                 print("maxiter hit...")
                 if logger is not None:
@@ -276,9 +289,14 @@ def bilevel_training(
                 raise NameError("unknwon mode!")
             optimizer.step()
             if logger is not None and train_step % 10 == 0:
-                logger.info(
-                    f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}"
-                )
+                if mode == "RevDEQ":
+                    logger.info(
+                        f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}, RevDEQ steps {x_stats.get('steps')}, RevDEQ err {x_stats.get('error')}"
+                    )
+                else:
+                    logger.info(
+                        f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}"
+                    )
 
         scheduler.step()
         mean_train_loss = train_loss_epoch / len(train_dataloader)
