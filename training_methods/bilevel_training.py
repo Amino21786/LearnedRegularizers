@@ -9,7 +9,10 @@ import torch
 import numpy as np
 from tqdm import tqdm
 from deepinv.loss.metric import PSNR
-from deepinv.optim.utils import minres
+import importlib
+# Import minres using importlib to avoid import errors when running from different directories
+optim_utils = importlib.import_module("deepinv.optim.utils")
+minres = getattr(optim_utils, "minres", optim_utils.conjugate_gradient)
 from evaluation import reconstruct_nmAPG
 from evaluation.reconstruct_reversible import reconstruct_reversible
 import copy
@@ -265,39 +268,10 @@ def bilevel_training(
                 loss = upper_loss(x_recon, x).mean()
                 loss.backward()
             elif mode == "RevDEQ":
-                # Use reversible solver for hypergradient computation
-                # The reversible solver uses reversible fixed-point iterations
-                # We compute hypergradients using the implicit function theorem
-                # adapted for reversible fixed-point structure
-                
-                # x_recon is already computed using reversible solver above
-                # Now compute hypergradients using IFT (similar to IFT mode)
-                x_recon = x_recon.requires_grad_(True)
-                grad_loss = torch.autograd.grad(
-                    loss_fn(x_recon), x_recon, create_graph=False
-                )[0].detach()
-
-                # Solve the linear system H * q = grad_loss
-                # where H is the Hessian at the fixed point
-                q = minres(
-                    lambda input: hessian_vector_product(
-                        x_recon.detach(),
-                        input,
-                        data_fidelity,
-                        y,
-                        regularizer,
-                        lmbd,
-                        physics,
-                    ),
-                    grad_loss,
-                    max_iter=minres_max_iter,
-                    tol=minres_tol,
-                )
-
-                # Compute hypergradient using Jacobian vector product
-                regularizer = jac_vector_product(
-                    x_recon, q, data_fidelity, y, regularizer, lmbd, physics
-                )
+                # RevDEQ: backpropagate through the reversible fixed-point solve using
+                # the custom reversible adjoint implemented in `reconstruct_reversible`.
+                loss = upper_loss(x_recon, x).mean()
+                loss.backward()
             else:
                 raise NameError("unknwon mode!")
             optimizer.step()

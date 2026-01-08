@@ -6,8 +6,8 @@ solver instead of nmAPG for solving the lower-level variational problem.
 """
 
 import torch
-from typing import Callable, Optional
-from training_methods.reversible_deq import solve_reversible, ReversibleSolver
+from typing import Optional
+from training_methods.reversible_deq import solve_reversible_adjoint
 
 
 def reconstruct_reversible(
@@ -83,22 +83,27 @@ def reconstruct_reversible(
     
     # Prepare arguments for the fixed-point function
     args = (y, physics, data_fidelity, regularizer, lamda, step_size)
-    
-    # Solve using reversible iterations
-    solution = solve_reversible(
+
+    # Solve using reversible iterations with a custom reversible adjoint backward pass.
+    # Important: pass parameters explicitly so custom autograd can return their gradients.
+    params = [p for p in regularizer.parameters() if p.requires_grad]
+    z1, steps_taken, error = solve_reversible_adjoint(
         function=fixed_point_function,
         z0=x,
         args=args,
+        params=params,
         beta=beta,
         tol=tol,
         max_steps=max_iter,
     )
-    
+
     if verbose:
-        print(f"Reversible solver converged in {solution.steps} steps with error {solution.error:.6e}")
-    
-    stats = dict(steps=solution.steps, error=solution.error, L=1.0/step_size)
+        print(
+            f"Reversible solver converged in {steps_taken} steps with error {error:.6e}"
+        )
+
+    stats = dict(steps=steps_taken, error=error, L=1.0 / step_size)
     
     if return_stats:
-        return solution.z1, stats
-    return solution.z1
+        return z1, stats
+    return z1
