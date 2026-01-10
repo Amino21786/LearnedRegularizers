@@ -19,7 +19,7 @@ def get_bilevel_hyperparameters(regularizer_name, problem):
         3e-2 if problem == "Denoising" else 1.5e-2
     )  # noise level for pretraining
     args.adabelief = True  # chooses optimizer
-    args.jacobian_regularization = True  # whether to use Jacobian regularization
+    args.jacobian_regularization = False#True  # whether to use Jacobian regularization
 
     if regularizer_name in ["CRR", "WCRR"]:
 
@@ -40,11 +40,11 @@ def get_bilevel_hyperparameters(regularizer_name, problem):
         args.epochs_maid = 200  # MAID parameter
 
         if problem == "Denoising":
-            args.pretrain_epochs = 300  # number of epochs in pretraining
+            args.pretrain_epochs = 10 #300  # number of epochs in pretraining
             args.jacobian_regularization_parameter = (
                 1e-6  # Jacobian regularization parameter
             )
-            args.epochs = 100  # number of epochs in the bilevel phase
+            args.epochs = 25 #100  # number of epochs in the bilevel phase
             args.parameter_fitting_init = (
                 1.0  # initialization of the regularization parameter
             )

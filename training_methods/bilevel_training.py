@@ -286,16 +286,12 @@ def bilevel_training(
                 loss = upper_loss(x_recon, x).mean()
                 loss.backward()
             else:
-                raise NameError("unknwon mode!")
+                raise NameError("unknown model")
             optimizer.step()
-            if logger is not None and train_step % 10 == 0:
+            if logger is not None and train_step % 2 == 0:
                 if mode == "RevDEQ":
                     logger.info(
                         f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}, RevDEQ steps {x_stats.get('steps')}, RevDEQ err {x_stats.get('error')}"
-                    )
-                else:
-                    logger.info(
-                        f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}"
                     )
 
         scheduler.step()

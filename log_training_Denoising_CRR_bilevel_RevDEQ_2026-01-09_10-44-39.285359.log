@@ -1,0 +1,17 @@
+2026-01-09 10:44:39,288: Train CRR with RevDEQ on Denoising
+2026-01-09 10:44:39,289: The model has 13767 parameters
+2026-01-09 10:44:39,289: Parameters:
+2026-01-09 10:44:39,289: load_pretrain: False, load_parameter_fitting: False, score_sigma: 0.03
+2026-01-09 10:44:39,289: pretrain_epochs: 10, pretrain_lr: 0.01, epochs: 10
+2026-01-09 10:44:39,289: adabelief: True, fitting_lr: 0.1, lr: 0.001
+2026-01-09 10:44:39,290: jacobian_regularization: False, jacobian_regularization_parameter: 1e-06, lmbd: 1.0
+2026-01-09 10:47:19,948: [Epoch 1] Train Loss: 1.45E+03, PSNR: 24.86
+2026-01-09 10:49:46,859: [Epoch 2] Train Loss: 1.86E+02, PSNR: 31.71
+2026-01-09 10:52:25,194: [Epoch 3] Train Loss: 1.30E+02, PSNR: 33.29
+2026-01-09 10:54:27,784: [Epoch 4] Train Loss: 1.21E+02, PSNR: 33.63
+2026-01-09 10:56:31,208: [Epoch 5] Train Loss: 1.17E+02, PSNR: 33.75
+2026-01-09 10:58:37,638: [Epoch 6] Train Loss: 1.14E+02, PSNR: 33.91
+2026-01-09 11:00:53,561: [Epoch 7] Train Loss: 1.13E+02, PSNR: 34.00
+2026-01-09 11:03:17,566: [Epoch 8] Train Loss: 1.09E+02, PSNR: 34.12
+2026-01-09 11:05:12,440: [Epoch 9] Train Loss: 1.10E+02, PSNR: 34.10
+2026-01-09 11:07:40,114: [Epoch 10] Train Loss: 1.07E+02, PSNR: 34.24

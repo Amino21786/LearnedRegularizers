@@ -309,7 +309,7 @@ if __name__ == "__main__":
             )
         torch.save(
             regularizer.state_dict(),
-            f"weights/score_parameter_fitting_for_{problem}/{regularizer_name}_fitted_parameters_with_{hypergradient_computation}_for_{problem}.pt",
+            f"weights/score_parameter_fitting_for_{problem}/{regularizer_name}_fitted_parameters_with_{hypergradient_computation}_for_{problem}_trial.pt",
         )
 
     # bilevel training
