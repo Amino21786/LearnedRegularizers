@@ -4,7 +4,10 @@ from tqdm import tqdm
 from deepinv.physics import Denoising
 from deepinv.loss.metric import PSNR
 from torch.utils.data import RandomSampler, Dataset, Subset
-from deepinv.optim.utils import minres
+import importlib
+# Import minres using importlib to avoid import errors
+optim_utils = importlib.import_module("deepinv.optim.utils")
+minres = getattr(optim_utils, "minres", optim_utils.conjugate_gradient)
 from evaluation import reconstruct_nmAPG
 from PIL import Image
 from collections import deque

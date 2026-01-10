@@ -9,8 +9,12 @@ import torch
 import numpy as np
 from tqdm import tqdm
 from deepinv.loss.metric import PSNR
-from deepinv.optim.utils import minres
+import importlib
+# Import minres using importlib to avoid import errors when running from different directories
+optim_utils = importlib.import_module("deepinv.optim.utils")
+minres = getattr(optim_utils, "minres", optim_utils.conjugate_gradient)
 from evaluation import reconstruct_nmAPG
+from evaluation.reconstruct_reversible import reconstruct_reversible
 import copy
 from .utils.adabelief import AdaBelief
 
@@ -23,7 +27,7 @@ def bilevel_training(
     train_dataloader,  # torch.utils.data.DataLoader object for loading the training data
     val_dataloader,  # torch.utils.data.DataLoader object for loading the validation data
     epochs=100,  # number of epochs
-    mode="IFT",  # hypergradient computation mode. Choices are "IFT" and "JFB"
+    mode="IFT",  # hypergradient computation mode. Choices are "IFT", "JFB", and "RevDEQ"
     lower_level_step_size=1e-1,  # initial step size for the lower level problem
     lower_level_max_iter=1000,  # maximal number of iterations in the lower level problem
     lower_level_tol_train=1e-4,  # convergence tolerance for the lower level solver during training
@@ -177,33 +181,63 @@ def bilevel_training(
             y = physics(x)
             x_noisy = physics.A_dagger(y)
 
-            x_recon, x_stats = reconstruct_nmAPG(
-                y,
-                physics,
-                data_fidelity,
-                regularizer,
-                lmbd,
-                lower_level_step_size,
-                lower_level_max_iter,
-                lower_level_tol_train,
-                verbose=verbose,
-                x_init=x_noisy,
-                return_stats=True,
-            )
+            # Use reversible solver for RevDEQ mode, otherwise use nmAPG
+            if mode == "RevDEQ":
+                x_recon, x_stats = reconstruct_reversible(
+                    y,
+                    physics,
+                    data_fidelity,
+                    regularizer,
+                    lmbd,
+                    lower_level_step_size,
+                    lower_level_max_iter,
+                    lower_level_tol_train,
+                    x_init=x_noisy,
+                    beta=0.8,  # reversible relaxation parameter
+                    verbose=verbose,
+                    return_stats=True,
+                )
+            else:
+                x_recon, x_stats = reconstruct_nmAPG(
+                    y,
+                    physics,
+                    data_fidelity,
+                    regularizer,
+                    lmbd,
+                    lower_level_step_size,
+                    lower_level_max_iter,
+                    lower_level_tol_train,
+                    verbose=verbose,
+                    x_init=x_noisy,
+                    return_stats=True,
+                )
 
             optimizer.zero_grad()
             loss_fn = lambda x_in: upper_loss(x, x_in).mean()
             train_loss_epoch += loss_fn(x_recon).item()
             train_psnr_epoch += psnr(x_recon, x).mean().item()
-            progress_bar.set_description(
-                "used {0} of {1} steps, Loss: {2:.2E}, PSNR: {3:.2f}".format(
-                    x_stats["steps"] + 1,
-                    lower_level_max_iter,
-                    train_loss_epoch / train_step,
-                    train_psnr_epoch / train_step,
+            # Display progress. For RevDEQ we also show the fixed-point residual.
+            if mode == "RevDEQ":
+                err = x_stats.get("error", float("nan"))
+                progress_bar.set_description(
+                    "used {0} of {1} steps, err: {2:.2E}, Loss: {3:.2E}, PSNR: {4:.2f}".format(
+                        x_stats["steps"],
+                        lower_level_max_iter,
+                        float(err),
+                        train_loss_epoch / train_step,
+                        train_psnr_epoch / train_step,
+                    )
                 )
-            )
-            if x_stats["steps"] + 1 == lower_level_max_iter:
+            else:
+                progress_bar.set_description(
+                    "used {0} of {1} steps, Loss: {2:.2E}, PSNR: {3:.2f}".format(
+                        x_stats["steps"] + 1,
+                        lower_level_max_iter,
+                        train_loss_epoch / train_step,
+                        train_psnr_epoch / train_step,
+                    )
+                )
+            if (x_stats["steps"] == lower_level_max_iter if mode == "RevDEQ" else x_stats["steps"] + 1 == lower_level_max_iter):
                 print("maxiter hit...")
                 if logger is not None:
                     logger.info(f"maxiter hit in iteration {train_step}")
@@ -246,13 +280,19 @@ def bilevel_training(
                 x_recon = x_recon - jfb_step_size_factor / L * grad
                 loss = upper_loss(x_recon, x).mean()
                 loss.backward()
+            elif mode == "RevDEQ":
+                # RevDEQ: backpropagate through the reversible fixed-point solve using
+                # the custom reversible adjoint implemented in `reconstruct_reversible`.
+                loss = upper_loss(x_recon, x).mean()
+                loss.backward()
             else:
-                raise NameError("unknwon mode!")
+                raise NameError("unknown model")
             optimizer.step()
-            if logger is not None and train_step % 10 == 0:
-                logger.info(
-                    f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}"
-                )
+            if logger is not None and train_step % 2 == 0:
+                if mode == "RevDEQ":
+                    logger.info(
+                        f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}, RevDEQ steps {x_stats.get('steps')}, RevDEQ err {x_stats.get('error')}"
+                    )
 
         scheduler.step()
         mean_train_loss = train_loss_epoch / len(train_dataloader)
@@ -278,18 +318,35 @@ def bilevel_training(
                     y_val = physics(x_val)
                     x_val_noisy = physics.A_dagger(y_val)
 
-                    x_recon_val = reconstruct_nmAPG(
-                        y_val,
-                        physics,
-                        data_fidelity,
-                        regularizer,
-                        lmbd,
-                        lower_level_step_size,
-                        lower_level_max_iter,
-                        lower_level_tol_val,
-                        verbose=verbose,
-                        x_init=x_val_noisy,
-                    )
+                    # Use reversible solver for RevDEQ mode, otherwise use nmAPG
+                    if mode == "RevDEQ":
+                        x_recon_val = reconstruct_reversible(
+                            y_val,
+                            physics,
+                            data_fidelity,
+                            regularizer,
+                            lmbd,
+                            lower_level_step_size,
+                            lower_level_max_iter,
+                            lower_level_tol_val,
+                            x_init=x_val_noisy,
+                            beta=0.8,  # reversible relaxation parameter
+                            verbose=verbose,
+                            return_stats=False,
+                        )
+                    else:
+                        x_recon_val = reconstruct_nmAPG(
+                            y_val,
+                            physics,
+                            data_fidelity,
+                            regularizer,
+                            lmbd,
+                            lower_level_step_size,
+                            lower_level_max_iter,
+                            lower_level_tol_val,
+                            verbose=verbose,
+                            x_init=x_val_noisy,
+                        )
 
                     val_loss_epoch += upper_loss(x_val, x_recon_val).mean().item()
                     val_psnr_epoch += psnr(x_recon_val, x_val).mean().item()
