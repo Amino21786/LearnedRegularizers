@@ -49,11 +49,11 @@ if __name__ == "__main__":
     parser.add_argument("--hypergradient", type=str, default="IFT")
     parser.add_argument("--regularizer_name", type=str, default="CRR")
     parser.add_argument("--load_pretrain", type=bool, default=True) #load pretrained weights 
-    parser.add_argument("--load_parameter_fitting", type=bool, default=False)
+    parser.add_argument("--load_parameter_fitting", type=bool, default=True)
     inp = parser.parse_args()
 
     problem = inp.problem  # Denoising or CT
-    hypergradient_computation = inp.hypergradient  # IFT or JFB
+    hypergradient_computation = inp.hypergradient  # IFT, JFB, or RevDEQ
     regularizer_name = inp.regularizer_name  # CRR, WCRR, ICNN, IDCNN, LAR, TDV or LSR
     load_pretrain = inp.load_pretrain  # load pretrained weights given that they exist
     load_parameter_fitting = (
@@ -218,11 +218,19 @@ if __name__ == "__main__":
     )
 
     if load_pretrain and not load_parameter_fitting:
-        regularizer.load_state_dict(
-            torch.load(
-                f"weights/score_for_{problem}/{regularizer_name}_score_training_for_{problem}.pt"
+        if hypergradient_computation == "RevDEQ":
+            regularizer.load_state_dict(
+                torch.load(
+                    f"weights/score_for_{problem}/{regularizer_name}_score_training_for_{problem}_trial.pt"
+                )
             )
-        )
+        else:   
+            regularizer.load_state_dict(
+                torch.load(
+                    f"weights/score_for_{problem}/{regularizer_name}_score_training_for_{problem}.pt"
+                )
+            )
+
     elif not load_parameter_fitting and not hyper_params.pretrain_epochs == 0:
         for p in regularizer.parameters():
             p.requires_grad_(True)
@@ -262,11 +270,18 @@ if __name__ == "__main__":
         )
 
     if load_parameter_fitting:
-        regularizer.load_state_dict(
-            torch.load(
-                f"weights/score_parameter_fitting_for_{problem}/{regularizer_name}_fitted_parameters_with_{hypergradient_computation}_for_{problem}.pt"
+        if hypergradient_computation == "RevDEQ":
+            regularizer.load_state_dict(
+                torch.load(
+                    f"weights/score_parameter_fitting_for_{problem}/{regularizer_name}_fitted_parameters_with_{hypergradient_computation}_for_{problem}_trial.pt"
+                )
             )
-        )
+        else:
+            regularizer.load_state_dict(
+                torch.load(
+                    f"weights/score_parameter_fitting_for_{problem}/{regularizer_name}_fitted_parameters_with_{hypergradient_computation}_for_{problem}.pt"
+                )
+            )
     else:
         for p in regularizer.parameters():
             p.requires_grad_(False)
@@ -292,7 +307,7 @@ if __name__ == "__main__":
                 epochs=2 if problem == "Denoising" else 100, # 1 epoch for testing out revDEQ, 100 epochs for other modes (usually 20 epochs for Denoising and 100 epochs for CT)
                 mode="IFT" if hypergradient_computation == "IFT-MAID" else hypergradient_computation,
                 lower_level_step_size=1e-1,
-                lower_level_max_iter=10,
+                lower_level_max_iter=10 if hypergradient_computation == "RevDEQ" else 1000,
                 lower_level_tol_train=1e-4,
                 lower_level_tol_val=1e-4,
                 lr=hyper_params.fitting_lr,
@@ -329,7 +344,7 @@ if __name__ == "__main__":
             epochs=hyper_params.epochs,
             mode=hypergradient_computation,
             lower_level_step_size=1e-1,
-            lower_level_max_iter=1500,
+            lower_level_max_iter=10 if hypergradient_computation == "RevDEQ" else 20, #10 for RevDEQ, 20 for other modes
             lower_level_tol_train=1e-4,
             lower_level_tol_val=1e-4,
             lr=hyper_params.lr,
@@ -342,7 +357,7 @@ if __name__ == "__main__":
             logger=logger,
             adabelief=hyper_params.adabelief,
             dynamic_range_psnr=problem == "CT",
-            validation_epochs=20 if problem == "Denoising" else 1,
+            validation_epochs=1 if problem == "Denoising" else 1,
         )
     else:
         # Define patch parameters for data augmentation

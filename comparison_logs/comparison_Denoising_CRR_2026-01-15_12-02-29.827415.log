@@ -1,0 +1,188 @@
+2026-01-15 12:02:29,842: Dataset: BSDS500_gray
+2026-01-15 12:02:29,842: Train set size: 20, Val set size: 10
+2026-01-15 12:02:29,842: ======================================================================
+2026-01-15 12:02:29,844: HYPERGRADIENT METHOD COMPARISON
+2026-01-15 12:02:29,844: ======================================================================
+2026-01-15 12:02:29,844: Problem: Denoising
+2026-01-15 12:02:29,845: Regularizer: CRR
+2026-01-15 12:02:29,845: Epochs: 2
+2026-01-15 12:02:29,846: Function evaluations per batch:
+2026-01-15 12:02:29,847:   IFT: 20 steps x 1 = 20 f-evals
+2026-01-15 12:02:29,847:   JFB: 20 steps x 1 = 20 f-evals
+2026-01-15 12:02:29,847:   RevDEQ: 10 steps x 2 = 20 f-evals
+2026-01-15 12:02:29,848: ======================================================================
+2026-01-15 12:02:29,848: 
+======================================================================
+2026-01-15 12:02:29,848: Running IFT
+2026-01-15 12:02:29,850: ======================================================================
+2026-01-15 12:02:29,857: Loaded pretrained weights from weights/score_for_Denoising/CRR_score_training_for_Denoising.pt
+2026-01-15 12:04:20,670: maxiter hit in iteration 6
+2026-01-15 12:04:42,021: maxiter hit in iteration 7
+2026-01-15 12:05:06,130: maxiter hit in iteration 8
+2026-01-15 12:05:33,727: maxiter hit in iteration 9
+2026-01-15 12:05:57,240: maxiter hit in iteration 10
+2026-01-15 12:06:21,046: maxiter hit in iteration 11
+2026-01-15 12:06:43,237: maxiter hit in iteration 12
+2026-01-15 12:07:01,973: maxiter hit in iteration 13
+2026-01-15 12:07:20,787: maxiter hit in iteration 14
+2026-01-15 12:07:39,126: maxiter hit in iteration 15
+2026-01-15 12:07:58,075: maxiter hit in iteration 16
+2026-01-15 12:08:16,568: maxiter hit in iteration 17
+2026-01-15 12:08:35,382: maxiter hit in iteration 18
+2026-01-15 12:08:54,021: maxiter hit in iteration 19
+2026-01-15 12:09:13,864: maxiter hit in iteration 20
+2026-01-15 12:09:34,136: [Epoch 1] Train Loss: 1.32E+01, PSNR: 25.60
+2026-01-15 12:09:39,912: [Epoch 1] Val Loss: 9.16E+00, PSNR: 26.95
+2026-01-15 12:09:40,637: maxiter hit in iteration 1
+2026-01-15 12:10:02,798: maxiter hit in iteration 2
+2026-01-15 12:10:24,129: maxiter hit in iteration 3
+2026-01-15 12:10:44,466: maxiter hit in iteration 4
+2026-01-15 12:11:04,917: maxiter hit in iteration 5
+2026-01-15 12:11:24,937: maxiter hit in iteration 6
+2026-01-15 12:11:45,609: maxiter hit in iteration 7
+2026-01-15 12:12:05,996: maxiter hit in iteration 8
+2026-01-15 12:12:25,783: maxiter hit in iteration 9
+2026-01-15 12:12:45,725: maxiter hit in iteration 10
+2026-01-15 12:13:05,808: maxiter hit in iteration 11
+2026-01-15 12:13:26,172: maxiter hit in iteration 12
+2026-01-15 12:13:45,791: maxiter hit in iteration 13
+2026-01-15 12:14:05,468: maxiter hit in iteration 14
+2026-01-15 12:14:25,682: maxiter hit in iteration 15
+2026-01-15 12:14:49,075: maxiter hit in iteration 16
+2026-01-15 12:15:13,841: maxiter hit in iteration 17
+2026-01-15 12:15:40,956: maxiter hit in iteration 18
+2026-01-15 12:16:01,197: maxiter hit in iteration 19
+2026-01-15 12:16:22,658: maxiter hit in iteration 20
+2026-01-15 12:16:41,909: [Epoch 2] Train Loss: 8.00E+00, PSNR: 27.80
+2026-01-15 12:16:48,733: [Epoch 2] Val Loss: 8.92E+00, PSNR: 27.14
+2026-01-15 12:16:48,734: 
+IFT completed in 858.9s
+2026-01-15 12:16:48,736:   Final Train Loss: 7.9951
+2026-01-15 12:16:48,736:   Final Train PSNR: 27.80 dB
+2026-01-15 12:16:48,736:   Final Val Loss: 8.9240
+2026-01-15 12:16:48,736:   Final Val PSNR: 27.14 dB
+2026-01-15 12:16:48,736: 
+======================================================================
+2026-01-15 12:16:48,736: Running JFB
+2026-01-15 12:16:48,736: ======================================================================
+2026-01-15 12:16:48,757: Loaded pretrained weights from weights/score_for_Denoising/CRR_score_training_for_Denoising.pt
+2026-01-15 12:16:51,363: maxiter hit in iteration 6
+2026-01-15 12:16:52,084: maxiter hit in iteration 7
+2026-01-15 12:16:52,802: maxiter hit in iteration 8
+2026-01-15 12:16:53,475: maxiter hit in iteration 9
+2026-01-15 12:16:54,128: maxiter hit in iteration 10
+2026-01-15 12:16:54,825: maxiter hit in iteration 11
+2026-01-15 12:16:55,476: maxiter hit in iteration 12
+2026-01-15 12:16:56,172: maxiter hit in iteration 13
+2026-01-15 12:16:56,875: maxiter hit in iteration 14
+2026-01-15 12:16:57,566: maxiter hit in iteration 15
+2026-01-15 12:16:58,422: maxiter hit in iteration 16
+2026-01-15 12:16:59,117: maxiter hit in iteration 17
+2026-01-15 12:16:59,750: maxiter hit in iteration 18
+2026-01-15 12:17:00,439: maxiter hit in iteration 19
+2026-01-15 12:17:01,155: maxiter hit in iteration 20
+2026-01-15 12:17:01,204: [Epoch 1] Train Loss: 1.26E+01, PSNR: 25.65
+2026-01-15 12:17:07,506: [Epoch 1] Val Loss: 9.19E+00, PSNR: 26.87
+2026-01-15 12:17:08,120: maxiter hit in iteration 1
+2026-01-15 12:17:08,787: maxiter hit in iteration 2
+2026-01-15 12:17:09,474: maxiter hit in iteration 3
+2026-01-15 12:17:10,188: maxiter hit in iteration 4
+2026-01-15 12:17:10,855: maxiter hit in iteration 5
+2026-01-15 12:17:11,490: maxiter hit in iteration 6
+2026-01-15 12:17:12,178: maxiter hit in iteration 7
+2026-01-15 12:17:12,987: maxiter hit in iteration 8
+2026-01-15 12:17:13,884: maxiter hit in iteration 9
+2026-01-15 12:17:14,691: maxiter hit in iteration 10
+2026-01-15 12:17:15,367: maxiter hit in iteration 11
+2026-01-15 12:17:16,053: maxiter hit in iteration 12
+2026-01-15 12:17:16,724: maxiter hit in iteration 13
+2026-01-15 12:17:17,369: maxiter hit in iteration 14
+2026-01-15 12:17:18,066: maxiter hit in iteration 15
+2026-01-15 12:17:18,794: maxiter hit in iteration 16
+2026-01-15 12:17:19,483: maxiter hit in iteration 17
+2026-01-15 12:17:20,346: maxiter hit in iteration 18
+2026-01-15 12:17:21,038: maxiter hit in iteration 19
+2026-01-15 12:17:21,675: maxiter hit in iteration 20
+2026-01-15 12:17:21,722: [Epoch 2] Train Loss: 9.11E+00, PSNR: 26.96
+2026-01-15 12:17:27,580: [Epoch 2] Val Loss: 8.95E+00, PSNR: 27.05
+2026-01-15 12:17:27,582: 
+JFB completed in 38.8s
+2026-01-15 12:17:27,583:   Final Train Loss: 9.1081
+2026-01-15 12:17:27,583:   Final Train PSNR: 26.96 dB
+2026-01-15 12:17:27,583:   Final Val Loss: 8.9504
+2026-01-15 12:17:27,583:   Final Val PSNR: 27.05 dB
+2026-01-15 12:17:27,583: 
+======================================================================
+2026-01-15 12:17:27,583: Running RevDEQ
+2026-01-15 12:17:27,585: ======================================================================
+2026-01-15 12:17:27,591: Loaded pretrained weights from weights/score_for_Denoising/CRR_score_training_for_Denoising.pt
+2026-01-15 12:17:27,858: maxiter hit in iteration 1
+2026-01-15 12:17:28,862: maxiter hit in iteration 2
+2026-01-15 12:17:29,858: maxiter hit in iteration 3
+2026-01-15 12:17:31,076: maxiter hit in iteration 4
+2026-01-15 12:17:32,331: maxiter hit in iteration 5
+2026-01-15 12:17:33,124: Step 5, Train PSNR 22.484618, RevDEQ steps 10, RevDEQ err 2.695486e-03
+2026-01-15 12:17:33,381: maxiter hit in iteration 6
+2026-01-15 12:17:34,323: maxiter hit in iteration 7
+2026-01-15 12:17:35,355: maxiter hit in iteration 8
+2026-01-15 12:17:36,390: maxiter hit in iteration 9
+2026-01-15 12:17:37,374: maxiter hit in iteration 10
+2026-01-15 12:17:38,116: Step 10, Train PSNR 23.893756, RevDEQ steps 10, RevDEQ err 4.352317e-03
+2026-01-15 12:17:38,375: maxiter hit in iteration 11
+2026-01-15 12:17:39,368: maxiter hit in iteration 12
+2026-01-15 12:17:40,838: maxiter hit in iteration 13
+2026-01-15 12:17:41,821: maxiter hit in iteration 14
+2026-01-15 12:17:42,821: maxiter hit in iteration 15
+2026-01-15 12:17:43,557: Step 15, Train PSNR 24.722299, RevDEQ steps 10, RevDEQ err 3.666422e-03
+2026-01-15 12:17:43,833: maxiter hit in iteration 16
+2026-01-15 12:17:44,878: maxiter hit in iteration 17
+2026-01-15 12:17:45,830: maxiter hit in iteration 18
+2026-01-15 12:17:46,823: maxiter hit in iteration 19
+2026-01-15 12:17:47,988: maxiter hit in iteration 20
+2026-01-15 12:17:48,792: Step 20, Train PSNR 25.032585, RevDEQ steps 10, RevDEQ err 4.522692e-03
+2026-01-15 12:17:48,792: [Epoch 1] Train Loss: 1.44E+01, PSNR: 25.03
+2026-01-15 12:17:51,300: [Epoch 1] Val Loss: 9.94E+00, PSNR: 26.42
+2026-01-15 12:17:51,555: maxiter hit in iteration 1
+2026-01-15 12:17:52,534: maxiter hit in iteration 2
+2026-01-15 12:17:53,625: maxiter hit in iteration 3
+2026-01-15 12:17:54,619: maxiter hit in iteration 4
+2026-01-15 12:17:55,607: maxiter hit in iteration 5
+2026-01-15 12:17:56,340: Step 5, Train PSNR 28.425312, RevDEQ steps 10, RevDEQ err 4.139658e-03
+2026-01-15 12:17:56,592: maxiter hit in iteration 6
+2026-01-15 12:17:57,725: maxiter hit in iteration 7
+2026-01-15 12:17:58,790: maxiter hit in iteration 8
+2026-01-15 12:17:59,940: maxiter hit in iteration 9
+2026-01-15 12:18:01,178: maxiter hit in iteration 10
+2026-01-15 12:18:02,063: Step 10, Train PSNR 27.045386, RevDEQ steps 10, RevDEQ err 3.504438e-03
+2026-01-15 12:18:02,347: maxiter hit in iteration 11
+2026-01-15 12:18:03,312: maxiter hit in iteration 12
+2026-01-15 12:18:04,307: maxiter hit in iteration 13
+2026-01-15 12:18:05,288: maxiter hit in iteration 14
+2026-01-15 12:18:06,350: maxiter hit in iteration 15
+2026-01-15 12:18:07,104: Step 15, Train PSNR 27.354177, RevDEQ steps 10, RevDEQ err 3.432762e-03
+2026-01-15 12:18:07,354: maxiter hit in iteration 16
+2026-01-15 12:18:08,338: maxiter hit in iteration 17
+2026-01-15 12:18:09,338: maxiter hit in iteration 18
+2026-01-15 12:18:10,442: maxiter hit in iteration 19
+2026-01-15 12:18:11,777: maxiter hit in iteration 20
+2026-01-15 12:18:12,588: Step 20, Train PSNR 27.168384, RevDEQ steps 10, RevDEQ err 4.441288e-03
+2026-01-15 12:18:12,588: [Epoch 2] Train Loss: 8.72E+00, PSNR: 27.17
+2026-01-15 12:18:15,469: [Epoch 2] Val Loss: 9.26E+00, PSNR: 26.83
+2026-01-15 12:18:15,472: 
+RevDEQ completed in 47.9s
+2026-01-15 12:18:15,472:   Final Train Loss: 8.7154
+2026-01-15 12:18:15,472:   Final Train PSNR: 27.17 dB
+2026-01-15 12:18:15,472:   Final Val Loss: 9.2636
+2026-01-15 12:18:15,472:   Final Val PSNR: 26.83 dB
+2026-01-15 12:18:15,472: 
+======================================================================
+2026-01-15 12:18:15,472: SUMMARY
+2026-01-15 12:18:15,472: ======================================================================
+2026-01-15 12:18:15,478: Method | Max Iter | F-Evals/Batch | Final Train PSNR | Final Val PSNR | Duration (s)
+2026-01-15 12:18:15,478: ------------------------------------------------------------------------------------
+2026-01-15 12:18:15,478: IFT    | 20       | 20            | 27.80            | 27.14          | 858.9       
+2026-01-15 12:18:15,478: JFB    | 20       | 20            | 26.96            | 27.05          | 38.8        
+2026-01-15 12:18:15,478: RevDEQ | 10       | 20            | 27.17            | 26.83          | 47.9        
+2026-01-15 12:18:15,484: 
+Results saved to: comparison_logs\comparison_results_Denoising_CRR_2026-01-15_12-02-29.827415.json
+2026-01-15 12:18:15,486: Log saved to: comparison_logs\comparison_Denoising_CRR_2026-01-15_12-02-29.827415.log

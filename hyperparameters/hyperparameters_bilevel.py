@@ -44,7 +44,7 @@ def get_bilevel_hyperparameters(regularizer_name, problem):
             args.jacobian_regularization_parameter = (
                 1e-6  # Jacobian regularization parameter
             )
-            args.epochs = 25 #100  # number of epochs in the bilevel phase
+            args.epochs = 2 #100  # number of epochs in the bilevel phase
             args.parameter_fitting_init = (
                 1.0  # initialization of the regularization parameter
             )
