@@ -266,8 +266,10 @@ def run_comparison(args):
                 "Method": method_name,
                 "Max Iter": r["max_iter"],
                 "F-Evals/Batch": r["total_f_evals_per_batch"],
-                "Final Train PSNR": f"{r['psnr_train'][-1]:.2f}",
-                "Final Val PSNR": f"{r['psnr_val'][-1]:.2f}",
+                "Train Loss": f"{r['loss_train'][-1]:.2f}",
+                "Val Loss": f"{r['loss_val'][-1]:.2f}",
+                "Train PSNR": f"{r['psnr_train'][-1]:.2f}",
+                "Val PSNR": f"{r['psnr_val'][-1]:.2f}",
                 "Duration (s)": f"{r['duration_seconds']:.1f}",
             })
     
