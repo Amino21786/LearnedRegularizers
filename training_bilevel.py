@@ -48,7 +48,7 @@ if __name__ == "__main__":
     parser.add_argument("--problem", type=str, default="Denoising")
     parser.add_argument("--hypergradient", type=str, default="IFT")
     parser.add_argument("--regularizer_name", type=str, default="CRR")
-    parser.add_argument("--load_pretrain", type=bool, default=False)
+    parser.add_argument("--load_pretrain", type=bool, default=True) #load pretrained weights 
     parser.add_argument("--load_parameter_fitting", type=bool, default=False)
     inp = parser.parse_args()
 
@@ -289,10 +289,10 @@ if __name__ == "__main__":
                 lmbd,
                 fitting_dataloader,
                 val_dataloader,
-                epochs=1 if problem == "Denoising" else 100, # 1 epoch for testing out revDEQ, 100 epochs for other modes (usually 20 epochs for Denoising and 100 epochs for CT)
+                epochs=2 if problem == "Denoising" else 100, # 1 epoch for testing out revDEQ, 100 epochs for other modes (usually 20 epochs for Denoising and 100 epochs for CT)
                 mode="IFT" if hypergradient_computation == "IFT-MAID" else hypergradient_computation,
                 lower_level_step_size=1e-1,
-                lower_level_max_iter=1500,
+                lower_level_max_iter=10,
                 lower_level_tol_train=1e-4,
                 lower_level_tol_val=1e-4,
                 lr=hyper_params.fitting_lr,
@@ -304,7 +304,7 @@ if __name__ == "__main__":
                 device=device,
                 verbose=False,
                 dynamic_range_psnr=problem == "CT",
-                validation_epochs=5 if problem == "Denoising" else 25,
+                validation_epochs=1 if problem == "Denoising" else 25,
                 logger=logger,
             )
         torch.save(

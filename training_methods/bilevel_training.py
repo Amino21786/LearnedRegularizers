@@ -242,10 +242,13 @@ def bilevel_training(
                 if logger is not None:
                     logger.info(f"maxiter hit in iteration {train_step}")
 
-            x_recon = x_recon.detach()
+            # For IFT/JFB modes, detach x_recon since they use custom gradient computation.
+            # For RevDEQ, keep the computation graph so the custom backward pass can run.
+            if mode != "RevDEQ":
+                x_recon = x_recon.detach()
 
             if reg and (train_step % 5) == 1:
-                jac_loss = reg_para * jac_pow_loss(x_recon)
+                jac_loss = reg_para * jac_pow_loss(x_recon.detach())
                 jac_loss.backward()
 
             if mode == "IFT":
@@ -291,7 +294,7 @@ def bilevel_training(
             if logger is not None and train_step % 2 == 0:
                 if mode == "RevDEQ":
                     logger.info(
-                        f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step}, RevDEQ steps {x_stats.get('steps')}, RevDEQ err {x_stats.get('error')}"
+                        f"Step {train_step}, Train PSNR {train_psnr_epoch/train_step:2f}, RevDEQ steps {x_stats.get('steps')}, RevDEQ err {x_stats.get('error'):2e}"
                     )
 
         scheduler.step()
