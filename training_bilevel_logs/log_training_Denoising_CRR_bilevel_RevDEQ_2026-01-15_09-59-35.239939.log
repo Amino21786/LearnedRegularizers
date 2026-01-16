@@ -1,0 +1,145 @@
+2026-01-15 09:59:35,239: Train CRR with RevDEQ on Denoising
+2026-01-15 09:59:35,239: The model has 13767 parameters
+2026-01-15 09:59:35,239: Parameters:
+2026-01-15 09:59:35,249: load_pretrain: True, load_parameter_fitting: False, score_sigma: 0.03
+2026-01-15 09:59:35,249: pretrain_epochs: 100, pretrain_lr: 0.01, epochs: 25
+2026-01-15 09:59:35,249: adabelief: True, fitting_lr: 0.1, lr: 0.001
+2026-01-15 09:59:35,249: jacobian_regularization: False, jacobian_regularization_parameter: 1e-06, lmbd: 1.0
+2026-01-15 10:01:23,548: maxiter hit in iteration 1
+2026-01-15 10:01:32,667: maxiter hit in iteration 2
+2026-01-15 10:01:39,034: Step 2, Train PSNR 21.659990310668945, RevDEQ steps 10, RevDEQ err 0.0014286988880485296
+2026-01-15 10:01:42,081: maxiter hit in iteration 3
+2026-01-15 10:01:51,390: maxiter hit in iteration 4
+2026-01-15 10:01:57,636: Step 4, Train PSNR 22.1850643157959, RevDEQ steps 10, RevDEQ err 0.0028588820714503527
+2026-01-15 10:02:00,154: maxiter hit in iteration 5
+2026-01-15 10:02:08,689: maxiter hit in iteration 6
+2026-01-15 10:02:14,762: Step 6, Train PSNR 22.882043202718098, RevDEQ steps 10, RevDEQ err 0.0033461647108197212
+2026-01-15 10:02:17,262: maxiter hit in iteration 7
+2026-01-15 10:02:25,878: maxiter hit in iteration 8
+2026-01-15 10:02:31,915: Step 8, Train PSNR 23.546252012252808, RevDEQ steps 10, RevDEQ err 0.0031310960184782743
+2026-01-15 10:02:34,431: maxiter hit in iteration 9
+2026-01-15 10:02:43,542: maxiter hit in iteration 10
+2026-01-15 10:02:50,384: Step 10, Train PSNR 24.4289981842041, RevDEQ steps 10, RevDEQ err 0.0026246909983456135
+2026-01-15 10:02:53,321: maxiter hit in iteration 11
+2026-01-15 10:03:02,145: maxiter hit in iteration 12
+2026-01-15 10:03:09,308: Step 12, Train PSNR 24.79772679011027, RevDEQ steps 10, RevDEQ err 0.0029799642506986856
+2026-01-15 10:03:13,111: maxiter hit in iteration 13
+2026-01-15 10:03:22,956: maxiter hit in iteration 14
+2026-01-15 10:03:29,559: Step 14, Train PSNR 25.126789365495956, RevDEQ steps 10, RevDEQ err 0.002777055138722062
+2026-01-15 10:03:32,329: maxiter hit in iteration 15
+2026-01-15 10:03:41,743: maxiter hit in iteration 16
+2026-01-15 10:03:50,828: Step 16, Train PSNR 25.487486004829407, RevDEQ steps 10, RevDEQ err 0.0026513957418501377
+2026-01-15 10:03:55,373: maxiter hit in iteration 17
+2026-01-15 10:04:10,596: maxiter hit in iteration 18
+2026-01-15 10:04:18,114: Step 18, Train PSNR 25.629742834303116, RevDEQ steps 10, RevDEQ err 0.0031175296753644943
+2026-01-15 10:04:23,037: maxiter hit in iteration 19
+2026-01-15 10:04:32,776: maxiter hit in iteration 20
+2026-01-15 10:04:39,485: Step 20, Train PSNR 25.797404289245605, RevDEQ steps 10, RevDEQ err 0.0027509054634720087
+2026-01-15 10:04:43,824: maxiter hit in iteration 21
+2026-01-15 10:04:57,910: maxiter hit in iteration 22
+2026-01-15 10:05:04,217: Step 22, Train PSNR 25.898891188881613, RevDEQ steps 10, RevDEQ err 0.003032475709915161
+2026-01-15 10:05:06,831: maxiter hit in iteration 23
+2026-01-15 10:05:15,582: maxiter hit in iteration 24
+2026-01-15 10:05:24,449: Step 24, Train PSNR 26.032852490743, RevDEQ steps 10, RevDEQ err 0.0024905644822865725
+2026-01-15 10:05:27,200: maxiter hit in iteration 25
+2026-01-15 10:05:36,301: maxiter hit in iteration 26
+2026-01-15 10:05:42,438: Step 26, Train PSNR 26.185149339529183, RevDEQ steps 10, RevDEQ err 0.002231354359537363
+2026-01-15 10:05:45,463: maxiter hit in iteration 27
+2026-01-15 10:05:55,487: maxiter hit in iteration 28
+2026-01-15 10:06:02,026: Step 28, Train PSNR 26.396175656999862, RevDEQ steps 10, RevDEQ err 0.0026385572273284197
+2026-01-15 10:06:04,630: maxiter hit in iteration 29
+2026-01-15 10:06:13,255: maxiter hit in iteration 30
+2026-01-15 10:06:21,597: Step 30, Train PSNR 26.46334171295166, RevDEQ steps 10, RevDEQ err 0.0024520286824554205
+2026-01-15 10:06:25,917: maxiter hit in iteration 31
+2026-01-15 10:06:36,517: maxiter hit in iteration 32
+2026-01-15 10:06:44,136: Step 32, Train PSNR 26.464893639087677, RevDEQ steps 10, RevDEQ err 0.0032306250650435686
+2026-01-15 10:06:46,818: maxiter hit in iteration 33
+2026-01-15 10:06:56,996: maxiter hit in iteration 34
+2026-01-15 10:07:05,743: Step 34, Train PSNR 26.536249553456027, RevDEQ steps 10, RevDEQ err 0.0031672182958573103
+2026-01-15 10:07:08,706: maxiter hit in iteration 35
+2026-01-15 10:07:19,632: maxiter hit in iteration 36
+2026-01-15 10:07:26,197: Step 36, Train PSNR 26.624407079484726, RevDEQ steps 10, RevDEQ err 0.0024729669094085693
+2026-01-15 10:07:28,967: maxiter hit in iteration 37
+2026-01-15 10:07:40,122: maxiter hit in iteration 38
+2026-01-15 10:07:47,409: Step 38, Train PSNR 26.65250597502056, RevDEQ steps 10, RevDEQ err 0.002986319363117218
+2026-01-15 10:07:50,401: maxiter hit in iteration 39
+2026-01-15 10:08:04,482: maxiter hit in iteration 40
+2026-01-15 10:08:12,129: Step 40, Train PSNR 26.65468053817749, RevDEQ steps 10, RevDEQ err 0.0035626087337732315
+2026-01-15 10:08:15,043: maxiter hit in iteration 41
+2026-01-15 10:08:25,067: maxiter hit in iteration 42
+2026-01-15 10:08:31,373: Step 42, Train PSNR 26.72460565112886, RevDEQ steps 10, RevDEQ err 0.0027092215605080128
+2026-01-15 10:08:34,158: maxiter hit in iteration 43
+2026-01-15 10:08:43,386: maxiter hit in iteration 44
+2026-01-15 10:08:49,624: Step 44, Train PSNR 26.741906946355645, RevDEQ steps 10, RevDEQ err 0.0027873509097844362
+2026-01-15 10:08:52,125: maxiter hit in iteration 45
+2026-01-15 10:09:01,654: [Epoch 1] Train Loss: 4.11E+01, PSNR: 26.74
+2026-01-15 10:12:49,230: [Epoch 1] Val Loss: 1.99E+02, PSNR: 27.44
+2026-01-15 10:14:38,611: maxiter hit in iteration 1
+2026-01-15 10:14:48,322: maxiter hit in iteration 2
+2026-01-15 10:14:54,829: Step 2, Train PSNR 27.20072364807129, RevDEQ steps 10, RevDEQ err 0.0033442445565015078
+2026-01-15 10:14:57,522: maxiter hit in iteration 3
+2026-01-15 10:15:06,897: maxiter hit in iteration 4
+2026-01-15 10:15:13,471: Step 4, Train PSNR 27.703165531158447, RevDEQ steps 10, RevDEQ err 0.0022780143190175295
+2026-01-15 10:15:16,078: maxiter hit in iteration 5
+2026-01-15 10:15:32,091: maxiter hit in iteration 6
+2026-01-15 10:15:40,846: Step 6, Train PSNR 27.719510078430176, RevDEQ steps 10, RevDEQ err 0.003101393347606063
+2026-01-15 10:15:44,784: maxiter hit in iteration 7
+2026-01-15 10:15:57,754: maxiter hit in iteration 8
+2026-01-15 10:16:12,305: Step 8, Train PSNR 27.65493130683899, RevDEQ steps 10, RevDEQ err 0.0031589167192578316
+2026-01-15 10:16:17,833: maxiter hit in iteration 9
+2026-01-15 10:16:30,701: maxiter hit in iteration 10
+2026-01-15 10:16:39,789: Step 10, Train PSNR 27.744387435913087, RevDEQ steps 10, RevDEQ err 0.0028255493380129337
+2026-01-15 10:16:44,261: maxiter hit in iteration 11
+2026-01-15 10:16:55,764: maxiter hit in iteration 12
+2026-01-15 10:17:04,009: Step 12, Train PSNR 27.807194709777832, RevDEQ steps 10, RevDEQ err 0.0031578862108290195
+2026-01-15 10:17:08,863: maxiter hit in iteration 13
+2026-01-15 10:17:22,527: maxiter hit in iteration 14
+2026-01-15 10:17:31,428: Step 14, Train PSNR 27.579233714512416, RevDEQ steps 10, RevDEQ err 0.0032902921084314585
+2026-01-15 10:17:36,410: maxiter hit in iteration 15
+2026-01-15 10:17:52,048: maxiter hit in iteration 16
+2026-01-15 10:18:01,876: Step 16, Train PSNR 27.553285717964172, RevDEQ steps 10, RevDEQ err 0.0033644523937255144
+2026-01-15 10:18:06,633: maxiter hit in iteration 17
+2026-01-15 10:18:23,649: maxiter hit in iteration 18
+2026-01-15 10:18:33,110: Step 18, Train PSNR 27.575380855136448, RevDEQ steps 10, RevDEQ err 0.0036841919645667076
+2026-01-15 10:18:39,373: maxiter hit in iteration 19
+2026-01-15 10:18:49,976: maxiter hit in iteration 20
+2026-01-15 10:18:58,547: Step 20, Train PSNR 27.560489845275878, RevDEQ steps 10, RevDEQ err 0.0031015893910080194
+2026-01-15 10:19:01,650: maxiter hit in iteration 21
+2026-01-15 10:19:20,676: maxiter hit in iteration 22
+2026-01-15 10:19:35,629: Step 22, Train PSNR 27.451482859524813, RevDEQ steps 10, RevDEQ err 0.003644557436928153
+2026-01-15 10:19:41,031: maxiter hit in iteration 23
+2026-01-15 10:19:59,496: maxiter hit in iteration 24
+2026-01-15 10:20:08,616: Step 24, Train PSNR 27.52259890238444, RevDEQ steps 10, RevDEQ err 0.0034358161501586437
+2026-01-15 10:20:11,868: maxiter hit in iteration 25
+2026-01-15 10:20:27,972: maxiter hit in iteration 26
+2026-01-15 10:20:37,750: Step 26, Train PSNR 27.56978255051833, RevDEQ steps 10, RevDEQ err 0.0030472499784082174
+2026-01-15 10:20:41,189: maxiter hit in iteration 27
+2026-01-15 10:20:54,727: maxiter hit in iteration 28
+2026-01-15 10:21:03,431: Step 28, Train PSNR 27.58867863246373, RevDEQ steps 10, RevDEQ err 0.0030214141588658094
+2026-01-15 10:21:06,550: maxiter hit in iteration 29
+2026-01-15 10:21:19,426: maxiter hit in iteration 30
+2026-01-15 10:21:28,173: Step 30, Train PSNR 27.575517336527508, RevDEQ steps 10, RevDEQ err 0.00342323025688529
+2026-01-15 10:21:31,511: maxiter hit in iteration 31
+2026-01-15 10:21:44,178: maxiter hit in iteration 32
+2026-01-15 10:21:52,659: Step 32, Train PSNR 27.571981728076935, RevDEQ steps 10, RevDEQ err 0.0033591287210583687
+2026-01-15 10:21:55,860: maxiter hit in iteration 33
+2026-01-15 10:22:05,871: maxiter hit in iteration 34
+2026-01-15 10:22:12,718: Step 34, Train PSNR 27.579883238848517, RevDEQ steps 10, RevDEQ err 0.00391398323699832
+2026-01-15 10:22:17,443: maxiter hit in iteration 35
+2026-01-15 10:22:28,768: maxiter hit in iteration 36
+2026-01-15 10:22:37,014: Step 36, Train PSNR 27.577022976345486, RevDEQ steps 10, RevDEQ err 0.0032331531401723623
+2026-01-15 10:22:41,795: maxiter hit in iteration 37
+2026-01-15 10:22:53,401: maxiter hit in iteration 38
+2026-01-15 10:23:01,512: Step 38, Train PSNR 27.57004707737973, RevDEQ steps 10, RevDEQ err 0.0035702206660062075
+2026-01-15 10:23:04,422: maxiter hit in iteration 39
+2026-01-15 10:23:15,333: maxiter hit in iteration 40
+2026-01-15 10:23:22,748: Step 40, Train PSNR 27.57381978034973, RevDEQ steps 10, RevDEQ err 0.0032258082646876574
+2026-01-15 10:23:25,975: maxiter hit in iteration 41
+2026-01-15 10:23:36,840: maxiter hit in iteration 42
+2026-01-15 10:23:45,926: Step 42, Train PSNR 27.569669496445428, RevDEQ steps 10, RevDEQ err 0.003176551079377532
+2026-01-15 10:23:49,049: maxiter hit in iteration 43
+2026-01-15 10:23:59,656: maxiter hit in iteration 44
+2026-01-15 10:24:06,758: Step 44, Train PSNR 27.537945313887164, RevDEQ steps 10, RevDEQ err 0.00390694011002779
+2026-01-15 10:24:09,640: maxiter hit in iteration 45
+2026-01-15 10:24:25,141: [Epoch 2] Train Loss: 3.26E+01, PSNR: 27.54
+2026-01-15 10:28:56,625: [Epoch 2] Val Loss: 1.93E+02, PSNR: 27.69

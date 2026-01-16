@@ -40,11 +40,11 @@ def get_bilevel_hyperparameters(regularizer_name, problem):
         args.epochs_maid = 200  # MAID parameter
 
         if problem == "Denoising":
-            args.pretrain_epochs = 10 #300  # number of epochs in pretraining
+            args.pretrain_epochs = 100 #300  # number of epochs in pretraining
             args.jacobian_regularization_parameter = (
                 1e-6  # Jacobian regularization parameter
             )
-            args.epochs = 25 #100  # number of epochs in the bilevel phase
+            args.epochs = 2 #100  # number of epochs in the bilevel phase
             args.parameter_fitting_init = (
                 1.0  # initialization of the regularization parameter
             )
