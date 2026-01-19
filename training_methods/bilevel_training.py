@@ -32,7 +32,7 @@ def bilevel_training(
     lower_level_max_iter=1000,  # maximal number of iterations in the lower level problem
     lower_level_tol_train=1e-4,  # convergence tolerance for the lower level solver during training
     lower_level_tol_val=1e-4,  # convergence tolerance for the lower level solver during validation
-    minres_max_iter=1000,  # maximal number of iterations in the linear system solver for mode == "IFT", no effect for mode "JFB"
+    minres_max_iter=200,  # maximal number of iterations in the linear system solver for mode == "IFT", no effect for mode "JFB"
     minres_tol=1e-6,  # convergence tolerance in the linear system solver for mode == "IFT", no effect for mode "JFB"
     jfb_step_size_factor=1.0,  # gradient scaling for mode == "JFB", no effect for mode == "IFT"
     lr=0.005,  # learning rate
