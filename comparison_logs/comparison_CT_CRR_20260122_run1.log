@@ -1,0 +1,131 @@
+2026-01-22 12:34:45,501: Dataset: LoDoPaB
+2026-01-22 12:34:45,555: Train set size: 50, Val set size: 20
+2026-01-22 12:34:45,602: Pretrained weights not found at weights/score_for_CT/CRR_score_training_for_CT_trial.pt, will train from scratch
+2026-01-22 12:34:45,619: 
+======================================================================
+2026-01-22 12:34:45,620: SCORE PRETRAINING (training regularizer from scratch)
+2026-01-22 12:34:45,624: ======================================================================
+2026-01-22 12:34:46,009: Pretraining for 40 epochs...
+2026-01-22 12:34:52,908: [Epoch 1] Train Loss: 3.18E+03, PSNR: 11.53
+2026-01-22 12:34:58,683: [Epoch 2] Train Loss: 1.42E+03, PSNR: 15.27
+2026-01-22 12:35:02,921: [Epoch 3] Train Loss: 1.03E+03, PSNR: 15.54
+2026-01-22 12:35:07,588: [Epoch 4] Train Loss: 7.38E+02, PSNR: 17.75
+2026-01-22 12:35:12,071: [Epoch 5] Train Loss: 6.23E+02, PSNR: 18.63
+2026-01-22 12:35:12,872: [Epoch 5] Val Loss: 4.52E+01, PSNR: 18.85
+2026-01-22 12:35:18,391: [Epoch 6] Train Loss: 4.90E+02, PSNR: 20.27
+2026-01-22 12:35:23,800: [Epoch 7] Train Loss: 4.03E+02, PSNR: 20.47
+2026-01-22 12:35:27,809: [Epoch 8] Train Loss: 3.33E+02, PSNR: 22.62
+2026-01-22 12:35:32,672: [Epoch 9] Train Loss: 2.35E+02, PSNR: 23.19
+2026-01-22 12:35:37,009: [Epoch 10] Train Loss: 1.84E+02, PSNR: 23.55
+2026-01-22 12:35:39,449: [Epoch 10] Val Loss: 1.33E+01, PSNR: 24.12
+2026-01-22 12:35:47,132: [Epoch 11] Train Loss: 1.55E+02, PSNR: 24.75
+2026-01-22 12:35:51,926: [Epoch 12] Train Loss: 1.10E+02, PSNR: 25.80
+2026-01-22 12:35:57,774: [Epoch 13] Train Loss: 7.83E+01, PSNR: 27.57
+2026-01-22 12:36:04,502: [Epoch 14] Train Loss: 5.73E+01, PSNR: 27.96
+2026-01-22 12:36:08,602: [Epoch 15] Train Loss: 4.91E+01, PSNR: 29.03
+2026-01-22 12:36:10,474: [Epoch 15] Val Loss: 3.59E+00, PSNR: 29.69
+2026-01-22 12:36:14,103: [Epoch 16] Train Loss: 4.46E+01, PSNR: 29.71
+2026-01-22 12:36:18,195: [Epoch 17] Train Loss: 3.91E+01, PSNR: 30.70
+2026-01-22 12:36:23,021: [Epoch 18] Train Loss: 3.40E+01, PSNR: 30.41
+2026-01-22 12:36:29,725: [Epoch 19] Train Loss: 3.35E+01, PSNR: 30.97
+2026-01-22 12:36:34,924: [Epoch 20] Train Loss: 3.03E+01, PSNR: 31.78
+2026-01-22 12:36:35,959: [Epoch 20] Val Loss: 2.22E+00, PSNR: 31.86
+2026-01-22 12:36:41,945: [Epoch 21] Train Loss: 2.79E+01, PSNR: 34.03
+2026-01-22 12:36:48,259: [Epoch 22] Train Loss: 2.58E+01, PSNR: 32.64
+2026-01-22 12:36:53,017: [Epoch 23] Train Loss: 2.42E+01, PSNR: 33.66
+2026-01-22 12:36:58,579: [Epoch 24] Train Loss: 2.34E+01, PSNR: 32.89
+2026-01-22 12:37:05,001: [Epoch 25] Train Loss: 2.36E+01, PSNR: 32.81
+2026-01-22 12:37:07,645: [Epoch 25] Val Loss: 1.68E+00, PSNR: 33.07
+2026-01-22 12:37:12,703: [Epoch 26] Train Loss: 2.13E+01, PSNR: 33.86
+2026-01-22 12:37:18,594: [Epoch 27] Train Loss: 2.02E+01, PSNR: 35.02
+2026-01-22 12:37:23,891: [Epoch 28] Train Loss: 2.14E+01, PSNR: 33.19
+2026-01-22 12:37:29,187: [Epoch 29] Train Loss: 2.02E+01, PSNR: 33.73
+2026-01-22 12:37:35,503: [Epoch 30] Train Loss: 2.11E+01, PSNR: 33.42
+2026-01-22 12:37:36,519: [Epoch 30] Val Loss: 1.82E+00, PSNR: 32.65
+2026-01-22 12:37:41,901: [Epoch 31] Train Loss: 1.99E+01, PSNR: 33.53
+2026-01-22 12:37:47,951: [Epoch 32] Train Loss: 1.90E+01, PSNR: 33.56
+2026-01-22 12:37:53,569: [Epoch 33] Train Loss: 1.90E+01, PSNR: 34.06
+2026-01-22 12:37:58,187: [Epoch 34] Train Loss: 1.86E+01, PSNR: 34.85
+2026-01-22 12:38:03,359: [Epoch 35] Train Loss: 1.95E+01, PSNR: 33.71
+2026-01-22 12:38:04,134: [Epoch 35] Val Loss: 1.44E+00, PSNR: 33.74
+2026-01-22 12:38:09,588: [Epoch 36] Train Loss: 1.82E+01, PSNR: 34.35
+2026-01-22 12:38:13,541: [Epoch 37] Train Loss: 1.75E+01, PSNR: 34.36
+2026-01-22 12:38:17,807: [Epoch 38] Train Loss: 1.80E+01, PSNR: 34.15
+2026-01-22 12:38:21,336: [Epoch 39] Train Loss: 1.77E+01, PSNR: 35.30
+2026-01-22 12:38:25,519: [Epoch 40] Train Loss: 1.77E+01, PSNR: 34.96
+2026-01-22 12:38:26,639: [Epoch 40] Val Loss: 1.31E+00, PSNR: 34.27
+2026-01-22 12:38:26,649: Pretraining complete. Final PSNR: 34.27 dB
+2026-01-22 12:38:26,866: Saved pretrained weights to weights/score_for_CT/CRR_score_training_for_CT_trial.pt
+2026-01-22 12:38:26,866: ======================================================================
+2026-01-22 12:38:26,866: HYPERGRADIENT METHOD COMPARISON (CT)
+2026-01-22 12:38:26,868: ======================================================================
+2026-01-22 12:38:26,868: Run ID: 20260122_run1
+2026-01-22 12:38:26,868: Problem: CT
+2026-01-22 12:38:26,868: Regularizer: CRR
+2026-01-22 12:38:26,868: Epochs: 2
+2026-01-22 12:38:26,871: Validation epochs: 2
+2026-01-22 12:38:26,871: Load pretrained weights: False
+2026-01-22 12:38:26,871: Load parameter-fitted weights: False
+2026-01-22 12:38:26,871: RevDEQ beta: 0.8
+2026-01-22 12:38:26,871: Function evaluations per batch:
+2026-01-22 12:38:26,874:   JFB: 20 steps x 1 = 20 f-evals
+2026-01-22 12:38:26,874:   RevDEQ: 10 steps x 2 = 20 f-evals
+2026-01-22 12:38:26,875: ======================================================================
+2026-01-22 12:38:26,876: 
+======================================================================
+2026-01-22 12:38:26,876: Running JFB
+2026-01-22 12:38:26,877: ======================================================================
+2026-01-22 12:38:26,892: Using pretrained base regularizer
+2026-01-22 12:43:49,776: [Epoch 1] Train Loss: 1.46E+01, PSNR: 24.96
+2026-01-22 12:49:07,804: [Epoch 2] Train Loss: 1.12E+01, PSNR: 25.26
+2026-01-22 12:51:14,559: [Epoch 2] Val Loss: 1.12E+01, PSNR: 25.33
+2026-01-22 12:51:14,575: 
+JFB training completed in 767.7s
+2026-01-22 12:51:14,576:   Final Train Loss: 11.1859
+2026-01-22 12:51:14,576:   Final Train PSNR: 25.26 dB
+2026-01-22 12:51:14,577:   Final Val Loss: 11.1913
+2026-01-22 12:51:14,577:   Final Val PSNR: 25.33 dB
+2026-01-22 12:51:14,585:   Saved weights to weights/bilevel_CT\CRR_bilevel_JFB_for_CT_20260122_run1.pt
+2026-01-22 12:51:14,586: 
+======================================================================
+2026-01-22 12:51:14,586: Running RevDEQ
+2026-01-22 12:51:14,587: ======================================================================
+2026-01-22 12:51:14,590: Using pretrained base regularizer
+2026-01-22 12:51:53,805: Step 5, Train PSNR 4.907054, RevDEQ steps 10, RevDEQ err 1.346193e+00
+2026-01-22 12:52:30,996: Step 10, Train PSNR 6.825208, RevDEQ steps 10, RevDEQ err 1.066872e+00
+2026-01-22 12:53:10,523: Step 15, Train PSNR 8.627723, RevDEQ steps 10, RevDEQ err 1.391786e+00
+2026-01-22 12:53:48,230: Step 20, Train PSNR 10.189932, RevDEQ steps 10, RevDEQ err 6.976603e-01
+2026-01-22 12:54:24,478: Step 25, Train PSNR 10.850506, RevDEQ steps 10, RevDEQ err 7.129174e-01
+2026-01-22 12:55:01,687: Step 30, Train PSNR 11.649633, RevDEQ steps 10, RevDEQ err 4.779513e-01
+2026-01-22 12:55:41,663: Step 35, Train PSNR 12.481504, RevDEQ steps 10, RevDEQ err 4.309956e-01
+2026-01-22 12:56:20,494: Step 40, Train PSNR 13.394763, RevDEQ steps 10, RevDEQ err 7.423913e-01
+2026-01-22 12:56:57,549: Step 45, Train PSNR 13.771826, RevDEQ steps 10, RevDEQ err 5.578007e-01
+2026-01-22 12:57:33,938: Step 50, Train PSNR 14.204350, RevDEQ steps 10, RevDEQ err 3.602108e-01
+2026-01-22 12:57:33,940: [Epoch 1] Train Loss: 2.55E+02, PSNR: 14.20
+2026-01-22 12:58:10,671: Step 5, Train PSNR 19.697924, RevDEQ steps 10, RevDEQ err 4.334955e-01
+2026-01-22 12:58:48,634: Step 10, Train PSNR 19.416304, RevDEQ steps 10, RevDEQ err 2.695699e-01
+2026-01-22 12:59:23,519: Step 15, Train PSNR 19.113731, RevDEQ steps 10, RevDEQ err 2.557381e-01
+2026-01-22 12:59:57,550: Step 20, Train PSNR 19.222133, RevDEQ steps 10, RevDEQ err 2.455149e-01
+2026-01-22 13:00:34,509: Step 25, Train PSNR 19.753926, RevDEQ steps 10, RevDEQ err 3.224294e-01
+2026-01-22 13:01:11,349: Step 30, Train PSNR 19.861189, RevDEQ steps 10, RevDEQ err 2.407923e-01
+2026-01-22 13:01:47,010: Step 35, Train PSNR 19.826874, RevDEQ steps 10, RevDEQ err 2.403616e-01
+2026-01-22 13:02:22,412: Step 40, Train PSNR 20.030850, RevDEQ steps 10, RevDEQ err 2.558127e-01
+2026-01-22 13:02:56,402: Step 45, Train PSNR 20.267726, RevDEQ steps 10, RevDEQ err 2.019451e-01
+2026-01-22 13:03:34,969: Step 50, Train PSNR 20.268520, RevDEQ steps 10, RevDEQ err 2.433653e-01
+2026-01-22 13:03:34,969: [Epoch 2] Train Loss: 3.08E+01, PSNR: 20.27
+2026-01-22 13:04:54,328: [Epoch 2] Val Loss: 2.54E+01, PSNR: 21.29
+2026-01-22 13:04:54,344: 
+RevDEQ training completed in 819.8s
+2026-01-22 13:04:54,344:   Final Train Loss: 30.8203
+2026-01-22 13:04:54,345:   Final Train PSNR: 20.27 dB
+2026-01-22 13:04:54,345:   Final Val Loss: 25.4158
+2026-01-22 13:04:54,345:   Final Val PSNR: 21.29 dB
+2026-01-22 13:04:54,357:   Saved weights to weights/bilevel_CT\CRR_bilevel_RevDEQ_for_CT_20260122_run1.pt
+2026-01-22 13:04:54,359: 
+======================================================================
+2026-01-22 13:04:54,362: POST-TRAINING EVALUATION (Variational Reconstruction)
+2026-01-22 13:04:54,363: ======================================================================
+2026-01-22 13:04:54,364: 
+Evaluating JFB...
+2026-01-22 13:04:54,690: Running evaluation on 10 test images...
+2026-01-22 13:04:54,696: Number of test images: 10.

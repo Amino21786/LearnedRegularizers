@@ -1,19 +1,20 @@
 """
-Comparison script for IFT, JFB, and RevDEQ hypergradient methods.
+Comparison script for JFB and RevDEQ hypergradient methods on CT (LoDoPaB dataset).
 
-This script runs bilevel training with each method using normalized function evaluations:
-- RevDEQ: 10 steps × 2 f-evals/step = 20 function evaluations
-- IFT/JFB (nmAPG): 20 steps × 1 f-eval/step = 20 function evaluations
+This script:
+1. Trains regularizers using JFB and RevDEQ methods with normalized function evaluations
+2. Runs post-training evaluation using variational reconstruction
+3. Outputs JSON files compatible with plot_comparison_results.py
 
 Usage:
-    # Using pretrained weights (default)
-    python compare_hypergradient_methods.py --epochs 5 --problem Denoising --regularizer_name CRR
+    # Small-scale run (default - for testing)
+    python compare_hypergradient_ct.py --epochs 2 --regularizer_name CRR --train_limit 50 --val_limit 20 --eval_limit 10
     
-    # Train from scratch (no pretrained weights)
-    python compare_hypergradient_methods.py --epochs 5 --no_load_pretrain --pretrain_epochs 10
+    # Full run with pretrained weights
+    python compare_hypergradient_ct.py --epochs 4 --regularizer_name CRR
     
-    # Use parameter-fitted weights
-    python compare_hypergradient_methods.py --epochs 5 --load_param_fit
+    # Train from scratch
+    python compare_hypergradient_ct.py --epochs 4 --no_load_pretrain --pretrain_epochs 10
 """
 
 import os
@@ -48,6 +49,8 @@ from torchvision.transforms import (
     RandomRotation,
 )
 from hyperparameters.hyperparameters_bilevel import get_bilevel_hyperparameters
+from operators import get_operator, get_evaluation_setting
+from evaluation import evaluate
 import deepinv
 
 
@@ -61,8 +64,6 @@ def create_regularizer(regularizer_name, device):
         reg = ICNNPrior(in_channels=1, channels=32, device=device, kernel_size=5).to(device)
     elif regularizer_name == "IDCNN":
         reg = IDCNNPrior(in_channels=1, channels=32, device=device, kernel_size=5).to(device)
-    elif regularizer_name == "LAR":
-        reg = LocalAR(in_channels=1, pad=True, use_bias=False, n_patches=-1, reduction="sum").to(device)
     elif regularizer_name == "TDV":
         reg = TDV(in_channels=1, num_features=16).to(device)
     elif regularizer_name == "LSR":
@@ -86,9 +87,7 @@ def generate_run_id(log_dir: str, problem: str, regularizer: str) -> str:
     if os.path.exists(log_dir):
         for filename in os.listdir(log_dir):
             if filename.startswith(base_pattern):
-                # Extract run number
                 try:
-                    # Pattern: comparison_Problem_Reg_YYYYMMDD_runN.log or .json
                     parts = filename.replace(".log", "").replace(".json", "").split("_run")
                     if len(parts) == 2:
                         run_num = int(parts[1])
@@ -96,13 +95,63 @@ def generate_run_id(log_dir: str, problem: str, regularizer: str) -> str:
                 except (ValueError, IndexError):
                     pass
     
-    # Get next run number
     next_run = max(existing_runs, default=0) + 1
     return f"{date_str}_run{next_run}"
 
 
+def run_evaluation(
+    regularizer,
+    device,
+    eval_limit=None,
+    logger=None,
+):
+    """
+    Run post-training evaluation using variational reconstruction.
+    
+    Returns dict with evaluation metrics.
+    """
+    # Get evaluation setting for CT
+    dataset, physics, data_fidelity = get_evaluation_setting("CT", device)
+    
+    # Optionally limit evaluation dataset
+    if eval_limit is not None and eval_limit < len(dataset):
+        dataset = torch.utils.data.Subset(dataset, range(eval_limit))
+    
+    if logger:
+        logger.info(f"Running evaluation on {len(dataset)} test images...")
+    
+    # Evaluation parameters (from variational_reconstruction.py)
+    step_size = 1e-1
+    max_iter = 1000
+    tol = 1e-4
+    
+    # Run evaluation
+    mean_psnr, x_out, y_out, recon_out = evaluate(
+        physics=physics,
+        data_fidelity=data_fidelity,
+        dataset=dataset,
+        regularizer=regularizer,
+        lmbd=1.0,
+        step_size=step_size,
+        max_iter=max_iter,
+        tol=tol,
+        only_first=False,
+        adaptive_range=True,  # CT uses adaptive range PSNR
+        device=device,
+        adam=False,
+        verbose=False,
+        save_path=None,
+        logger=logger,
+    )
+    
+    return {
+        "mean_psnr": float(mean_psnr),
+        "num_test_images": len(dataset),
+    }
+
+
 def run_comparison(args):
-    """Run comparison of all three hypergradient methods."""
+    """Run comparison of JFB and RevDEQ hypergradient methods on CT."""
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
@@ -126,45 +175,30 @@ def run_comparison(args):
     # Get hyperparameters
     hyper_params = get_bilevel_hyperparameters(args.regularizer_name, args.problem)
     
-    # Setup physics and data fidelity
-    if args.problem == "Denoising":
-        noise_level = 0.1
-        physics = deepinv.physics.Denoising(
-            noise_model=deepinv.physics.GaussianNoise(sigma=noise_level)
-        )
-        lmbd = 1.0
-    elif args.problem == "CT":
-        noise_level = 0.02
-        physics = deepinv.physics.Tomography(
-            img_width=128,
-            angles=30,
-            noise_model=deepinv.physics.GaussianNoise(sigma=noise_level),
-            device=device,
-        )
-        lmbd = 150.0
-    
+    # Setup physics and data fidelity for CT
+    # Training uses different settings than evaluation (smaller images, fewer angles)
+    noise_level = 0.02
+    physics = deepinv.physics.Tomography(
+        img_width=128,
+        angles=30,
+        noise_model=deepinv.physics.GaussianNoise(sigma=noise_level),
+        device=device,
+    )
+    lmbd = 150.0
     data_fidelity = deepinv.optim.L2()
     
-    # Load datasets (matching training_bilevel.py pattern)
+    # Load datasets
     transform_train = Compose([
-        RandomCrop(64),
+        RandomCrop(128),
         RandomHorizontalFlip(),
         RandomVerticalFlip(),
         RandomApply([RandomRotation((90, 90))], 0.5),
     ])
-    transform_val = CenterCrop(64 if args.problem == "Denoising" else 128)
+    transform_val = CenterCrop(128)
     
-    # Map problem to dataset key
-    if args.problem == "Denoising":
-        dataset_key = "BSDS500_gray"
-    elif args.problem == "CT":
-        dataset_key = "LoDoPaB"
-    else:
-        raise ValueError(f"Unknown problem: {args.problem}")
-    
-    # Load full dataset and split into train/val
-    train_dataset = get_dataset(dataset_key, test=False, transform=transform_train)
-    val_dataset = get_dataset(dataset_key, test=False, transform=transform_val)
+    # Load LoDoPaB dataset
+    train_dataset = get_dataset("LoDoPaB", test=False, transform=transform_train)
+    val_dataset = get_dataset("LoDoPaB", test=False, transform=transform_val)
     
     # Split into train/val (90%/10%)
     test_ratio = 0.1
@@ -180,7 +214,7 @@ def run_comparison(args):
     if args.val_limit is not None and args.val_limit < len(val_set):
         val_set = torch.utils.data.Subset(val_set, range(args.val_limit))
     
-    logger.info(f"Dataset: {dataset_key}")
+    logger.info(f"Dataset: LoDoPaB")
     logger.info(f"Train set size: {len(train_set)}, Val set size: {len(val_set)}")
     
     train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=1, shuffle=True, num_workers=0)
@@ -236,7 +270,7 @@ def run_comparison(args):
                 validation_epochs=5,
                 logger=logger,
                 adabelief=hyper_params.adabelief,
-                dynamic_range_psnr=args.problem == "CT",
+                dynamic_range_psnr=True,
                 model_selection=False,
             )
             logger.info(f"Pretraining complete. Final PSNR: {pt_psnr_val[-1]:.2f} dB")
@@ -249,17 +283,17 @@ def run_comparison(args):
             logger.info("Skipping pretraining (pretrain_epochs=0)")
     
     # Methods to compare with their lower-level max iterations
-    # RevDEQ: 2 f-evals per step, IFT/JFB: 1 f-eval per step
+    # RevDEQ: 2 f-evals per step, JFB: 1 f-eval per step
     methods = {
-        "IFT": {"max_iter": args.ift_jfb_max_iter, "f_evals_per_step": 1},
-        "JFB": {"max_iter": args.ift_jfb_max_iter, "f_evals_per_step": 1},
+        "JFB": {"max_iter": args.jfb_max_iter, "f_evals_per_step": 1},
         "RevDEQ": {"max_iter": args.revdeq_max_iter, "f_evals_per_step": 2},
     }
     
     results = {}
+    trained_regularizers = {}  # Store trained regularizers for evaluation
     
     logger.info("=" * 70)
-    logger.info("HYPERGRADIENT METHOD COMPARISON")
+    logger.info("HYPERGRADIENT METHOD COMPARISON (CT)")
     logger.info("=" * 70)
     logger.info(f"Run ID: {run_id}")
     logger.info(f"Problem: {args.problem}")
@@ -269,7 +303,6 @@ def run_comparison(args):
     logger.info(f"Load pretrained weights: {args.load_pretrain}")
     logger.info(f"Load parameter-fitted weights: {args.load_param_fit}")
     logger.info(f"RevDEQ beta: {args.revdeq_beta}")
-    logger.info(f"Use embedded beta: {args.use_embedded_beta}")
     logger.info(f"Function evaluations per batch:")
     for method, config in methods.items():
         f_evals = config["max_iter"] * config["f_evals_per_step"]
@@ -321,36 +354,91 @@ def run_comparison(args):
                 verbose=False,
                 logger=logger,
                 adabelief=hyper_params.adabelief,
-                dynamic_range_psnr=args.problem == "CT",
+                dynamic_range_psnr=True,
                 validation_epochs=args.validation_epochs,
                 revdeq_beta=args.revdeq_beta,
                 use_embedded_beta=args.use_embedded_beta,
-                dtype=args.dtype,
             )
             
             end_time = datetime.datetime.now()
-            duration = (end_time - start_time).total_seconds()
+            training_duration = (end_time - start_time).total_seconds()
+            
+            # Store trained regularizer for evaluation
+            trained_regularizers[method_name] = deepcopy(regularizer)
             
             results[method_name] = {
                 "loss_train": loss_train,
                 "loss_val": loss_val,
                 "psnr_train": psnr_train,
                 "psnr_val": psnr_val,
-                "duration_seconds": duration,
+                "training_duration_seconds": training_duration,
                 "max_iter": config["max_iter"],
                 "f_evals_per_step": config["f_evals_per_step"],
                 "total_f_evals_per_batch": config["max_iter"] * config["f_evals_per_step"],
             }
             
-            logger.info(f"\n{method_name} completed in {duration:.1f}s")
+            logger.info(f"\n{method_name} training completed in {training_duration:.1f}s")
             logger.info(f"  Final Train Loss: {loss_train[-1]:.4f}")
             logger.info(f"  Final Train PSNR: {psnr_train[-1]:.2f} dB")
             logger.info(f"  Final Val Loss: {loss_val[-1]:.4f}")
             logger.info(f"  Final Val PSNR: {psnr_val[-1]:.2f} dB")
             
+            # Save trained weights
+            weights_dir = f"weights/bilevel_{args.problem}"
+            os.makedirs(weights_dir, exist_ok=True)
+            weights_path = os.path.join(weights_dir, f"{args.regularizer_name}_bilevel_{method_name}_for_{args.problem}_{run_id}.pt")
+            torch.save(regularizer.state_dict(), weights_path)
+            results[method_name]["weights_path"] = weights_path
+            logger.info(f"  Saved weights to {weights_path}")
+            
         except Exception as e:
-            logger.error(f"{method_name} failed with error: {e}")
+            logger.error(f"{method_name} training failed with error: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
             results[method_name] = {"error": str(e)}
+    
+    # ---- Post-training Evaluation ----
+    if args.run_evaluation:
+        logger.info("\n" + "=" * 70)
+        logger.info("POST-TRAINING EVALUATION (Variational Reconstruction)")
+        logger.info("=" * 70)
+        
+        for method_name, regularizer in trained_regularizers.items():
+            logger.info(f"\nEvaluating {method_name}...")
+            
+            try:
+                eval_start = datetime.datetime.now()
+                
+                eval_results = run_evaluation(
+                    regularizer,
+                    device,
+                    eval_limit=args.eval_limit,
+                    logger=logger,
+                )
+                
+                eval_duration = (datetime.datetime.now() - eval_start).total_seconds()
+                
+                results[method_name]["evaluation"] = {
+                    "test_psnr": eval_results["mean_psnr"],
+                    "num_test_images": eval_results["num_test_images"],
+                    "evaluation_duration_seconds": eval_duration,
+                }
+                
+                logger.info(f"  {method_name} Evaluation PSNR: {eval_results['mean_psnr']:.2f} dB")
+                logger.info(f"  Evaluation time: {eval_duration:.1f}s")
+                
+            except Exception as e:
+                logger.error(f"{method_name} evaluation failed: {e}")
+                import traceback
+                logger.error(traceback.format_exc())
+                results[method_name]["evaluation"] = {"error": str(e)}
+    
+    # Calculate total duration including evaluation
+    for method_name in results:
+        if "error" not in results[method_name]:
+            training_time = results[method_name].get("training_duration_seconds", 0)
+            eval_time = results[method_name].get("evaluation", {}).get("evaluation_duration_seconds", 0)
+            results[method_name]["duration_seconds"] = training_time + eval_time
     
     # Summary
     logger.info("\n" + "=" * 70)
@@ -361,16 +449,17 @@ def run_comparison(args):
     for method_name in methods.keys():
         if method_name in results and "error" not in results[method_name]:
             r = results[method_name]
-            summary_table.append({
+            row = {
                 "Method": method_name,
                 "Max Iter": r["max_iter"],
                 "F-Evals/Batch": r["total_f_evals_per_batch"],
-                "Train Loss": f"{r['loss_train'][-1]:.2f}",
-                "Val Loss": f"{r['loss_val'][-1]:.2f}",
                 "Train PSNR": f"{r['psnr_train'][-1]:.2f}",
                 "Val PSNR": f"{r['psnr_val'][-1]:.2f}",
-                "Duration (s)": f"{r['duration_seconds']:.1f}",
-            })
+                "Train Time (s)": f"{r['training_duration_seconds']:.1f}",
+            }
+            if "evaluation" in r and "test_psnr" in r["evaluation"]:
+                row["Test PSNR"] = f"{r['evaluation']['test_psnr']:.2f}"
+            summary_table.append(row)
     
     # Print table
     if summary_table:
@@ -402,8 +491,25 @@ def run_comparison(args):
             return [convert_to_serializable(v) for v in obj]
         return obj
     
+    # Add metadata to results
+    results_with_metadata = {
+        "metadata": {
+            "problem": args.problem,
+            "regularizer": args.regularizer_name,
+            "run_id": run_id,
+            "epochs": args.epochs,
+            "validation_epochs": args.validation_epochs,
+            "train_set_size": len(train_set),
+            "val_set_size": len(val_set),
+            "eval_limit": args.eval_limit,
+            "revdeq_beta": args.revdeq_beta,
+            "timestamp": datetime.datetime.now().isoformat(),
+        },
+        "results": results,
+    }
+    
     with open(results_file, "w") as f:
-        json.dump(convert_to_serializable(results), f, indent=2)
+        json.dump(convert_to_serializable(results_with_metadata), f, indent=2)
     
     logger.info(f"\nResults saved to: {results_file}")
     logger.info(f"Log saved to: {log_file}")
@@ -413,19 +519,22 @@ def run_comparison(args):
 
 if __name__ == "__main__":
     rev_deq_max_iter = 10
-    parser = argparse.ArgumentParser(description="Compare IFT, JFB, and RevDEQ hypergradient methods")
-    parser.add_argument("--problem", type=str, default="Denoising", choices=["Denoising", "CT"])
+    parser = argparse.ArgumentParser(description="Compare JFB and RevDEQ hypergradient methods on CT")
+    parser.add_argument("--problem", type=str, default="CT", choices=["CT"],
+                        help="Problem type (CT only for this script)")
     parser.add_argument("--regularizer_name", type=str, default="CRR", 
-                        choices=["CRR", "WCRR", "ICNN", "IDCNN", "LAR", "TDV", "LSR"])
-    parser.add_argument("--epochs", type=int, default=5, help="Number of training epochs")
+                        choices=["CRR", "WCRR", "ICNN", "IDCNN", "TDV", "LSR"])
+    parser.add_argument("--epochs", type=int, default=2, help="Number of training epochs")
     parser.add_argument("--revdeq_max_iter", type=int, default=rev_deq_max_iter, 
                         help="Max iterations for RevDEQ (2 f-evals per step)")
-    parser.add_argument("--ift_jfb_max_iter", type=int, default=2*rev_deq_max_iter, 
-                        help="Max iterations for IFT/JFB (1 f-eval per step)")
-    parser.add_argument("--train_limit", type=int, default=None, 
+    parser.add_argument("--jfb_max_iter", type=int, default=2*rev_deq_max_iter, 
+                        help="Max iterations for JFB (1 f-eval per step)")
+    parser.add_argument("--train_limit", type=int, default=50, 
                         help="Limit training set size (None for full dataset)")
-    parser.add_argument("--val_limit", type=int, default=None, 
+    parser.add_argument("--val_limit", type=int, default=20, 
                         help="Limit validation set size (None for full dataset)")
+    parser.add_argument("--eval_limit", type=int, default=10, 
+                        help="Limit evaluation set size (None for full test set)")
     parser.add_argument("--load_pretrain", action="store_true", default=True,
                         help="Load pretrained score weights (default: True)")
     parser.add_argument("--no_load_pretrain", action="store_false", dest="load_pretrain",
@@ -433,20 +542,19 @@ if __name__ == "__main__":
     parser.add_argument("--load_param_fit", action="store_true", 
                         help="Load parameter-fitted weights instead of just pretrained")
     parser.add_argument("--pretrain_epochs", type=int, default=None,
-                        help="Number of score pretraining epochs if training from scratch (uses hyperparams default if not set)")
+                        help="Number of score pretraining epochs if training from scratch")
     parser.add_argument("--revdeq_beta", type=float, default=0.8,
                         help="Relaxation parameter for RevDEQ reversible iterations (0 < beta <= 1)")
     parser.add_argument("--use_embedded_beta", action="store_true",
                         help="Embed beta directly into fixed-point function (experimental)")
     parser.add_argument("--validation_epochs", type=int, default=None,
                         help="Run validation every N epochs (default: min(5, epochs))")
-    parser.add_argument("--dtype", type=str, default="float32", choices=["float32", "float64"],
-                        help="Data type for training (float32 or float64). Use float64 for better gradient accuracy.")
+    parser.add_argument("--run_evaluation", action="store_true", default=True,
+                        help="Run post-training evaluation (default: True)")
+    parser.add_argument("--no_evaluation", action="store_false", dest="run_evaluation",
+                        help="Skip post-training evaluation")
     
     args = parser.parse_args()
-    
-    # Convert dtype string to torch dtype
-    args.dtype = torch.float64 if args.dtype == "float64" else torch.float32
     
     # Set validation_epochs default: min(5, epochs) to ensure it's <= epochs
     if args.validation_epochs is None:

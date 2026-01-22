@@ -1,0 +1,894 @@
+2026-01-22 11:05:52,356: Dataset: BSDS500_gray
+2026-01-22 11:05:52,358: Train set size: 50, Val set size: 25
+2026-01-22 11:05:52,359: 
+======================================================================
+2026-01-22 11:05:52,360: SCORE PRETRAINING (training regularizer from scratch)
+2026-01-22 11:05:52,361: ======================================================================
+2026-01-22 11:05:52,370: Pretraining for 5 epochs...
+2026-01-22 11:05:55,455: [Epoch 1] Train Loss: 8.54E+02, PSNR: 18.38
+2026-01-22 11:05:58,237: [Epoch 2] Train Loss: 3.23E+02, PSNR: 22.46
+2026-01-22 11:06:00,092: [Epoch 3] Train Loss: 1.93E+02, PSNR: 24.46
+2026-01-22 11:06:02,056: [Epoch 4] Train Loss: 1.51E+02, PSNR: 25.70
+2026-01-22 11:06:04,017: [Epoch 5] Train Loss: 1.36E+02, PSNR: 25.87
+2026-01-22 11:06:05,289: [Epoch 5] Val Loss: 1.10E+01, PSNR: 25.80
+2026-01-22 11:06:05,289: Pretraining complete. Final PSNR: 25.80 dB
+2026-01-22 11:06:05,316: Saved pretrained weights to weights/score_for_Denoising/CRR_score_training_for_Denoising_trial.pt
+2026-01-22 11:06:05,319: ======================================================================
+2026-01-22 11:06:05,324: HYPERGRADIENT METHOD COMPARISON
+2026-01-22 11:06:05,327: ======================================================================
+2026-01-22 11:06:05,330: Problem: Denoising
+2026-01-22 11:06:05,332: Regularizer: CRR
+2026-01-22 11:06:05,336: Epochs: 5
+2026-01-22 11:06:05,338: Validation epochs: 5
+2026-01-22 11:06:05,338: Load pretrained weights: False
+2026-01-22 11:06:05,340: Load parameter-fitted weights: False
+2026-01-22 11:06:05,341: RevDEQ beta: 0.8
+2026-01-22 11:06:05,342: Use embedded beta: False
+2026-01-22 11:06:05,344: Function evaluations per batch:
+2026-01-22 11:06:05,344:   IFT: 20 steps x 1 = 20 f-evals
+2026-01-22 11:06:05,344:   JFB: 20 steps x 1 = 20 f-evals
+2026-01-22 11:06:05,346:   RevDEQ: 10 steps x 2 = 20 f-evals
+2026-01-22 11:06:05,346: ======================================================================
+2026-01-22 11:06:05,347: 
+======================================================================
+2026-01-22 11:06:05,347: Running IFT
+2026-01-22 11:06:05,348: ======================================================================
+2026-01-22 11:06:05,351: Using pretrained base regularizer
+2026-01-22 11:06:06,324: maxiter hit in iteration 1
+2026-01-22 11:06:08,715: maxiter hit in iteration 2
+2026-01-22 11:06:10,622: maxiter hit in iteration 3
+2026-01-22 11:06:14,307: maxiter hit in iteration 4
+2026-01-22 11:06:15,993: maxiter hit in iteration 5
+2026-01-22 11:06:18,208: maxiter hit in iteration 6
+2026-01-22 11:06:20,003: maxiter hit in iteration 7
+2026-01-22 11:06:26,252: maxiter hit in iteration 8
+2026-01-22 11:06:29,302: maxiter hit in iteration 9
+2026-01-22 11:06:32,762: maxiter hit in iteration 10
+2026-01-22 11:06:34,985: maxiter hit in iteration 11
+2026-01-22 11:06:36,991: maxiter hit in iteration 12
+2026-01-22 11:06:39,119: maxiter hit in iteration 13
+2026-01-22 11:06:40,938: maxiter hit in iteration 14
+2026-01-22 11:06:42,600: maxiter hit in iteration 15
+2026-01-22 11:06:44,406: maxiter hit in iteration 16
+2026-01-22 11:06:46,121: maxiter hit in iteration 17
+2026-01-22 11:06:48,516: maxiter hit in iteration 18
+2026-01-22 11:06:50,993: maxiter hit in iteration 19
+2026-01-22 11:06:54,702: maxiter hit in iteration 20
+2026-01-22 11:06:56,339: maxiter hit in iteration 21
+2026-01-22 11:06:58,354: maxiter hit in iteration 22
+2026-01-22 11:07:00,176: maxiter hit in iteration 23
+2026-01-22 11:07:02,572: maxiter hit in iteration 24
+2026-01-22 11:07:04,875: maxiter hit in iteration 25
+2026-01-22 11:07:06,988: maxiter hit in iteration 26
+2026-01-22 11:07:08,925: maxiter hit in iteration 27
+2026-01-22 11:07:11,630: maxiter hit in iteration 28
+2026-01-22 11:07:14,030: maxiter hit in iteration 29
+2026-01-22 11:07:16,129: maxiter hit in iteration 30
+2026-01-22 11:07:17,817: maxiter hit in iteration 31
+2026-01-22 11:07:19,923: maxiter hit in iteration 32
+2026-01-22 11:07:22,230: maxiter hit in iteration 33
+2026-01-22 11:07:24,773: maxiter hit in iteration 34
+2026-01-22 11:07:26,975: maxiter hit in iteration 35
+2026-01-22 11:07:30,454: maxiter hit in iteration 36
+2026-01-22 11:07:32,886: maxiter hit in iteration 37
+2026-01-22 11:07:34,721: maxiter hit in iteration 38
+2026-01-22 11:07:36,610: maxiter hit in iteration 39
+2026-01-22 11:07:38,535: maxiter hit in iteration 40
+2026-01-22 11:07:40,799: maxiter hit in iteration 41
+2026-01-22 11:07:43,208: maxiter hit in iteration 42
+2026-01-22 11:07:45,328: maxiter hit in iteration 43
+2026-01-22 11:07:47,688: maxiter hit in iteration 44
+2026-01-22 11:07:51,061: maxiter hit in iteration 45
+2026-01-22 11:07:53,542: maxiter hit in iteration 46
+2026-01-22 11:07:56,219: maxiter hit in iteration 47
+2026-01-22 11:07:59,091: maxiter hit in iteration 48
+2026-01-22 11:08:01,271: maxiter hit in iteration 49
+2026-01-22 11:08:04,198: maxiter hit in iteration 50
+2026-01-22 11:08:05,697: [Epoch 1] Train Loss: 1.47E+01, PSNR: 25.32
+2026-01-22 11:08:06,937: maxiter hit in iteration 1
+2026-01-22 11:08:10,366: maxiter hit in iteration 2
+2026-01-22 11:08:13,864: maxiter hit in iteration 3
+2026-01-22 11:08:17,056: maxiter hit in iteration 4
+2026-01-22 11:08:20,409: maxiter hit in iteration 5
+2026-01-22 11:08:23,205: maxiter hit in iteration 6
+2026-01-22 11:08:25,671: maxiter hit in iteration 7
+2026-01-22 11:08:27,911: maxiter hit in iteration 8
+2026-01-22 11:08:32,273: maxiter hit in iteration 9
+2026-01-22 11:08:34,894: maxiter hit in iteration 10
+2026-01-22 11:08:37,034: maxiter hit in iteration 11
+2026-01-22 11:08:39,422: maxiter hit in iteration 12
+2026-01-22 11:08:41,548: maxiter hit in iteration 13
+2026-01-22 11:08:46,457: maxiter hit in iteration 14
+2026-01-22 11:08:49,189: maxiter hit in iteration 15
+2026-01-22 11:08:52,018: maxiter hit in iteration 16
+2026-01-22 11:08:56,266: maxiter hit in iteration 17
+2026-01-22 11:08:59,482: maxiter hit in iteration 18
+2026-01-22 11:09:03,723: maxiter hit in iteration 19
+2026-01-22 11:09:06,689: maxiter hit in iteration 20
+2026-01-22 11:09:10,273: maxiter hit in iteration 21
+2026-01-22 11:09:12,549: maxiter hit in iteration 22
+2026-01-22 11:09:16,069: maxiter hit in iteration 23
+2026-01-22 11:09:17,830: maxiter hit in iteration 24
+2026-01-22 11:09:19,847: maxiter hit in iteration 25
+2026-01-22 11:09:21,890: maxiter hit in iteration 26
+2026-01-22 11:09:23,855: maxiter hit in iteration 27
+2026-01-22 11:09:25,840: maxiter hit in iteration 28
+2026-01-22 11:09:27,814: maxiter hit in iteration 29
+2026-01-22 11:09:29,959: maxiter hit in iteration 30
+2026-01-22 11:09:31,900: maxiter hit in iteration 31
+2026-01-22 11:09:35,500: maxiter hit in iteration 32
+2026-01-22 11:09:37,873: maxiter hit in iteration 33
+2026-01-22 11:09:40,311: maxiter hit in iteration 34
+2026-01-22 11:09:42,301: maxiter hit in iteration 35
+2026-01-22 11:09:44,583: maxiter hit in iteration 36
+2026-01-22 11:09:46,584: maxiter hit in iteration 37
+2026-01-22 11:09:48,669: maxiter hit in iteration 38
+2026-01-22 11:09:50,577: maxiter hit in iteration 39
+2026-01-22 11:09:52,571: maxiter hit in iteration 40
+2026-01-22 11:09:54,519: maxiter hit in iteration 41
+2026-01-22 11:09:56,568: maxiter hit in iteration 42
+2026-01-22 11:09:58,888: maxiter hit in iteration 43
+2026-01-22 11:10:01,331: maxiter hit in iteration 44
+2026-01-22 11:10:03,475: maxiter hit in iteration 45
+2026-01-22 11:10:07,272: maxiter hit in iteration 46
+2026-01-22 11:10:15,489: maxiter hit in iteration 47
+2026-01-22 11:10:24,059: maxiter hit in iteration 48
+2026-01-22 11:10:28,284: maxiter hit in iteration 49
+2026-01-22 11:10:31,818: maxiter hit in iteration 50
+2026-01-22 11:10:33,371: [Epoch 2] Train Loss: 1.05E+01, PSNR: 26.68
+2026-01-22 11:10:34,442: maxiter hit in iteration 1
+2026-01-22 11:10:38,509: maxiter hit in iteration 2
+2026-01-22 11:10:41,522: maxiter hit in iteration 3
+2026-01-22 11:10:43,610: maxiter hit in iteration 4
+2026-01-22 11:10:45,746: maxiter hit in iteration 5
+2026-01-22 11:10:47,697: maxiter hit in iteration 6
+2026-01-22 11:10:49,967: maxiter hit in iteration 7
+2026-01-22 11:10:51,884: maxiter hit in iteration 8
+2026-01-22 11:10:54,117: maxiter hit in iteration 9
+2026-01-22 11:10:56,230: maxiter hit in iteration 10
+2026-01-22 11:10:58,915: maxiter hit in iteration 11
+2026-01-22 11:11:01,094: maxiter hit in iteration 12
+2026-01-22 11:11:03,058: maxiter hit in iteration 13
+2026-01-22 11:11:04,953: maxiter hit in iteration 14
+2026-01-22 11:11:07,019: maxiter hit in iteration 15
+2026-01-22 11:11:09,104: maxiter hit in iteration 16
+2026-01-22 11:11:11,107: maxiter hit in iteration 17
+2026-01-22 11:11:13,337: maxiter hit in iteration 18
+2026-01-22 11:11:15,466: maxiter hit in iteration 19
+2026-01-22 11:11:17,578: maxiter hit in iteration 20
+2026-01-22 11:11:19,850: maxiter hit in iteration 21
+2026-01-22 11:11:22,123: maxiter hit in iteration 22
+2026-01-22 11:11:24,648: maxiter hit in iteration 23
+2026-01-22 11:11:29,979: maxiter hit in iteration 24
+2026-01-22 11:11:32,231: maxiter hit in iteration 25
+2026-01-22 11:11:34,485: maxiter hit in iteration 26
+2026-01-22 11:11:36,401: maxiter hit in iteration 27
+2026-01-22 11:11:38,723: maxiter hit in iteration 28
+2026-01-22 11:11:41,729: maxiter hit in iteration 29
+2026-01-22 11:11:44,358: maxiter hit in iteration 30
+2026-01-22 11:11:46,506: maxiter hit in iteration 31
+2026-01-22 11:11:48,963: maxiter hit in iteration 32
+2026-01-22 11:11:51,682: maxiter hit in iteration 33
+2026-01-22 11:11:53,770: maxiter hit in iteration 34
+2026-01-22 11:11:56,049: maxiter hit in iteration 35
+2026-01-22 11:11:58,148: maxiter hit in iteration 36
+2026-01-22 11:12:01,726: maxiter hit in iteration 37
+2026-01-22 11:12:04,264: maxiter hit in iteration 38
+2026-01-22 11:12:06,447: maxiter hit in iteration 39
+2026-01-22 11:12:08,426: maxiter hit in iteration 40
+2026-01-22 11:12:10,602: maxiter hit in iteration 41
+2026-01-22 11:12:12,438: maxiter hit in iteration 42
+2026-01-22 11:12:14,450: maxiter hit in iteration 43
+2026-01-22 11:12:16,361: maxiter hit in iteration 44
+2026-01-22 11:12:18,416: maxiter hit in iteration 45
+2026-01-22 11:12:20,378: maxiter hit in iteration 46
+2026-01-22 11:12:22,387: maxiter hit in iteration 47
+2026-01-22 11:12:25,208: maxiter hit in iteration 48
+2026-01-22 11:12:27,387: maxiter hit in iteration 49
+2026-01-22 11:12:29,982: maxiter hit in iteration 50
+2026-01-22 11:12:31,227: [Epoch 3] Train Loss: 1.06E+01, PSNR: 26.52
+2026-01-22 11:12:32,513: maxiter hit in iteration 1
+2026-01-22 11:12:34,984: maxiter hit in iteration 2
+2026-01-22 11:12:37,205: maxiter hit in iteration 3
+2026-01-22 11:12:39,289: maxiter hit in iteration 4
+2026-01-22 11:12:41,447: maxiter hit in iteration 5
+2026-01-22 11:12:43,669: maxiter hit in iteration 6
+2026-01-22 11:12:47,022: maxiter hit in iteration 7
+2026-01-22 11:12:48,930: maxiter hit in iteration 8
+2026-01-22 11:12:51,206: maxiter hit in iteration 9
+2026-01-22 11:12:53,249: maxiter hit in iteration 10
+2026-01-22 11:12:55,508: maxiter hit in iteration 11
+2026-01-22 11:12:57,429: maxiter hit in iteration 12
+2026-01-22 11:12:59,625: maxiter hit in iteration 13
+2026-01-22 11:13:01,651: maxiter hit in iteration 14
+2026-01-22 11:13:03,747: maxiter hit in iteration 15
+2026-01-22 11:13:05,506: maxiter hit in iteration 16
+2026-01-22 11:13:07,587: maxiter hit in iteration 17
+2026-01-22 11:13:09,660: maxiter hit in iteration 18
+2026-01-22 11:13:11,974: maxiter hit in iteration 19
+2026-01-22 11:13:14,048: maxiter hit in iteration 20
+2026-01-22 11:13:16,317: maxiter hit in iteration 21
+2026-01-22 11:13:18,578: maxiter hit in iteration 22
+2026-01-22 11:13:20,983: maxiter hit in iteration 23
+2026-01-22 11:13:23,309: maxiter hit in iteration 24
+2026-01-22 11:13:26,762: maxiter hit in iteration 25
+2026-01-22 11:13:28,770: maxiter hit in iteration 26
+2026-01-22 11:13:31,252: maxiter hit in iteration 27
+2026-01-22 11:13:33,647: maxiter hit in iteration 28
+2026-01-22 11:13:35,949: maxiter hit in iteration 29
+2026-01-22 11:13:38,514: maxiter hit in iteration 30
+2026-01-22 11:13:40,542: maxiter hit in iteration 31
+2026-01-22 11:13:42,931: maxiter hit in iteration 32
+2026-01-22 11:13:45,123: maxiter hit in iteration 33
+2026-01-22 11:13:48,460: maxiter hit in iteration 34
+2026-01-22 11:13:50,900: maxiter hit in iteration 35
+2026-01-22 11:13:53,154: maxiter hit in iteration 36
+2026-01-22 11:13:55,919: maxiter hit in iteration 37
+2026-01-22 11:13:58,067: maxiter hit in iteration 38
+2026-01-22 11:14:00,454: maxiter hit in iteration 39
+2026-01-22 11:14:02,573: maxiter hit in iteration 40
+2026-01-22 11:14:04,997: maxiter hit in iteration 41
+2026-01-22 11:14:07,313: maxiter hit in iteration 42
+2026-01-22 11:14:09,917: maxiter hit in iteration 43
+2026-01-22 11:14:11,896: maxiter hit in iteration 44
+2026-01-22 11:14:14,006: maxiter hit in iteration 45
+2026-01-22 11:14:15,930: maxiter hit in iteration 46
+2026-01-22 11:14:18,221: maxiter hit in iteration 47
+2026-01-22 11:14:20,383: maxiter hit in iteration 48
+2026-01-22 11:14:22,668: maxiter hit in iteration 49
+2026-01-22 11:14:24,753: maxiter hit in iteration 50
+2026-01-22 11:14:26,176: [Epoch 4] Train Loss: 9.81E+00, PSNR: 26.87
+2026-01-22 11:14:27,225: maxiter hit in iteration 1
+2026-01-22 11:14:29,319: maxiter hit in iteration 2
+2026-01-22 11:14:31,547: maxiter hit in iteration 3
+2026-01-22 11:14:33,695: maxiter hit in iteration 4
+2026-01-22 11:14:36,324: maxiter hit in iteration 5
+2026-01-22 11:14:38,389: maxiter hit in iteration 6
+2026-01-22 11:14:40,538: maxiter hit in iteration 7
+2026-01-22 11:14:42,723: maxiter hit in iteration 8
+2026-01-22 11:14:45,052: maxiter hit in iteration 9
+2026-01-22 11:14:47,058: maxiter hit in iteration 10
+2026-01-22 11:14:49,261: maxiter hit in iteration 11
+2026-01-22 11:14:52,212: maxiter hit in iteration 12
+2026-01-22 11:14:54,454: maxiter hit in iteration 13
+2026-01-22 11:14:56,633: maxiter hit in iteration 14
+2026-01-22 11:14:59,415: maxiter hit in iteration 15
+2026-01-22 11:15:02,430: maxiter hit in iteration 16
+2026-01-22 11:15:04,615: maxiter hit in iteration 17
+2026-01-22 11:15:06,789: maxiter hit in iteration 18
+2026-01-22 11:15:08,827: maxiter hit in iteration 19
+2026-01-22 11:15:11,314: maxiter hit in iteration 20
+2026-01-22 11:15:13,640: maxiter hit in iteration 21
+2026-01-22 11:15:15,982: maxiter hit in iteration 22
+2026-01-22 11:15:17,997: maxiter hit in iteration 23
+2026-01-22 11:15:20,301: maxiter hit in iteration 24
+2026-01-22 11:15:22,425: maxiter hit in iteration 25
+2026-01-22 11:15:24,703: maxiter hit in iteration 26
+2026-01-22 11:15:26,792: maxiter hit in iteration 27
+2026-01-22 11:15:29,068: maxiter hit in iteration 28
+2026-01-22 11:15:31,221: maxiter hit in iteration 29
+2026-01-22 11:15:33,439: maxiter hit in iteration 30
+2026-01-22 11:15:35,553: maxiter hit in iteration 31
+2026-01-22 11:15:37,703: maxiter hit in iteration 32
+2026-01-22 11:15:43,120: maxiter hit in iteration 33
+2026-01-22 11:15:45,350: maxiter hit in iteration 34
+2026-01-22 11:15:47,920: maxiter hit in iteration 35
+2026-01-22 11:15:50,545: maxiter hit in iteration 36
+2026-01-22 11:15:53,828: maxiter hit in iteration 37
+2026-01-22 11:15:56,742: maxiter hit in iteration 38
+2026-01-22 11:15:59,171: maxiter hit in iteration 39
+2026-01-22 11:16:01,382: maxiter hit in iteration 40
+2026-01-22 11:16:03,351: maxiter hit in iteration 41
+2026-01-22 11:16:06,349: maxiter hit in iteration 42
+2026-01-22 11:16:09,553: maxiter hit in iteration 43
+2026-01-22 11:16:12,265: maxiter hit in iteration 44
+2026-01-22 11:16:14,553: maxiter hit in iteration 45
+2026-01-22 11:16:16,729: maxiter hit in iteration 46
+2026-01-22 11:16:19,117: maxiter hit in iteration 47
+2026-01-22 11:16:21,072: maxiter hit in iteration 48
+2026-01-22 11:16:23,099: maxiter hit in iteration 49
+2026-01-22 11:16:25,513: maxiter hit in iteration 50
+2026-01-22 11:16:26,807: [Epoch 5] Train Loss: 9.74E+00, PSNR: 26.93
+2026-01-22 11:16:46,010: [Epoch 5] Val Loss: 1.02E+01, PSNR: 26.76
+2026-01-22 11:16:46,013: 
+IFT completed in 640.7s
+2026-01-22 11:16:46,013:   Final Train Loss: 9.7377
+2026-01-22 11:16:46,013:   Final Train PSNR: 26.93 dB
+2026-01-22 11:16:46,013:   Final Val Loss: 10.1822
+2026-01-22 11:16:46,013:   Final Val PSNR: 26.76 dB
+2026-01-22 11:16:46,015: 
+======================================================================
+2026-01-22 11:16:46,015: Running JFB
+2026-01-22 11:16:46,015: ======================================================================
+2026-01-22 11:16:46,018: Using pretrained base regularizer
+2026-01-22 11:16:46,791: maxiter hit in iteration 1
+2026-01-22 11:16:47,590: maxiter hit in iteration 2
+2026-01-22 11:16:48,550: maxiter hit in iteration 3
+2026-01-22 11:16:49,364: maxiter hit in iteration 4
+2026-01-22 11:16:50,234: maxiter hit in iteration 5
+2026-01-22 11:16:51,032: maxiter hit in iteration 6
+2026-01-22 11:16:51,949: maxiter hit in iteration 7
+2026-01-22 11:16:53,111: maxiter hit in iteration 8
+2026-01-22 11:16:53,942: maxiter hit in iteration 9
+2026-01-22 11:16:54,918: maxiter hit in iteration 10
+2026-01-22 11:16:55,777: maxiter hit in iteration 11
+2026-01-22 11:16:57,635: maxiter hit in iteration 12
+2026-01-22 11:16:58,872: maxiter hit in iteration 13
+2026-01-22 11:16:59,920: maxiter hit in iteration 14
+2026-01-22 11:17:01,007: maxiter hit in iteration 15
+2026-01-22 11:17:02,172: maxiter hit in iteration 16
+2026-01-22 11:17:03,075: maxiter hit in iteration 17
+2026-01-22 11:17:03,927: maxiter hit in iteration 18
+2026-01-22 11:17:04,785: maxiter hit in iteration 19
+2026-01-22 11:17:06,327: maxiter hit in iteration 20
+2026-01-22 11:17:07,555: maxiter hit in iteration 21
+2026-01-22 11:17:08,472: maxiter hit in iteration 22
+2026-01-22 11:17:09,350: maxiter hit in iteration 23
+2026-01-22 11:17:10,338: maxiter hit in iteration 24
+2026-01-22 11:17:11,192: maxiter hit in iteration 25
+2026-01-22 11:17:12,000: maxiter hit in iteration 26
+2026-01-22 11:17:12,858: maxiter hit in iteration 27
+2026-01-22 11:17:13,652: maxiter hit in iteration 28
+2026-01-22 11:17:14,623: maxiter hit in iteration 29
+2026-01-22 11:17:15,479: maxiter hit in iteration 30
+2026-01-22 11:17:16,284: maxiter hit in iteration 31
+2026-01-22 11:17:17,056: maxiter hit in iteration 32
+2026-01-22 11:17:17,836: maxiter hit in iteration 33
+2026-01-22 11:17:18,673: maxiter hit in iteration 34
+2026-01-22 11:17:19,601: maxiter hit in iteration 35
+2026-01-22 11:17:20,431: maxiter hit in iteration 36
+2026-01-22 11:17:21,236: maxiter hit in iteration 37
+2026-01-22 11:17:22,063: maxiter hit in iteration 38
+2026-01-22 11:17:22,903: maxiter hit in iteration 39
+2026-01-22 11:17:23,805: maxiter hit in iteration 40
+2026-01-22 11:17:24,721: maxiter hit in iteration 41
+2026-01-22 11:17:25,932: maxiter hit in iteration 42
+2026-01-22 11:17:26,935: maxiter hit in iteration 43
+2026-01-22 11:17:28,043: maxiter hit in iteration 44
+2026-01-22 11:17:29,067: maxiter hit in iteration 45
+2026-01-22 11:17:30,087: maxiter hit in iteration 46
+2026-01-22 11:17:31,105: maxiter hit in iteration 47
+2026-01-22 11:17:32,362: maxiter hit in iteration 48
+2026-01-22 11:17:33,164: maxiter hit in iteration 49
+2026-01-22 11:17:33,958: maxiter hit in iteration 50
+2026-01-22 11:17:34,013: [Epoch 1] Train Loss: 1.60E+01, PSNR: 24.73
+2026-01-22 11:17:34,807: maxiter hit in iteration 1
+2026-01-22 11:17:35,578: maxiter hit in iteration 2
+2026-01-22 11:17:36,776: maxiter hit in iteration 3
+2026-01-22 11:17:37,818: maxiter hit in iteration 4
+2026-01-22 11:17:38,697: maxiter hit in iteration 5
+2026-01-22 11:17:39,496: maxiter hit in iteration 6
+2026-01-22 11:17:40,299: maxiter hit in iteration 7
+2026-01-22 11:17:41,248: maxiter hit in iteration 8
+2026-01-22 11:17:42,032: maxiter hit in iteration 9
+2026-01-22 11:17:42,807: maxiter hit in iteration 10
+2026-01-22 11:17:43,651: maxiter hit in iteration 11
+2026-01-22 11:17:44,442: maxiter hit in iteration 12
+2026-01-22 11:17:45,355: maxiter hit in iteration 13
+2026-01-22 11:17:46,213: maxiter hit in iteration 14
+2026-01-22 11:17:47,030: maxiter hit in iteration 15
+2026-01-22 11:17:47,834: maxiter hit in iteration 16
+2026-01-22 11:17:48,677: maxiter hit in iteration 17
+2026-01-22 11:17:49,546: maxiter hit in iteration 18
+2026-01-22 11:17:50,493: maxiter hit in iteration 19
+2026-01-22 11:17:51,287: maxiter hit in iteration 20
+2026-01-22 11:17:52,076: maxiter hit in iteration 21
+2026-01-22 11:17:52,924: maxiter hit in iteration 22
+2026-01-22 11:17:53,754: maxiter hit in iteration 23
+2026-01-22 11:17:54,746: maxiter hit in iteration 24
+2026-01-22 11:17:55,547: maxiter hit in iteration 25
+2026-01-22 11:17:56,343: maxiter hit in iteration 26
+2026-01-22 11:17:57,446: maxiter hit in iteration 27
+2026-01-22 11:17:58,243: maxiter hit in iteration 28
+2026-01-22 11:17:59,581: maxiter hit in iteration 29
+2026-01-22 11:18:01,304: maxiter hit in iteration 30
+2026-01-22 11:18:02,329: maxiter hit in iteration 31
+2026-01-22 11:18:03,408: maxiter hit in iteration 32
+2026-01-22 11:18:04,231: maxiter hit in iteration 33
+2026-01-22 11:18:05,079: maxiter hit in iteration 34
+2026-01-22 11:18:05,864: maxiter hit in iteration 35
+2026-01-22 11:18:06,699: maxiter hit in iteration 36
+2026-01-22 11:18:07,918: maxiter hit in iteration 37
+2026-01-22 11:18:08,692: maxiter hit in iteration 38
+2026-01-22 11:18:09,454: maxiter hit in iteration 39
+2026-01-22 11:18:10,254: maxiter hit in iteration 40
+2026-01-22 11:18:11,032: maxiter hit in iteration 41
+2026-01-22 11:18:11,848: maxiter hit in iteration 42
+2026-01-22 11:18:12,724: maxiter hit in iteration 43
+2026-01-22 11:18:13,492: maxiter hit in iteration 44
+2026-01-22 11:18:14,277: maxiter hit in iteration 45
+2026-01-22 11:18:15,121: maxiter hit in iteration 46
+2026-01-22 11:18:15,908: maxiter hit in iteration 47
+2026-01-22 11:18:16,847: maxiter hit in iteration 48
+2026-01-22 11:18:17,615: maxiter hit in iteration 49
+2026-01-22 11:18:18,439: maxiter hit in iteration 50
+2026-01-22 11:18:18,488: [Epoch 2] Train Loss: 1.01E+01, PSNR: 26.67
+2026-01-22 11:18:19,243: maxiter hit in iteration 1
+2026-01-22 11:18:20,055: maxiter hit in iteration 2
+2026-01-22 11:18:20,947: maxiter hit in iteration 3
+2026-01-22 11:18:21,702: maxiter hit in iteration 4
+2026-01-22 11:18:22,461: maxiter hit in iteration 5
+2026-01-22 11:18:23,230: maxiter hit in iteration 6
+2026-01-22 11:18:24,022: maxiter hit in iteration 7
+2026-01-22 11:18:24,907: maxiter hit in iteration 8
+2026-01-22 11:18:25,805: maxiter hit in iteration 9
+2026-01-22 11:18:26,597: maxiter hit in iteration 10
+2026-01-22 11:18:27,386: maxiter hit in iteration 11
+2026-01-22 11:18:28,196: maxiter hit in iteration 12
+2026-01-22 11:18:28,950: maxiter hit in iteration 13
+2026-01-22 11:18:29,930: maxiter hit in iteration 14
+2026-01-22 11:18:30,731: maxiter hit in iteration 15
+2026-01-22 11:18:31,480: maxiter hit in iteration 16
+2026-01-22 11:18:32,276: maxiter hit in iteration 17
+2026-01-22 11:18:33,060: maxiter hit in iteration 18
+2026-01-22 11:18:33,952: maxiter hit in iteration 19
+2026-01-22 11:18:34,833: maxiter hit in iteration 20
+2026-01-22 11:18:35,604: maxiter hit in iteration 21
+2026-01-22 11:18:36,401: maxiter hit in iteration 22
+2026-01-22 11:18:37,182: maxiter hit in iteration 23
+2026-01-22 11:18:37,962: maxiter hit in iteration 24
+2026-01-22 11:18:38,975: maxiter hit in iteration 25
+2026-01-22 11:18:39,764: maxiter hit in iteration 26
+2026-01-22 11:18:40,516: maxiter hit in iteration 27
+2026-01-22 11:18:41,292: maxiter hit in iteration 28
+2026-01-22 11:18:42,030: maxiter hit in iteration 29
+2026-01-22 11:18:42,953: maxiter hit in iteration 30
+2026-01-22 11:18:43,709: maxiter hit in iteration 31
+2026-01-22 11:18:44,468: maxiter hit in iteration 32
+2026-01-22 11:18:45,272: maxiter hit in iteration 33
+2026-01-22 11:18:46,065: maxiter hit in iteration 34
+2026-01-22 11:18:46,860: maxiter hit in iteration 35
+2026-01-22 11:18:47,781: maxiter hit in iteration 36
+2026-01-22 11:18:48,547: maxiter hit in iteration 37
+2026-01-22 11:18:49,304: maxiter hit in iteration 38
+2026-01-22 11:18:50,125: maxiter hit in iteration 39
+2026-01-22 11:18:50,904: maxiter hit in iteration 40
+2026-01-22 11:18:51,863: maxiter hit in iteration 41
+2026-01-22 11:18:52,660: maxiter hit in iteration 42
+2026-01-22 11:18:53,444: maxiter hit in iteration 43
+2026-01-22 11:18:54,287: maxiter hit in iteration 44
+2026-01-22 11:18:55,112: maxiter hit in iteration 45
+2026-01-22 11:18:56,051: maxiter hit in iteration 46
+2026-01-22 11:18:56,865: maxiter hit in iteration 47
+2026-01-22 11:18:57,676: maxiter hit in iteration 48
+2026-01-22 11:18:58,479: maxiter hit in iteration 49
+2026-01-22 11:18:59,270: maxiter hit in iteration 50
+2026-01-22 11:18:59,318: [Epoch 3] Train Loss: 1.04E+01, PSNR: 26.76
+2026-01-22 11:19:00,281: maxiter hit in iteration 1
+2026-01-22 11:19:01,106: maxiter hit in iteration 2
+2026-01-22 11:19:02,052: maxiter hit in iteration 3
+2026-01-22 11:19:03,483: maxiter hit in iteration 4
+2026-01-22 11:19:04,766: maxiter hit in iteration 5
+2026-01-22 11:19:05,559: maxiter hit in iteration 6
+2026-01-22 11:19:06,357: maxiter hit in iteration 7
+2026-01-22 11:19:07,130: maxiter hit in iteration 8
+2026-01-22 11:19:07,892: maxiter hit in iteration 9
+2026-01-22 11:19:08,630: maxiter hit in iteration 10
+2026-01-22 11:19:09,487: maxiter hit in iteration 11
+2026-01-22 11:19:10,331: maxiter hit in iteration 12
+2026-01-22 11:19:11,104: maxiter hit in iteration 13
+2026-01-22 11:19:11,833: maxiter hit in iteration 14
+2026-01-22 11:19:12,550: maxiter hit in iteration 15
+2026-01-22 11:19:13,460: maxiter hit in iteration 16
+2026-01-22 11:19:14,247: maxiter hit in iteration 17
+2026-01-22 11:19:15,152: maxiter hit in iteration 18
+2026-01-22 11:19:15,938: maxiter hit in iteration 19
+2026-01-22 11:19:16,745: maxiter hit in iteration 20
+2026-01-22 11:19:17,550: maxiter hit in iteration 21
+2026-01-22 11:19:18,446: maxiter hit in iteration 22
+2026-01-22 11:19:19,241: maxiter hit in iteration 23
+2026-01-22 11:19:20,062: maxiter hit in iteration 24
+2026-01-22 11:19:20,852: maxiter hit in iteration 25
+2026-01-22 11:19:21,695: maxiter hit in iteration 26
+2026-01-22 11:19:22,587: maxiter hit in iteration 27
+2026-01-22 11:19:23,397: maxiter hit in iteration 28
+2026-01-22 11:19:24,161: maxiter hit in iteration 29
+2026-01-22 11:19:25,005: maxiter hit in iteration 30
+2026-01-22 11:19:25,819: maxiter hit in iteration 31
+2026-01-22 11:19:27,046: maxiter hit in iteration 32
+2026-01-22 11:19:27,846: maxiter hit in iteration 33
+2026-01-22 11:19:28,681: maxiter hit in iteration 34
+2026-01-22 11:19:29,476: maxiter hit in iteration 35
+2026-01-22 11:19:30,287: maxiter hit in iteration 36
+2026-01-22 11:19:31,263: maxiter hit in iteration 37
+2026-01-22 11:19:32,071: maxiter hit in iteration 38
+2026-01-22 11:19:32,880: maxiter hit in iteration 39
+2026-01-22 11:19:33,663: maxiter hit in iteration 40
+2026-01-22 11:19:34,449: maxiter hit in iteration 41
+2026-01-22 11:19:35,389: maxiter hit in iteration 42
+2026-01-22 11:19:36,178: maxiter hit in iteration 43
+2026-01-22 11:19:37,136: maxiter hit in iteration 44
+2026-01-22 11:19:37,997: maxiter hit in iteration 45
+2026-01-22 11:19:38,864: maxiter hit in iteration 46
+2026-01-22 11:19:39,935: maxiter hit in iteration 47
+2026-01-22 11:19:40,750: maxiter hit in iteration 48
+2026-01-22 11:19:41,532: maxiter hit in iteration 49
+2026-01-22 11:19:42,352: maxiter hit in iteration 50
+2026-01-22 11:19:42,432: [Epoch 4] Train Loss: 9.17E+00, PSNR: 27.24
+2026-01-22 11:19:43,160: maxiter hit in iteration 1
+2026-01-22 11:19:44,109: maxiter hit in iteration 2
+2026-01-22 11:19:44,966: maxiter hit in iteration 3
+2026-01-22 11:19:45,771: maxiter hit in iteration 4
+2026-01-22 11:19:46,660: maxiter hit in iteration 5
+2026-01-22 11:19:47,501: maxiter hit in iteration 6
+2026-01-22 11:19:48,417: maxiter hit in iteration 7
+2026-01-22 11:19:49,266: maxiter hit in iteration 8
+2026-01-22 11:19:50,101: maxiter hit in iteration 9
+2026-01-22 11:19:50,893: maxiter hit in iteration 10
+2026-01-22 11:19:52,004: maxiter hit in iteration 11
+2026-01-22 11:19:52,904: maxiter hit in iteration 12
+2026-01-22 11:19:53,763: maxiter hit in iteration 13
+2026-01-22 11:19:54,514: maxiter hit in iteration 14
+2026-01-22 11:19:55,364: maxiter hit in iteration 15
+2026-01-22 11:19:56,184: maxiter hit in iteration 16
+2026-01-22 11:19:57,000: maxiter hit in iteration 17
+2026-01-22 11:19:57,984: maxiter hit in iteration 18
+2026-01-22 11:19:58,805: maxiter hit in iteration 19
+2026-01-22 11:19:59,874: maxiter hit in iteration 20
+2026-01-22 11:20:00,812: maxiter hit in iteration 21
+2026-01-22 11:20:01,729: maxiter hit in iteration 22
+2026-01-22 11:20:02,546: maxiter hit in iteration 23
+2026-01-22 11:20:03,358: maxiter hit in iteration 24
+2026-01-22 11:20:04,147: maxiter hit in iteration 25
+2026-01-22 11:20:05,205: maxiter hit in iteration 26
+2026-01-22 11:20:07,579: maxiter hit in iteration 27
+2026-01-22 11:20:09,211: maxiter hit in iteration 28
+2026-01-22 11:20:10,119: maxiter hit in iteration 29
+2026-01-22 11:20:11,347: maxiter hit in iteration 30
+2026-01-22 11:20:12,304: maxiter hit in iteration 31
+2026-01-22 11:20:13,399: maxiter hit in iteration 32
+2026-01-22 11:20:14,175: maxiter hit in iteration 33
+2026-01-22 11:20:15,224: maxiter hit in iteration 34
+2026-01-22 11:20:16,020: maxiter hit in iteration 35
+2026-01-22 11:20:16,810: maxiter hit in iteration 36
+2026-01-22 11:20:17,602: maxiter hit in iteration 37
+2026-01-22 11:20:18,388: maxiter hit in iteration 38
+2026-01-22 11:20:19,311: maxiter hit in iteration 39
+2026-01-22 11:20:20,127: maxiter hit in iteration 40
+2026-01-22 11:20:20,953: maxiter hit in iteration 41
+2026-01-22 11:20:21,731: maxiter hit in iteration 42
+2026-01-22 11:20:22,588: maxiter hit in iteration 43
+2026-01-22 11:20:24,014: maxiter hit in iteration 44
+2026-01-22 11:20:25,115: maxiter hit in iteration 45
+2026-01-22 11:20:25,908: maxiter hit in iteration 46
+2026-01-22 11:20:26,706: maxiter hit in iteration 47
+2026-01-22 11:20:27,542: maxiter hit in iteration 48
+2026-01-22 11:20:28,447: maxiter hit in iteration 49
+2026-01-22 11:20:29,273: maxiter hit in iteration 50
+2026-01-22 11:20:29,323: [Epoch 5] Train Loss: 1.02E+01, PSNR: 26.72
+2026-01-22 11:20:47,242: [Epoch 5] Val Loss: 1.02E+01, PSNR: 26.62
+2026-01-22 11:20:47,244: 
+JFB completed in 241.2s
+2026-01-22 11:20:47,247:   Final Train Loss: 10.2138
+2026-01-22 11:20:47,247:   Final Train PSNR: 26.72 dB
+2026-01-22 11:20:47,247:   Final Val Loss: 10.2010
+2026-01-22 11:20:47,247:   Final Val PSNR: 26.62 dB
+2026-01-22 11:20:47,247: 
+======================================================================
+2026-01-22 11:20:47,247: Running RevDEQ
+2026-01-22 11:20:47,249: ======================================================================
+2026-01-22 11:20:47,251: Using pretrained base regularizer
+2026-01-22 11:20:47,539: maxiter hit in iteration 1
+2026-01-22 11:20:48,708: maxiter hit in iteration 2
+2026-01-22 11:20:49,994: maxiter hit in iteration 3
+2026-01-22 11:20:51,434: maxiter hit in iteration 4
+2026-01-22 11:20:52,594: maxiter hit in iteration 5
+2026-01-22 11:20:53,467: Step 5, Train PSNR 20.979746, RevDEQ steps 10, RevDEQ err 2.572935e-03
+2026-01-22 11:20:53,784: maxiter hit in iteration 6
+2026-01-22 11:20:55,097: maxiter hit in iteration 7
+2026-01-22 11:20:56,243: maxiter hit in iteration 8
+2026-01-22 11:20:57,368: maxiter hit in iteration 9
+2026-01-22 11:20:58,578: maxiter hit in iteration 10
+2026-01-22 11:20:59,543: Step 10, Train PSNR 21.817977, RevDEQ steps 10, RevDEQ err 2.696147e-03
+2026-01-22 11:20:59,884: maxiter hit in iteration 11
+2026-01-22 11:21:01,116: maxiter hit in iteration 12
+2026-01-22 11:21:02,313: maxiter hit in iteration 13
+2026-01-22 11:21:03,657: maxiter hit in iteration 14
+2026-01-22 11:21:04,820: maxiter hit in iteration 15
+2026-01-22 11:21:05,697: Step 15, Train PSNR 22.462401, RevDEQ steps 10, RevDEQ err 3.636310e-03
+2026-01-22 11:21:06,059: maxiter hit in iteration 16
+2026-01-22 11:21:07,336: maxiter hit in iteration 17
+2026-01-22 11:21:09,242: maxiter hit in iteration 18
+2026-01-22 11:21:10,963: maxiter hit in iteration 19
+2026-01-22 11:21:12,373: maxiter hit in iteration 20
+2026-01-22 11:21:13,348: Step 20, Train PSNR 22.718875, RevDEQ steps 10, RevDEQ err 2.662020e-03
+2026-01-22 11:21:13,651: maxiter hit in iteration 21
+2026-01-22 11:21:14,980: maxiter hit in iteration 22
+2026-01-22 11:21:16,417: maxiter hit in iteration 23
+2026-01-22 11:21:18,025: maxiter hit in iteration 24
+2026-01-22 11:21:19,574: maxiter hit in iteration 25
+2026-01-22 11:21:20,728: Step 25, Train PSNR 23.161752, RevDEQ steps 10, RevDEQ err 3.232499e-03
+2026-01-22 11:21:21,119: maxiter hit in iteration 26
+2026-01-22 11:21:22,388: maxiter hit in iteration 27
+2026-01-22 11:21:23,645: maxiter hit in iteration 28
+2026-01-22 11:21:25,441: maxiter hit in iteration 29
+2026-01-22 11:21:27,809: maxiter hit in iteration 30
+2026-01-22 11:21:29,405: Step 30, Train PSNR 23.676632, RevDEQ steps 10, RevDEQ err 4.850821e-03
+2026-01-22 11:21:29,919: maxiter hit in iteration 31
+2026-01-22 11:21:31,580: maxiter hit in iteration 32
+2026-01-22 11:21:33,026: maxiter hit in iteration 33
+2026-01-22 11:21:34,613: maxiter hit in iteration 34
+2026-01-22 11:21:35,982: maxiter hit in iteration 35
+2026-01-22 11:21:36,952: Step 35, Train PSNR 23.914697, RevDEQ steps 10, RevDEQ err 3.228220e-03
+2026-01-22 11:21:37,277: maxiter hit in iteration 36
+2026-01-22 11:21:38,875: maxiter hit in iteration 37
+2026-01-22 11:21:40,166: maxiter hit in iteration 38
+2026-01-22 11:21:41,430: maxiter hit in iteration 39
+2026-01-22 11:21:42,861: maxiter hit in iteration 40
+2026-01-22 11:21:43,819: Step 40, Train PSNR 24.249232, RevDEQ steps 10, RevDEQ err 3.615743e-03
+2026-01-22 11:21:44,170: maxiter hit in iteration 41
+2026-01-22 11:21:45,449: maxiter hit in iteration 42
+2026-01-22 11:21:46,701: maxiter hit in iteration 43
+2026-01-22 11:21:48,140: maxiter hit in iteration 44
+2026-01-22 11:21:49,432: maxiter hit in iteration 45
+2026-01-22 11:21:50,467: Step 45, Train PSNR 24.579162, RevDEQ steps 10, RevDEQ err 7.302464e-03
+2026-01-22 11:21:50,841: maxiter hit in iteration 46
+2026-01-22 11:21:52,258: maxiter hit in iteration 47
+2026-01-22 11:21:53,543: maxiter hit in iteration 48
+2026-01-22 11:21:54,828: maxiter hit in iteration 49
+2026-01-22 11:21:56,283: maxiter hit in iteration 50
+2026-01-22 11:21:57,253: Step 50, Train PSNR 24.785792, RevDEQ steps 10, RevDEQ err 1.964176e-03
+2026-01-22 11:21:57,255: [Epoch 1] Train Loss: 1.62E+01, PSNR: 24.79
+2026-01-22 11:21:57,566: maxiter hit in iteration 1
+2026-01-22 11:21:58,895: maxiter hit in iteration 2
+2026-01-22 11:22:00,386: maxiter hit in iteration 3
+2026-01-22 11:22:01,733: maxiter hit in iteration 4
+2026-01-22 11:22:03,259: maxiter hit in iteration 5
+2026-01-22 11:22:04,494: Step 5, Train PSNR 26.758451, RevDEQ steps 10, RevDEQ err 2.405851e-02
+2026-01-22 11:22:05,228: maxiter hit in iteration 6
+2026-01-22 11:22:06,803: maxiter hit in iteration 7
+2026-01-22 11:22:08,096: maxiter hit in iteration 8
+2026-01-22 11:22:09,490: maxiter hit in iteration 9
+2026-01-22 11:22:10,845: maxiter hit in iteration 10
+2026-01-22 11:22:12,702: Step 10, Train PSNR 26.516647, RevDEQ steps 10, RevDEQ err 3.602631e-03
+2026-01-22 11:22:13,167: maxiter hit in iteration 11
+2026-01-22 11:22:14,579: maxiter hit in iteration 12
+2026-01-22 11:22:15,767: maxiter hit in iteration 13
+2026-01-22 11:22:17,019: maxiter hit in iteration 14
+2026-01-22 11:22:18,809: maxiter hit in iteration 15
+2026-01-22 11:22:19,741: Step 15, Train PSNR 27.646191, RevDEQ steps 10, RevDEQ err 2.232347e-02
+2026-01-22 11:22:20,067: maxiter hit in iteration 16
+2026-01-22 11:22:21,286: maxiter hit in iteration 17
+2026-01-22 11:22:22,823: maxiter hit in iteration 18
+2026-01-22 11:22:24,124: maxiter hit in iteration 19
+2026-01-22 11:22:25,418: maxiter hit in iteration 20
+2026-01-22 11:22:26,319: Step 20, Train PSNR 27.514159, RevDEQ steps 10, RevDEQ err 5.891479e-03
+2026-01-22 11:22:26,620: maxiter hit in iteration 21
+2026-01-22 11:22:28,201: maxiter hit in iteration 22
+2026-01-22 11:22:29,797: maxiter hit in iteration 23
+2026-01-22 11:22:31,112: maxiter hit in iteration 24
+2026-01-22 11:22:32,469: maxiter hit in iteration 25
+2026-01-22 11:22:33,385: Step 25, Train PSNR 27.547410, RevDEQ steps 10, RevDEQ err 3.361584e-03
+2026-01-22 11:22:33,700: maxiter hit in iteration 26
+2026-01-22 11:22:34,885: maxiter hit in iteration 27
+2026-01-22 11:22:36,349: maxiter hit in iteration 28
+2026-01-22 11:22:37,672: maxiter hit in iteration 29
+2026-01-22 11:22:39,224: maxiter hit in iteration 30
+2026-01-22 11:22:40,724: Step 30, Train PSNR 27.381137, RevDEQ steps 10, RevDEQ err 2.133945e-03
+2026-01-22 11:22:41,191: maxiter hit in iteration 31
+2026-01-22 11:22:42,524: maxiter hit in iteration 32
+2026-01-22 11:22:43,939: maxiter hit in iteration 33
+2026-01-22 11:22:45,274: maxiter hit in iteration 34
+2026-01-22 11:22:46,709: maxiter hit in iteration 35
+2026-01-22 11:22:47,617: Step 35, Train PSNR 27.414622, RevDEQ steps 10, RevDEQ err 2.441175e-03
+2026-01-22 11:22:47,931: maxiter hit in iteration 36
+2026-01-22 11:22:49,221: maxiter hit in iteration 37
+2026-01-22 11:22:50,442: maxiter hit in iteration 38
+2026-01-22 11:22:51,623: maxiter hit in iteration 39
+2026-01-22 11:22:52,788: maxiter hit in iteration 40
+2026-01-22 11:22:53,782: Step 40, Train PSNR 27.413200, RevDEQ steps 10, RevDEQ err 4.196006e-03
+2026-01-22 11:22:54,081: maxiter hit in iteration 41
+2026-01-22 11:22:55,256: maxiter hit in iteration 42
+2026-01-22 11:22:56,455: maxiter hit in iteration 43
+2026-01-22 11:22:57,681: maxiter hit in iteration 44
+2026-01-22 11:22:58,935: maxiter hit in iteration 45
+2026-01-22 11:22:59,813: Step 45, Train PSNR 27.447945, RevDEQ steps 10, RevDEQ err 5.210569e-03
+2026-01-22 11:23:00,185: maxiter hit in iteration 46
+2026-01-22 11:23:01,379: maxiter hit in iteration 47
+2026-01-22 11:23:02,654: maxiter hit in iteration 48
+2026-01-22 11:23:04,085: maxiter hit in iteration 49
+2026-01-22 11:23:05,450: maxiter hit in iteration 50
+2026-01-22 11:23:06,866: Step 50, Train PSNR 27.251399, RevDEQ steps 10, RevDEQ err 2.133438e-03
+2026-01-22 11:23:06,866: [Epoch 2] Train Loss: 8.91E+00, PSNR: 27.25
+2026-01-22 11:23:07,210: maxiter hit in iteration 1
+2026-01-22 11:23:08,871: maxiter hit in iteration 2
+2026-01-22 11:23:10,240: maxiter hit in iteration 3
+2026-01-22 11:23:11,999: maxiter hit in iteration 4
+2026-01-22 11:23:13,172: maxiter hit in iteration 5
+2026-01-22 11:23:14,669: Step 5, Train PSNR 25.398662, RevDEQ steps 10, RevDEQ err 2.439799e-03
+2026-01-22 11:23:15,747: maxiter hit in iteration 6
+2026-01-22 11:23:17,467: maxiter hit in iteration 7
+2026-01-22 11:23:18,453: maxiter hit in iteration 8
+2026-01-22 11:23:19,470: maxiter hit in iteration 9
+2026-01-22 11:23:20,941: maxiter hit in iteration 10
+2026-01-22 11:23:21,694: Step 10, Train PSNR 26.864563, RevDEQ steps 10, RevDEQ err 6.215733e-03
+2026-01-22 11:23:21,945: maxiter hit in iteration 11
+2026-01-22 11:23:22,941: maxiter hit in iteration 12
+2026-01-22 11:23:23,940: maxiter hit in iteration 13
+2026-01-22 11:23:25,086: maxiter hit in iteration 14
+2026-01-22 11:23:26,095: maxiter hit in iteration 15
+2026-01-22 11:23:27,043: Step 15, Train PSNR 26.835301, RevDEQ steps 10, RevDEQ err 6.716919e-03
+2026-01-22 11:23:27,326: maxiter hit in iteration 16
+2026-01-22 11:23:28,362: maxiter hit in iteration 17
+2026-01-22 11:23:29,486: maxiter hit in iteration 18
+2026-01-22 11:23:30,523: maxiter hit in iteration 19
+2026-01-22 11:23:31,502: maxiter hit in iteration 20
+2026-01-22 11:23:32,242: Step 20, Train PSNR 26.883329, RevDEQ steps 10, RevDEQ err 1.916960e-03
+2026-01-22 11:23:32,485: maxiter hit in iteration 21
+2026-01-22 11:23:33,600: maxiter hit in iteration 22
+2026-01-22 11:23:34,667: maxiter hit in iteration 23
+2026-01-22 11:23:35,678: maxiter hit in iteration 24
+2026-01-22 11:23:36,671: maxiter hit in iteration 25
+2026-01-22 11:23:37,462: Step 25, Train PSNR 26.845524, RevDEQ steps 10, RevDEQ err 4.581784e-03
+2026-01-22 11:23:37,977: maxiter hit in iteration 26
+2026-01-22 11:23:38,996: maxiter hit in iteration 27
+2026-01-22 11:23:40,038: maxiter hit in iteration 28
+2026-01-22 11:23:41,042: maxiter hit in iteration 29
+2026-01-22 11:23:42,106: maxiter hit in iteration 30
+2026-01-22 11:23:42,879: Step 30, Train PSNR 26.660143, RevDEQ steps 10, RevDEQ err 2.806362e-03
+2026-01-22 11:23:43,136: maxiter hit in iteration 31
+2026-01-22 11:23:44,151: maxiter hit in iteration 32
+2026-01-22 11:23:45,141: maxiter hit in iteration 33
+2026-01-22 11:23:46,194: maxiter hit in iteration 34
+2026-01-22 11:23:47,263: maxiter hit in iteration 35
+2026-01-22 11:23:47,999: Step 35, Train PSNR 26.707382, RevDEQ steps 10, RevDEQ err 7.512975e-03
+2026-01-22 11:23:48,279: maxiter hit in iteration 36
+2026-01-22 11:23:49,253: maxiter hit in iteration 37
+2026-01-22 11:23:50,298: maxiter hit in iteration 38
+2026-01-22 11:23:51,362: maxiter hit in iteration 39
+2026-01-22 11:23:52,375: maxiter hit in iteration 40
+2026-01-22 11:23:53,130: Step 40, Train PSNR 26.445108, RevDEQ steps 10, RevDEQ err 3.203375e-03
+2026-01-22 11:23:53,371: maxiter hit in iteration 41
+2026-01-22 11:23:54,651: maxiter hit in iteration 42
+2026-01-22 11:23:58,505: maxiter hit in iteration 43
+2026-01-22 11:23:59,878: maxiter hit in iteration 44
+2026-01-22 11:24:00,937: maxiter hit in iteration 45
+2026-01-22 11:24:01,679: Step 45, Train PSNR 26.478947, RevDEQ steps 10, RevDEQ err 2.714779e-03
+2026-01-22 11:24:01,946: maxiter hit in iteration 46
+2026-01-22 11:24:02,896: maxiter hit in iteration 47
+2026-01-22 11:24:04,791: maxiter hit in iteration 48
+2026-01-22 11:24:05,786: maxiter hit in iteration 49
+2026-01-22 11:24:06,741: maxiter hit in iteration 50
+2026-01-22 11:24:07,479: Step 50, Train PSNR 26.455025, RevDEQ steps 10, RevDEQ err 3.126900e-03
+2026-01-22 11:24:07,479: [Epoch 3] Train Loss: 1.04E+01, PSNR: 26.46
+2026-01-22 11:24:07,789: maxiter hit in iteration 1
+2026-01-22 11:24:08,791: maxiter hit in iteration 2
+2026-01-22 11:24:10,165: maxiter hit in iteration 3
+2026-01-22 11:24:11,401: maxiter hit in iteration 4
+2026-01-22 11:24:12,546: maxiter hit in iteration 5
+2026-01-22 11:24:13,347: Step 5, Train PSNR 26.831523, RevDEQ steps 10, RevDEQ err 1.108092e-02
+2026-01-22 11:24:13,667: maxiter hit in iteration 6
+2026-01-22 11:24:14,748: maxiter hit in iteration 7
+2026-01-22 11:24:16,034: maxiter hit in iteration 8
+2026-01-22 11:24:17,828: maxiter hit in iteration 9
+2026-01-22 11:24:19,508: maxiter hit in iteration 10
+2026-01-22 11:24:20,394: Step 10, Train PSNR 27.437063, RevDEQ steps 10, RevDEQ err 1.540762e-02
+2026-01-22 11:24:20,689: maxiter hit in iteration 11
+2026-01-22 11:24:21,987: maxiter hit in iteration 12
+2026-01-22 11:24:23,029: maxiter hit in iteration 13
+2026-01-22 11:24:24,096: maxiter hit in iteration 14
+2026-01-22 11:24:25,126: maxiter hit in iteration 15
+2026-01-22 11:24:26,021: Step 15, Train PSNR 27.415646, RevDEQ steps 10, RevDEQ err 7.981692e-03
+2026-01-22 11:24:26,331: maxiter hit in iteration 16
+2026-01-22 11:24:27,839: maxiter hit in iteration 17
+2026-01-22 11:24:29,197: maxiter hit in iteration 18
+2026-01-22 11:24:30,612: maxiter hit in iteration 19
+2026-01-22 11:24:31,665: maxiter hit in iteration 20
+2026-01-22 11:24:32,445: Step 20, Train PSNR 27.528663, RevDEQ steps 10, RevDEQ err 3.474097e-03
+2026-01-22 11:24:32,730: maxiter hit in iteration 21
+2026-01-22 11:24:33,779: maxiter hit in iteration 22
+2026-01-22 11:24:34,972: maxiter hit in iteration 23
+2026-01-22 11:24:36,045: maxiter hit in iteration 24
+2026-01-22 11:24:37,153: maxiter hit in iteration 25
+2026-01-22 11:24:38,225: Step 25, Train PSNR 27.311464, RevDEQ steps 10, RevDEQ err 9.951402e-02
+2026-01-22 11:24:38,675: maxiter hit in iteration 26
+2026-01-22 11:24:40,037: maxiter hit in iteration 27
+2026-01-22 11:24:41,302: maxiter hit in iteration 28
+2026-01-22 11:24:42,619: maxiter hit in iteration 29
+2026-01-22 11:24:44,136: maxiter hit in iteration 30
+2026-01-22 11:24:45,000: Step 30, Train PSNR 27.257673, RevDEQ steps 10, RevDEQ err 1.879878e-02
+2026-01-22 11:24:45,301: maxiter hit in iteration 31
+2026-01-22 11:24:46,757: maxiter hit in iteration 32
+2026-01-22 11:24:48,086: maxiter hit in iteration 33
+2026-01-22 11:24:49,169: maxiter hit in iteration 34
+2026-01-22 11:24:50,345: maxiter hit in iteration 35
+2026-01-22 11:24:52,024: Step 35, Train PSNR 27.005303, RevDEQ steps 10, RevDEQ err 4.828917e-03
+2026-01-22 11:24:52,543: maxiter hit in iteration 36
+2026-01-22 11:24:54,198: maxiter hit in iteration 37
+2026-01-22 11:24:55,998: maxiter hit in iteration 38
+2026-01-22 11:24:57,765: maxiter hit in iteration 39
+2026-01-22 11:25:01,353: maxiter hit in iteration 40
+2026-01-22 11:25:02,395: Step 40, Train PSNR 27.007942, RevDEQ steps 10, RevDEQ err 3.356441e-03
+2026-01-22 11:25:02,719: maxiter hit in iteration 41
+2026-01-22 11:25:03,799: maxiter hit in iteration 42
+2026-01-22 11:25:04,907: maxiter hit in iteration 43
+2026-01-22 11:25:06,195: maxiter hit in iteration 44
+2026-01-22 11:25:08,075: maxiter hit in iteration 45
+2026-01-22 11:25:09,048: Step 45, Train PSNR 27.096132, RevDEQ steps 10, RevDEQ err 9.814721e-03
+2026-01-22 11:25:09,495: maxiter hit in iteration 46
+2026-01-22 11:25:11,140: maxiter hit in iteration 47
+2026-01-22 11:25:12,355: maxiter hit in iteration 48
+2026-01-22 11:25:13,611: maxiter hit in iteration 49
+2026-01-22 11:25:14,989: maxiter hit in iteration 50
+2026-01-22 11:25:15,972: Step 50, Train PSNR 27.201368, RevDEQ steps 10, RevDEQ err 1.607779e-02
+2026-01-22 11:25:15,974: [Epoch 4] Train Loss: 9.07E+00, PSNR: 27.20
+2026-01-22 11:25:16,379: maxiter hit in iteration 1
+2026-01-22 11:25:21,668: maxiter hit in iteration 2
+2026-01-22 11:25:26,748: maxiter hit in iteration 3
+2026-01-22 11:25:27,986: maxiter hit in iteration 4
+2026-01-22 11:25:29,119: maxiter hit in iteration 5
+2026-01-22 11:25:30,244: Step 5, Train PSNR 27.732586, RevDEQ steps 10, RevDEQ err 1.299496e-02
+2026-01-22 11:25:30,559: maxiter hit in iteration 6
+2026-01-22 11:25:31,676: maxiter hit in iteration 7
+2026-01-22 11:25:32,779: maxiter hit in iteration 8
+2026-01-22 11:25:33,895: maxiter hit in iteration 9
+2026-01-22 11:25:34,917: maxiter hit in iteration 10
+2026-01-22 11:25:35,741: Step 10, Train PSNR 27.511874, RevDEQ steps 10, RevDEQ err 8.348874e-03
+2026-01-22 11:25:36,003: maxiter hit in iteration 11
+2026-01-22 11:25:37,045: maxiter hit in iteration 12
+2026-01-22 11:25:38,131: maxiter hit in iteration 13
+2026-01-22 11:25:42,627: maxiter hit in iteration 14
+2026-01-22 11:25:44,650: maxiter hit in iteration 15
+2026-01-22 11:25:45,703: Step 15, Train PSNR 27.411355, RevDEQ steps 10, RevDEQ err 2.106355e-02
+2026-01-22 11:25:46,051: maxiter hit in iteration 16
+2026-01-22 11:25:47,477: maxiter hit in iteration 17
+2026-01-22 11:25:48,920: maxiter hit in iteration 18
+2026-01-22 11:25:50,309: maxiter hit in iteration 19
+2026-01-22 11:25:51,468: maxiter hit in iteration 20
+2026-01-22 11:25:52,304: Step 20, Train PSNR 27.118629, RevDEQ steps 10, RevDEQ err 8.058968e-03
+2026-01-22 11:25:52,562: maxiter hit in iteration 21
+2026-01-22 11:25:53,705: maxiter hit in iteration 22
+2026-01-22 11:25:54,898: maxiter hit in iteration 23
+2026-01-22 11:25:56,147: maxiter hit in iteration 24
+2026-01-22 11:25:57,621: maxiter hit in iteration 25
+2026-01-22 11:25:59,353: Step 25, Train PSNR 27.452434, RevDEQ steps 10, RevDEQ err 2.813696e-02
+2026-01-22 11:25:59,813: maxiter hit in iteration 26
+2026-01-22 11:26:01,286: maxiter hit in iteration 27
+2026-01-22 11:26:02,597: maxiter hit in iteration 28
+2026-01-22 11:26:03,862: maxiter hit in iteration 29
+2026-01-22 11:26:05,014: maxiter hit in iteration 30
+2026-01-22 11:26:05,901: Step 30, Train PSNR 26.972538, RevDEQ steps 10, RevDEQ err 4.412048e-03
+2026-01-22 11:26:06,190: maxiter hit in iteration 31
+2026-01-22 11:26:07,263: maxiter hit in iteration 32
+2026-01-22 11:26:08,705: maxiter hit in iteration 33
+2026-01-22 11:26:10,156: maxiter hit in iteration 34
+2026-01-22 11:26:11,261: maxiter hit in iteration 35
+2026-01-22 11:26:12,099: Step 35, Train PSNR 26.916573, RevDEQ steps 10, RevDEQ err 4.564762e-03
+2026-01-22 11:26:12,384: maxiter hit in iteration 36
+2026-01-22 11:26:13,678: maxiter hit in iteration 37
+2026-01-22 11:26:15,098: maxiter hit in iteration 38
+2026-01-22 11:26:16,232: maxiter hit in iteration 39
+2026-01-22 11:26:17,473: maxiter hit in iteration 40
+2026-01-22 11:26:18,400: Step 40, Train PSNR 26.952927, RevDEQ steps 10, RevDEQ err 6.170711e-03
+2026-01-22 11:26:18,664: maxiter hit in iteration 41
+2026-01-22 11:26:19,712: maxiter hit in iteration 42
+2026-01-22 11:26:21,105: maxiter hit in iteration 43
+2026-01-22 11:26:22,264: maxiter hit in iteration 44
+2026-01-22 11:26:23,333: maxiter hit in iteration 45
+2026-01-22 11:26:24,093: Step 45, Train PSNR 26.791036, RevDEQ steps 10, RevDEQ err 2.453412e-02
+2026-01-22 11:26:24,451: maxiter hit in iteration 46
+2026-01-22 11:26:25,920: maxiter hit in iteration 47
+2026-01-22 11:26:28,428: maxiter hit in iteration 48
+2026-01-22 11:26:29,883: maxiter hit in iteration 49
+2026-01-22 11:26:31,078: maxiter hit in iteration 50
+2026-01-22 11:26:31,835: Step 50, Train PSNR 26.789061, RevDEQ steps 10, RevDEQ err 3.923872e-03
+2026-01-22 11:26:31,838: [Epoch 5] Train Loss: 1.02E+01, PSNR: 26.79
+2026-01-22 11:26:38,853: [Epoch 5] Val Loss: 1.05E+01, PSNR: 26.57
+2026-01-22 11:26:38,857: 
+RevDEQ completed in 351.6s
+2026-01-22 11:26:38,857:   Final Train Loss: 10.1935
+2026-01-22 11:26:38,857:   Final Train PSNR: 26.79 dB
+2026-01-22 11:26:38,857:   Final Val Loss: 10.5028
+2026-01-22 11:26:38,859:   Final Val PSNR: 26.57 dB
+2026-01-22 11:26:38,859: 
+======================================================================
+2026-01-22 11:26:38,859: SUMMARY
+2026-01-22 11:26:38,859: ======================================================================
+2026-01-22 11:26:38,861: Method | Max Iter | F-Evals/Batch | Train Loss | Val Loss | Train PSNR | Val PSNR | Duration (s)
+2026-01-22 11:26:38,861: ------------------------------------------------------------------------------------------------
+2026-01-22 11:26:38,862: IFT    | 20       | 20            | 9.74       | 10.18    | 26.93      | 26.76    | 640.7       
+2026-01-22 11:26:38,862: JFB    | 20       | 20            | 10.21      | 10.20    | 26.72      | 26.62    | 241.2       
+2026-01-22 11:26:38,863: RevDEQ | 10       | 20            | 10.19      | 10.50    | 26.79      | 26.57    | 351.6       
+2026-01-22 11:26:38,875: 
+Results saved to: comparison_logs\comparison_results_Denoising_CRR_2026-01-22_11-05-52.326495.json
+2026-01-22 11:26:38,875: Log saved to: comparison_logs\comparison_Denoising_CRR_2026-01-22_11-05-52.326495.log

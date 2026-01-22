@@ -1,5 +1,6 @@
 #auxilary folders
 BSDS500/*
+LoDoPaB/*
 data/*
 scripts/model_ckpt/*
 results/*

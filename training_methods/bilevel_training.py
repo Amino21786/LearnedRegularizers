@@ -29,10 +29,10 @@ def bilevel_training(
     epochs=100,  # number of epochs
     mode="IFT",  # hypergradient computation mode. Choices are "IFT", "JFB", and "RevDEQ"
     lower_level_step_size=1e-1,  # initial step size for the lower level problem
-    lower_level_max_iter=1000,  # maximal number of iterations in the lower level problem
+    lower_level_max_iter= 300, #1000 as a baseline,  maximal number of iterations in the lower level problem
     lower_level_tol_train=1e-4,  # convergence tolerance for the lower level solver during training
     lower_level_tol_val=1e-4,  # convergence tolerance for the lower level solver during validation
-    minres_max_iter=200,  # maximal number of iterations in the linear system solver for mode == "IFT", no effect for mode "JFB"
+    minres_max_iter=200,  #1000 as a baseline, maximal number of iterations in the linear system solver for mode == "IFT", no effect for mode "JFB"
     minres_tol=1e-6,  # convergence tolerance in the linear system solver for mode == "IFT", no effect for mode "JFB"
     jfb_step_size_factor=1.0,  # gradient scaling for mode == "JFB", no effect for mode == "IFT"
     lr=0.005,  # learning rate
@@ -51,12 +51,19 @@ def bilevel_training(
     upper_loss=lambda x, y: torch.sum(
         ((x - y) ** 2).view(x.shape[0], -1), -1
     ),  # loss function used in the upper level problem
+    revdeq_beta=0.8,  # relaxation parameter for RevDEQ reversible iterations (0 < beta <= 1)
+    use_embedded_beta=False,  # if True, embed beta directly into fixed-point function (experimental)
+    revdeq_use_float64=False,  # use float64 for RevDEQ backward (only helps if model is also float64)
+    dtype=torch.float32,  # dtype for training (torch.float32 or torch.float64)
 ):
     assert validation_epochs <= epochs, (
         "validation_epochs cannot be greater than epochs. "
         "If validation_epochs > epochs, no validation will occur, "
         "best_regularizer_state will remain unchanged, and the returned model will be identical to the initial state."
     )
+    
+    # Convert regularizer to specified dtype
+    regularizer = regularizer.to(dtype)
 
     def hessian_vector_product(
         x,
@@ -177,7 +184,7 @@ def bilevel_training(
             )
         ):
             train_step += 1
-            x = x.to(device).to(torch.float32)
+            x = x.to(device).to(dtype)
             y = physics(x)
             x_noisy = physics.A_dagger(y)
 
@@ -193,9 +200,11 @@ def bilevel_training(
                     lower_level_max_iter,
                     lower_level_tol_train,
                     x_init=x_noisy,
-                    beta=0.8,  # reversible relaxation parameter
+                    beta=revdeq_beta,
                     verbose=verbose,
                     return_stats=True,
+                    use_embedded_beta=use_embedded_beta,
+                    use_float64=revdeq_use_float64,
                 )
             else:
                 x_recon, x_stats = reconstruct_nmAPG(
@@ -238,9 +247,9 @@ def bilevel_training(
                     )
                 )
             if (x_stats["steps"] == lower_level_max_iter if mode == "RevDEQ" else x_stats["steps"] + 1 == lower_level_max_iter):
-                print("maxiter hit...")
-                if logger is not None:
-                    logger.info(f"maxiter hit in iteration {train_step}")
+                print(f"maxiter hit in iteration {train_step}...")
+                #if logger is not None:
+                #    logger.info(f"maxiter hit in iteration {train_step}")
 
             # For IFT/JFB modes, detach x_recon since they use custom gradient computation.
             # For RevDEQ, keep the computation graph so the custom backward pass can run.
@@ -317,7 +326,7 @@ def bilevel_training(
                 for x_val in tqdm(
                     val_dataloader, desc=f"Epoch {epoch+1}/{epochs} - Val"
                 ):
-                    x_val = x_val.to(device).to(torch.float32)
+                    x_val = x_val.to(device).to(dtype)
                     y_val = physics(x_val)
                     x_val_noisy = physics.A_dagger(y_val)
 
@@ -333,9 +342,11 @@ def bilevel_training(
                             lower_level_max_iter,
                             lower_level_tol_val,
                             x_init=x_val_noisy,
-                            beta=0.8,  # reversible relaxation parameter
+                            beta=revdeq_beta,
                             verbose=verbose,
                             return_stats=False,
+                            use_embedded_beta=use_embedded_beta,
+                            use_float64=revdeq_use_float64,
                         )
                     else:
                         x_recon_val = reconstruct_nmAPG(

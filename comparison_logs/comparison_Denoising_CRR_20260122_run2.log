@@ -1,0 +1,113 @@
+2026-01-22 16:53:16,408: Dataset: BSDS500_gray
+2026-01-22 16:53:16,408: Train set size: 50, Val set size: 20
+2026-01-22 16:53:16,447: Loaded pretrained weights from weights/score_for_Denoising/CRR_score_training_for_Denoising.pt
+2026-01-22 16:53:16,447: ======================================================================
+2026-01-22 16:53:16,449: HYPERGRADIENT METHOD COMPARISON
+2026-01-22 16:53:16,449: ======================================================================
+2026-01-22 16:53:16,449: Run ID: 20260122_run2
+2026-01-22 16:53:16,449: Problem: Denoising
+2026-01-22 16:53:16,449: Regularizer: CRR
+2026-01-22 16:53:16,449: Epochs: 3
+2026-01-22 16:53:16,449: Validation epochs: 1
+2026-01-22 16:53:16,451: Load pretrained weights: True
+2026-01-22 16:53:16,451: Load parameter-fitted weights: False
+2026-01-22 16:53:16,451: RevDEQ beta: 0.5
+2026-01-22 16:53:16,451: Use embedded beta: False
+2026-01-22 16:53:16,451: Function evaluations per batch:
+2026-01-22 16:53:16,451:   IFT: 20 steps x 1 = 20 f-evals
+2026-01-22 16:53:16,451:   JFB: 20 steps x 1 = 20 f-evals
+2026-01-22 16:53:16,451:   RevDEQ: 10 steps x 2 = 20 f-evals
+2026-01-22 16:53:16,453: ======================================================================
+2026-01-22 16:53:16,453: 
+======================================================================
+2026-01-22 16:53:16,453: Running IFT
+2026-01-22 16:53:16,453: ======================================================================
+2026-01-22 16:53:16,455: Using pretrained base regularizer
+2026-01-22 17:03:47,664: [Epoch 1] Train Loss: 1.01E+01, PSNR: 26.87
+2026-01-22 17:04:15,796: [Epoch 1] Val Loss: 9.46E+00, PSNR: 27.11
+2026-01-22 17:12:40,992: [Epoch 2] Train Loss: 8.34E+00, PSNR: 27.54
+2026-01-22 17:13:00,132: [Epoch 2] Val Loss: 9.26E+00, PSNR: 27.33
+2026-01-22 17:18:25,075: [Epoch 3] Train Loss: 9.47E+00, PSNR: 27.11
+2026-01-22 17:18:37,235: [Epoch 3] Val Loss: 9.24E+00, PSNR: 27.17
+2026-01-22 17:18:37,267: 
+IFT completed in 1520.8s
+2026-01-22 17:18:37,267:   Final Train Loss: 9.4653
+2026-01-22 17:18:37,267:   Final Train PSNR: 27.11 dB
+2026-01-22 17:18:37,267:   Final Val Loss: 9.2372
+2026-01-22 17:18:37,267:   Final Val PSNR: 27.17 dB
+2026-01-22 17:18:37,269: 
+======================================================================
+2026-01-22 17:18:37,269: Running JFB
+2026-01-22 17:18:37,269: ======================================================================
+2026-01-22 17:18:37,313: Using pretrained base regularizer
+2026-01-22 17:19:07,657: [Epoch 1] Train Loss: 1.04E+01, PSNR: 26.47
+2026-01-22 17:19:18,607: [Epoch 1] Val Loss: 9.44E+00, PSNR: 26.91
+2026-01-22 17:19:50,742: [Epoch 2] Train Loss: 8.92E+00, PSNR: 27.20
+2026-01-22 17:20:02,381: [Epoch 2] Val Loss: 9.28E+00, PSNR: 27.12
+2026-01-22 17:20:34,948: [Epoch 3] Train Loss: 8.53E+00, PSNR: 27.56
+2026-01-22 17:20:46,401: [Epoch 3] Val Loss: 9.25E+00, PSNR: 27.32
+2026-01-22 17:20:46,403: 
+JFB completed in 129.1s
+2026-01-22 17:20:46,403:   Final Train Loss: 8.5276
+2026-01-22 17:20:46,403:   Final Train PSNR: 27.56 dB
+2026-01-22 17:20:46,405:   Final Val Loss: 9.2491
+2026-01-22 17:20:46,405:   Final Val PSNR: 27.32 dB
+2026-01-22 17:20:46,405: 
+======================================================================
+2026-01-22 17:20:46,405: Running RevDEQ
+2026-01-22 17:20:46,405: ======================================================================
+2026-01-22 17:20:46,406: Using pretrained base regularizer
+2026-01-22 17:20:51,317: Step 5, Train PSNR 21.561728, RevDEQ steps 10, RevDEQ err 7.805496e-03
+2026-01-22 17:20:56,027: Step 10, Train PSNR 22.577222, RevDEQ steps 10, RevDEQ err 5.896660e-03
+2026-01-22 17:21:00,681: Step 15, Train PSNR 23.166410, RevDEQ steps 10, RevDEQ err 9.316032e-03
+2026-01-22 17:21:05,907: Step 20, Train PSNR 23.651330, RevDEQ steps 10, RevDEQ err 2.534556e-02
+2026-01-22 17:21:10,712: Step 25, Train PSNR 24.122341, RevDEQ steps 10, RevDEQ err 1.026405e-02
+2026-01-22 17:21:15,705: Step 30, Train PSNR 24.277029, RevDEQ steps 10, RevDEQ err 3.790705e-02
+2026-01-22 17:21:20,239: Step 35, Train PSNR 24.461579, RevDEQ steps 10, RevDEQ err 1.161099e-02
+2026-01-22 17:21:25,017: Step 40, Train PSNR 24.975269, RevDEQ steps 10, RevDEQ err 1.569821e-02
+2026-01-22 17:21:30,513: Step 45, Train PSNR 25.269103, RevDEQ steps 10, RevDEQ err 1.307201e-02
+2026-01-22 17:21:35,563: Step 50, Train PSNR 25.224875, RevDEQ steps 10, RevDEQ err 1.042321e-02
+2026-01-22 17:21:35,563: [Epoch 1] Train Loss: 1.39E+01, PSNR: 25.22
+2026-01-22 17:21:40,870: [Epoch 1] Val Loss: 9.98E+00, PSNR: 26.49
+2026-01-22 17:21:45,361: Step 5, Train PSNR 28.098896, RevDEQ steps 10, RevDEQ err 1.346934e-02
+2026-01-22 17:21:49,843: Step 10, Train PSNR 28.888053, RevDEQ steps 10, RevDEQ err 1.692800e-02
+2026-01-22 17:21:54,354: Step 15, Train PSNR 28.629337, RevDEQ steps 10, RevDEQ err 1.549459e-02
+2026-01-22 17:21:58,956: Step 20, Train PSNR 28.294415, RevDEQ steps 10, RevDEQ err 1.449441e-02
+2026-01-22 17:22:03,506: Step 25, Train PSNR 28.278143, RevDEQ steps 10, RevDEQ err 7.537369e-03
+2026-01-22 17:22:08,058: Step 30, Train PSNR 28.193580, RevDEQ steps 10, RevDEQ err 1.650220e-02
+2026-01-22 17:22:12,647: Step 35, Train PSNR 28.057834, RevDEQ steps 10, RevDEQ err 9.195571e-03
+2026-01-22 17:22:17,205: Step 40, Train PSNR 28.038684, RevDEQ steps 10, RevDEQ err 1.103788e-02
+2026-01-22 17:22:21,802: Step 45, Train PSNR 27.777124, RevDEQ steps 10, RevDEQ err 1.453682e-02
+2026-01-22 17:22:26,340: Step 50, Train PSNR 27.635770, RevDEQ steps 10, RevDEQ err 1.303039e-02
+2026-01-22 17:22:26,340: [Epoch 2] Train Loss: 8.32E+00, PSNR: 27.64
+2026-01-22 17:22:31,330: [Epoch 2] Val Loss: 9.50E+00, PSNR: 26.92
+2026-01-22 17:22:35,914: Step 5, Train PSNR 28.129622, RevDEQ steps 10, RevDEQ err 2.302781e-02
+2026-01-22 17:22:41,808: Step 10, Train PSNR 27.859624, RevDEQ steps 10, RevDEQ err 1.175606e-02
+2026-01-22 17:22:46,394: Step 15, Train PSNR 27.071551, RevDEQ steps 10, RevDEQ err 1.864952e-02
+2026-01-22 17:22:50,954: Step 20, Train PSNR 27.424331, RevDEQ steps 10, RevDEQ err 1.828148e-02
+2026-01-22 17:22:55,489: Step 25, Train PSNR 27.388837, RevDEQ steps 10, RevDEQ err 1.068667e-02
+2026-01-22 17:23:00,435: Step 30, Train PSNR 27.167786, RevDEQ steps 10, RevDEQ err 1.727406e-02
+2026-01-22 17:23:05,003: Step 35, Train PSNR 27.324736, RevDEQ steps 10, RevDEQ err 3.717809e-02
+2026-01-22 17:23:09,561: Step 40, Train PSNR 27.014871, RevDEQ steps 10, RevDEQ err 1.129058e-02
+2026-01-22 17:23:14,072: Step 45, Train PSNR 27.046762, RevDEQ steps 10, RevDEQ err 2.355312e-02
+2026-01-22 17:23:18,623: Step 50, Train PSNR 26.850678, RevDEQ steps 10, RevDEQ err 1.243870e-02
+2026-01-22 17:23:18,623: [Epoch 3] Train Loss: 1.01E+01, PSNR: 26.85
+2026-01-22 17:23:23,173: [Epoch 3] Val Loss: 9.44E+00, PSNR: 26.90
+2026-01-22 17:23:23,175: 
+RevDEQ completed in 156.8s
+2026-01-22 17:23:23,175:   Final Train Loss: 10.1443
+2026-01-22 17:23:23,175:   Final Train PSNR: 26.85 dB
+2026-01-22 17:23:23,176:   Final Val Loss: 9.4358
+2026-01-22 17:23:23,176:   Final Val PSNR: 26.90 dB
+2026-01-22 17:23:23,176: 
+======================================================================
+2026-01-22 17:23:23,176: SUMMARY
+2026-01-22 17:23:23,177: ======================================================================
+2026-01-22 17:23:23,177: Method | Max Iter | F-Evals/Batch | Train Loss | Val Loss | Train PSNR | Val PSNR | Duration (s)
+2026-01-22 17:23:23,177: ------------------------------------------------------------------------------------------------
+2026-01-22 17:23:23,177: IFT    | 20       | 20            | 9.47       | 9.24     | 27.11      | 27.17    | 1520.8      
+2026-01-22 17:23:23,180: JFB    | 20       | 20            | 8.53       | 9.25     | 27.56      | 27.32    | 129.1       
+2026-01-22 17:23:23,180: RevDEQ | 10       | 20            | 10.14      | 9.44     | 26.85      | 26.90    | 156.8       
+2026-01-22 17:23:23,189: 
+Results saved to: comparison_logs\comparison_results_Denoising_CRR_20260122_run2.json
+2026-01-22 17:23:23,189: Log saved to: comparison_logs\comparison_Denoising_CRR_20260122_run2.log
