@@ -31,7 +31,7 @@ def reconstruct_reversible(
     verbose=False,  # set to True for some debug prints
     return_stats=False,  # return some statistics in addition to the reconstruction
     use_embedded_beta=False,  # if True, embed beta directly in fixed_point_function (experimental)
-    use_float64=False,  # use float64 for backward (only helps if model is also float64)
+    use_float64=True,  # use float64 for internal computations (matches JAX, improves gradient accuracy)
 ):
     """
     Reconstruct image using reversible fixed-point solver.
@@ -69,9 +69,9 @@ def reconstruct_reversible(
         verbose: Print debug information
         return_stats: Return statistics dictionary
         use_embedded_beta: Embed beta in fixed_point_function (experimental)
-        use_float64: Use float64 for backward pass reconstruction (default: False)
-                     Only helps if the model is also in float64. For float32 models,
-                     keep at False since precision is limited by forward pass.
+        use_float64: Use float64 for internal reversible computations (default: True)
+                     This matches the JAX reference implementation and significantly
+                     improves gradient accuracy by reducing reconstruction errors.
         
     Returns:
         Reconstructed image tensor (and stats if return_stats=True)

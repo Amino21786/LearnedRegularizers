@@ -324,7 +324,7 @@ def solve_reversible_adjoint(
     beta: float = 0.8,
     tol: float = 1e-3,
     max_steps: int = 50,
-    use_float64: bool = False,
+    use_float64: bool = True,
 ) -> Tuple[torch.Tensor, int, float]:
     """
     Reversible DEQ solve with a custom backward pass (RevDEQ-style adjoint).
@@ -337,9 +337,8 @@ def solve_reversible_adjoint(
         beta: Relaxation parameter (0 < beta < 1)
         tol: Convergence tolerance
         max_steps: Maximum number of iterations
-        use_float64: Use float64 for backward pass reconstruction (default: False)
-                     Only helps if the model is also in float64. For float32 models,
-                     set to False (default) since the precision is limited by forward pass.
+        use_float64: Use float64 internally for numerical stability (default: True)
+                     This matches the JAX implementation and improves gradient accuracy.
 
     Returns:
         z1: fixed point tensor (with custom gradient)

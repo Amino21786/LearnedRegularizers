@@ -1,0 +1,34 @@
+{
+  "IFT": {
+    "error": "Index put requires the source and destination dtypes match, got Float for the destination and Double for the source."
+  },
+  "JFB": {
+    "error": "Index put requires the source and destination dtypes match, got Float for the destination and Double for the source."
+  },
+  "RevDEQ": {
+    "loss_train": [
+      12.987189733293787,
+      8.338015128232165,
+      8.932873342606221
+    ],
+    "loss_val": [
+      9.575395835818224,
+      9.498295793439656,
+      9.392968525173087
+    ],
+    "psnr_train": [
+      25.60445641146899,
+      27.493941378141052,
+      27.310464833915468
+    ],
+    "psnr_val": [
+      26.962969525303908,
+      26.961069232214623,
+      27.107237375337615
+    ],
+    "duration_seconds": 411.016157,
+    "max_iter": 10,
+    "f_evals_per_step": 2,
+    "total_f_evals_per_batch": 20
+  }
+}

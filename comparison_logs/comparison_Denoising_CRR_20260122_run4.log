@@ -1,0 +1,89 @@
+2026-01-22 18:11:14,909: Dataset: BSDS500_gray
+2026-01-22 18:11:14,909: Train set size: 50, Val set size: 20
+2026-01-22 18:11:14,950: Loaded pretrained weights from weights/score_for_Denoising/CRR_score_training_for_Denoising.pt
+2026-01-22 18:11:14,951: ======================================================================
+2026-01-22 18:11:14,952: HYPERGRADIENT METHOD COMPARISON
+2026-01-22 18:11:14,953: ======================================================================
+2026-01-22 18:11:14,954: Run ID: 20260122_run4
+2026-01-22 18:11:14,955: Problem: Denoising
+2026-01-22 18:11:14,957: Regularizer: CRR
+2026-01-22 18:11:14,958: Epochs: 3
+2026-01-22 18:11:14,959: Validation epochs: 1
+2026-01-22 18:11:14,959: Load pretrained weights: True
+2026-01-22 18:11:14,960: Load parameter-fitted weights: False
+2026-01-22 18:11:14,961: RevDEQ beta: 0.5
+2026-01-22 18:11:14,962: Use embedded beta: False
+2026-01-22 18:11:14,963: Function evaluations per batch:
+2026-01-22 18:11:14,964:   IFT: 20 steps x 1 = 20 f-evals
+2026-01-22 18:11:14,965:   JFB: 20 steps x 1 = 20 f-evals
+2026-01-22 18:11:14,966:   RevDEQ: 10 steps x 2 = 20 f-evals
+2026-01-22 18:11:14,966: ======================================================================
+2026-01-22 18:11:14,967: 
+======================================================================
+2026-01-22 18:11:14,967: Running IFT
+2026-01-22 18:11:14,969: ======================================================================
+2026-01-22 18:11:14,973: Using pretrained base regularizer
+2026-01-22 18:11:15,408: IFT failed with error: Index put requires the source and destination dtypes match, got Float for the destination and Double for the source.
+2026-01-22 18:11:15,408: 
+======================================================================
+2026-01-22 18:11:15,411: Running JFB
+2026-01-22 18:11:15,411: ======================================================================
+2026-01-22 18:11:15,415: Using pretrained base regularizer
+2026-01-22 18:11:15,681: JFB failed with error: Index put requires the source and destination dtypes match, got Float for the destination and Double for the source.
+2026-01-22 18:11:15,683: 
+======================================================================
+2026-01-22 18:11:15,684: Running RevDEQ
+2026-01-22 18:11:15,684: ======================================================================
+2026-01-22 18:11:15,690: Using pretrained base regularizer
+2026-01-22 18:11:39,028: Step 5, Train PSNR 21.425775, RevDEQ steps 10, RevDEQ err 5.604968e-03
+2026-01-22 18:11:52,893: Step 10, Train PSNR 22.516610, RevDEQ steps 10, RevDEQ err 1.329295e-02
+2026-01-22 18:12:05,901: Step 15, Train PSNR 23.111091, RevDEQ steps 10, RevDEQ err 9.384509e-03
+2026-01-22 18:12:17,239: Step 20, Train PSNR 23.489902, RevDEQ steps 10, RevDEQ err 1.792841e-02
+2026-01-22 18:12:29,258: Step 25, Train PSNR 24.011609, RevDEQ steps 10, RevDEQ err 9.248630e-03
+2026-01-22 18:12:40,246: Step 30, Train PSNR 24.480578, RevDEQ steps 10, RevDEQ err 1.257008e-02
+2026-01-22 18:12:52,047: Step 35, Train PSNR 24.806074, RevDEQ steps 10, RevDEQ err 1.802669e-02
+2026-01-22 18:13:02,924: Step 40, Train PSNR 25.042641, RevDEQ steps 10, RevDEQ err 3.978022e-02
+2026-01-22 18:13:13,784: Step 45, Train PSNR 25.218050, RevDEQ steps 10, RevDEQ err 1.014796e-02
+2026-01-22 18:13:25,144: Step 50, Train PSNR 25.604456, RevDEQ steps 10, RevDEQ err 2.531284e-02
+2026-01-22 18:13:25,147: [Epoch 1] Train Loss: 1.30E+01, PSNR: 25.60
+2026-01-22 18:13:38,622: [Epoch 1] Val Loss: 9.58E+00, PSNR: 26.96
+2026-01-22 18:13:49,400: Step 5, Train PSNR 29.205882, RevDEQ steps 10, RevDEQ err 1.660054e-02
+2026-01-22 18:14:01,082: Step 10, Train PSNR 29.005639, RevDEQ steps 10, RevDEQ err 1.537797e-02
+2026-01-22 18:14:13,328: Step 15, Train PSNR 27.935451, RevDEQ steps 10, RevDEQ err 8.545983e-03
+2026-01-22 18:14:26,585: Step 20, Train PSNR 27.347615, RevDEQ steps 10, RevDEQ err 1.199045e-02
+2026-01-22 18:14:38,318: Step 25, Train PSNR 27.420174, RevDEQ steps 10, RevDEQ err 1.619140e-02
+2026-01-22 18:14:49,165: Step 30, Train PSNR 27.373132, RevDEQ steps 10, RevDEQ err 9.403404e-03
+2026-01-22 18:15:01,717: Step 35, Train PSNR 27.626169, RevDEQ steps 10, RevDEQ err 2.569839e-02
+2026-01-22 18:15:12,868: Step 40, Train PSNR 27.484844, RevDEQ steps 10, RevDEQ err 8.399342e-03
+2026-01-22 18:15:24,290: Step 45, Train PSNR 27.488746, RevDEQ steps 10, RevDEQ err 1.372705e-02
+2026-01-22 18:15:36,176: Step 50, Train PSNR 27.493941, RevDEQ steps 10, RevDEQ err 1.019180e-02
+2026-01-22 18:15:36,180: [Epoch 2] Train Loss: 8.34E+00, PSNR: 27.49
+2026-01-22 18:15:49,352: [Epoch 2] Val Loss: 9.50E+00, PSNR: 26.96
+2026-01-22 18:16:00,804: Step 5, Train PSNR 28.228553, RevDEQ steps 10, RevDEQ err 1.249116e-02
+2026-01-22 18:16:11,821: Step 10, Train PSNR 27.154322, RevDEQ steps 10, RevDEQ err 1.717573e-02
+2026-01-22 18:16:23,202: Step 15, Train PSNR 27.075228, RevDEQ steps 10, RevDEQ err 1.249528e-02
+2026-01-22 18:16:39,054: Step 20, Train PSNR 26.750510, RevDEQ steps 10, RevDEQ err 1.607374e-02
+2026-01-22 18:16:51,892: Step 25, Train PSNR 27.081010, RevDEQ steps 10, RevDEQ err 9.798079e-03
+2026-01-22 18:17:03,209: Step 30, Train PSNR 27.188829, RevDEQ steps 10, RevDEQ err 1.269104e-02
+2026-01-22 18:17:15,577: Step 35, Train PSNR 27.162000, RevDEQ steps 10, RevDEQ err 1.211091e-02
+2026-01-22 18:17:27,604: Step 40, Train PSNR 27.356205, RevDEQ steps 10, RevDEQ err 1.887571e-02
+2026-01-22 18:17:40,685: Step 45, Train PSNR 27.341635, RevDEQ steps 10, RevDEQ err 3.130716e-02
+2026-01-22 18:17:54,421: Step 50, Train PSNR 27.310465, RevDEQ steps 10, RevDEQ err 1.636155e-02
+2026-01-22 18:17:54,421: [Epoch 3] Train Loss: 8.93E+00, PSNR: 27.31
+2026-01-22 18:18:06,704: [Epoch 3] Val Loss: 9.39E+00, PSNR: 27.11
+2026-01-22 18:18:06,706: 
+RevDEQ completed in 411.0s
+2026-01-22 18:18:06,708:   Final Train Loss: 8.9329
+2026-01-22 18:18:06,708:   Final Train PSNR: 27.31 dB
+2026-01-22 18:18:06,708:   Final Val Loss: 9.3930
+2026-01-22 18:18:06,709:   Final Val PSNR: 27.11 dB
+2026-01-22 18:18:06,709: 
+======================================================================
+2026-01-22 18:18:06,709: SUMMARY
+2026-01-22 18:18:06,711: ======================================================================
+2026-01-22 18:18:06,711: Method | Max Iter | F-Evals/Batch | Train Loss | Val Loss | Train PSNR | Val PSNR | Duration (s)
+2026-01-22 18:18:06,711: ------------------------------------------------------------------------------------------------
+2026-01-22 18:18:06,712: RevDEQ | 10       | 20            | 8.93       | 9.39     | 27.31      | 27.11    | 411.0       
+2026-01-22 18:18:06,721: 
+Results saved to: comparison_logs\comparison_results_Denoising_CRR_20260122_run4.json
+2026-01-22 18:18:06,721: Log saved to: comparison_logs\comparison_Denoising_CRR_20260122_run4.log

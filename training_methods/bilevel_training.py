@@ -53,7 +53,7 @@ def bilevel_training(
     ),  # loss function used in the upper level problem
     revdeq_beta=0.8,  # relaxation parameter for RevDEQ reversible iterations (0 < beta <= 1)
     use_embedded_beta=False,  # if True, embed beta directly into fixed-point function (experimental)
-    revdeq_use_float64=False,  # use float64 for RevDEQ backward (only helps if model is also float64)
+    revdeq_use_float64=True,  # use float64 for RevDEQ backward (only helps if model is also float64)
     dtype=torch.float32,  # dtype for training (torch.float32 or torch.float64)
 ):
     assert validation_epochs <= epochs, (
@@ -62,8 +62,13 @@ def bilevel_training(
         "best_regularizer_state will remain unchanged, and the returned model will be identical to the initial state."
     )
     
-    # Convert regularizer to specified dtype
-    regularizer = regularizer.to(dtype)
+    # Only use specified dtype for RevDEQ mode (where gradient accuracy matters)
+    # IFT/JFB work fine with float32 and may have issues with pretrained float32 weights
+    if mode == "RevDEQ" and dtype != torch.float32:
+        dtype = torch.float64
+        regularizer = regularizer.to(dtype)
+    else:
+        dtype = torch.float32  # Force float32 for IFT/JFB
 
     def hessian_vector_product(
         x,
