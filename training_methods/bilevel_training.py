@@ -53,8 +53,7 @@ def bilevel_training(
     ),  # loss function used in the upper level problem
     revdeq_beta=0.8,  # relaxation parameter for RevDEQ reversible iterations (0 < beta <= 1)
     use_embedded_beta=False,  # if True, embed beta directly into fixed-point function (experimental)
-    revdeq_use_float64=True,  # use float64 for RevDEQ backward (only helps if model is also float64)
-    dtype=torch.float32,  # dtype for training (torch.float32 or torch.float64)
+    revdeq_use_float64=True,  # use float64 for RevDEQ fixed-point operations (NN stays in float32)
 ):
     assert validation_epochs <= epochs, (
         "validation_epochs cannot be greater than epochs. "
@@ -62,13 +61,9 @@ def bilevel_training(
         "best_regularizer_state will remain unchanged, and the returned model will be identical to the initial state."
     )
     
-    # Only use specified dtype for RevDEQ mode (where gradient accuracy matters)
-    # IFT/JFB work fine with float32 and may have issues with pretrained float32 weights
-    if mode == "RevDEQ" and dtype != torch.float32:
-        dtype = torch.float64
-        regularizer = regularizer.to(dtype)
-    else:
-        dtype = torch.float32  # Force float32 for IFT/JFB
+    # Neural network (regularizer) stays in float32 for compatibility with pretrained weights
+    # For RevDEQ, the fixed-point operations use float64 internally (controlled by revdeq_use_float64)
+    # Data is kept in float32 to match the neural network
 
     def hessian_vector_product(
         x,
@@ -189,7 +184,7 @@ def bilevel_training(
             )
         ):
             train_step += 1
-            x = x.to(device).to(dtype)
+            x = x.to(device)
             y = physics(x)
             x_noisy = physics.A_dagger(y)
 
@@ -331,7 +326,7 @@ def bilevel_training(
                 for x_val in tqdm(
                     val_dataloader, desc=f"Epoch {epoch+1}/{epochs} - Val"
                 ):
-                    x_val = x_val.to(device).to(dtype)
+                    x_val = x_val.to(device)
                     y_val = physics(x_val)
                     x_val_noisy = physics.A_dagger(y_val)
 

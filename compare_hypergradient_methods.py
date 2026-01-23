@@ -325,7 +325,6 @@ def run_comparison(args):
                 validation_epochs=args.validation_epochs,
                 revdeq_beta=args.revdeq_beta,
                 use_embedded_beta=args.use_embedded_beta,
-                dtype=args.dtype,
             )
             
             end_time = datetime.datetime.now()
@@ -440,13 +439,8 @@ if __name__ == "__main__":
                         help="Embed beta directly into fixed-point function (experimental)")
     parser.add_argument("--validation_epochs", type=int, default=None,
                         help="Run validation every N epochs (default: min(5, epochs))")
-    parser.add_argument("--dtype", type=str, default="float32", choices=["float32", "float64"],
-                        help="Data type for training (float32 or float64). Use float64 for better gradient accuracy.")
     
     args = parser.parse_args()
-    
-    # Convert dtype string to torch dtype
-    args.dtype = torch.float64 if args.dtype == "float64" else torch.float32
     
     # Set validation_epochs default: min(5, epochs) to ensure it's <= epochs
     if args.validation_epochs is None:

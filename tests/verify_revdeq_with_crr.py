@@ -44,7 +44,8 @@ class L2DataFidelity:
 # =============================================================================
 def unroll_reversible_forward(function, z0, args, beta, max_steps):
     """Standard unrolled forward pass that retains autograd graph."""
-    solver = ReversibleSolver(beta=beta)
+    # use_float64=False for unrolled version - we want standard autograd to work in float32
+    solver = ReversibleSolver(beta=beta, use_float64=False)
     y, fz = solver.init(function, z0, args)
     z = z0.clone()
     
@@ -71,16 +72,17 @@ def verify_with_crr(
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = "cpu"
-    dtype = torch.float64
+    # Neural network stays in float32; RevDEQ handles float64 internally for fixed-point ops
+    dtype = torch.float32
     
     print("=" * 70)
     print("RevDEQ Verification with CRR Regularizer")
     print("=" * 70)
     print(f"Settings: num_steps={num_steps}, beta={beta}, step_size={step_size}")
-    print(f"Image size: {image_size}x{image_size}")
+    print(f"Image size: {image_size}x{image_size}, dtype={dtype} (RevDEQ uses float64 internally)")
     print()
     
-    # Create CRR regularizer
+    # Create CRR regularizer (stays in float32)
     base_reg = WCRR(sigma=0.1, weak_convexity=0.0).to(dtype).to(device)
     regularizer = ParameterLearningWrapper(base_reg, device=device)
     regularizer = regularizer.to(dtype).to(device)
@@ -208,7 +210,7 @@ def visualize_gradient_accumulation(num_steps=3, beta=0.8):
     """
     torch.manual_seed(42)
     device = "cpu"
-    dtype = torch.float64
+    dtype = torch.float32  # Stay in float32 for consistency
     
     print()
     print("=" * 70)
@@ -227,8 +229,8 @@ def visualize_gradient_accumulation(num_steps=3, beta=0.8):
     z0 = torch.tensor([[1.0]], dtype=dtype)
     target = torch.tensor([[0.0]], dtype=dtype)
     
-    # Forward pass
-    solver = ReversibleSolver(beta=beta)
+    # Forward pass (use_float64=False for simple scalar test)
+    solver = ReversibleSolver(beta=beta, use_float64=False)
     y, fz = solver.init(f, z0, (w,))
     z = z0.clone()
     
@@ -250,7 +252,7 @@ def visualize_gradient_accumulation(num_steps=3, beta=0.8):
     print("\nBackward pass (RevDEQ-style):")
     grad_z = 2 * (z - target)
     grad_y = torch.zeros_like(y)
-    grad_w = torch.tensor(0.0, dtype=dtype)
+    grad_w = torch.tensor(0.0, dtype=torch.float32)
     
     z_curr = z.detach().clone()
     y_curr = y.detach().clone()
@@ -302,7 +304,7 @@ def visualize_gradient_accumulation(num_steps=3, beta=0.8):
     
     # Compare with unrolled autograd
     w.grad = None
-    solver = ReversibleSolver(beta=beta)
+    solver = ReversibleSolver(beta=beta, use_float64=False)
     y, fz = solver.init(f, z0, (w,))
     z = z0.clone()
     for _ in range(num_steps):

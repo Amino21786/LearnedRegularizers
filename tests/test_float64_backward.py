@@ -1,201 +1,262 @@
 """
-Test float64 backward pass for RevDEQ gradient accuracy.
+Test that float64 is used for fixed-point operations while NN stays in float32.
 
-This test compares RevDEQ gradients against unrolled backpropagation
-to verify that using float64 for backward pass reconstruction improves
-gradient accuracy, especially for higher step counts.
+This verifies the design:
+- Forward pass: fixed-point iterations in float64, NN calls in float32
+- Backward pass: state reconstruction in float64, NN calls in float32
+- Output and gradients: float32 (matching NN parameters)
 """
 
 import torch
-import numpy as np
+import torch.nn as nn
 import sys
 import os
 
-# Ensure imports work
-HERE = os.path.dirname(__file__)
-LR_ROOT = os.path.abspath(os.path.join(HERE, ".."))
-for p in (LR_ROOT,):
-    if p not in sys.path:
-        sys.path.insert(0, p)
+# Add parent directory for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from training_methods.reversible_deq import ReversibleSolver, solve_reversible_adjoint, REVDEQ_DTYPE
-from priors import ParameterLearningWrapper, WCRR
+from training_methods.reversible_deq import solve_reversible_adjoint, FP_DTYPE, NN_DTYPE
 
 
-class IdentityPhysics:
-    def __call__(self, x):
-        return x
-    def A_dagger(self, y):
-        return y
-
-
-class L2DataFidelity:
-    def grad(self, x, y, physics):
-        return x - y
-
-
-def unroll_reversible_forward(function, z0, args, beta, max_steps):
-    """Standard unrolled forward pass with autograd graph."""
-    solver = ReversibleSolver(beta=beta)
-    y, fz = solver.init(function, z0, args)
-    z = z0.clone()
-    for step in range(max_steps):
-        z, (y, fz), error = solver.step(function, z, args, (y, fz))
-    return z
-
-
-def test_gradient_accuracy(beta, num_steps, model_dtype, use_float64_bwd):
-    """
-    Compare RevDEQ gradients against unrolled backprop.
+class SimpleRegularizer(nn.Module):
+    """Simple CNN regularizer for testing."""
     
-    Args:
-        beta: Relaxation parameter
-        num_steps: Number of fixed-point iterations
-        model_dtype: Dtype for model and data (torch.float32 or torch.float64)
-        use_float64_bwd: Whether to use float64 for backward pass
-        
-    Returns:
-        max_rel_diff: Maximum relative difference between gradients
-    """
-    torch.manual_seed(42)
-    np.random.seed(42)
-    device = 'cpu'
-    image_size = 16
+    def __init__(self, channels=3):
+        super().__init__()
+        self.conv1 = nn.Conv2d(channels, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, channels, 3, padding=1)
+        self.relu = nn.ReLU()
+    
+    def forward(self, x):
+        out = self.conv1(x)
+        out = self.relu(out)
+        out = self.conv2(out)
+        return out
+    
+    def grad(self, x):
+        """Gradient of regularizer."""
+        return self.forward(x)
+
+
+def verify_dtype_handling():
+    """Verify that dtypes are handled correctly throughout."""
+    print("=" * 60)
+    print("Testing float64 fixed-point operations with float32 NN")
+    print("=" * 60)
+    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Device: {device}")
+    print(f"FP_DTYPE (fixed-point): {FP_DTYPE}")
+    print(f"NN_DTYPE (neural network): {NN_DTYPE}")
+    
+    # Create regularizer in float32
+    regularizer = SimpleRegularizer(channels=1).to(device)
+    print(f"\nRegularizer parameter dtype: {next(regularizer.parameters()).dtype}")
+    assert next(regularizer.parameters()).dtype == torch.float32, "Regularizer should be float32"
+    
+    # Create test data in float32
+    x = torch.randn(1, 1, 16, 16, device=device, dtype=torch.float32)
+    physics_scale = 0.9
+    y = x * physics_scale
     step_size = 0.1
-    lamda = 1.0
     
-    # Create regularizer
-    base_reg = WCRR(sigma=0.1, weak_convexity=0.0).to(model_dtype).to(device)
-    regularizer = ParameterLearningWrapper(base_reg, device=device).to(model_dtype).to(device)
-    for p in regularizer.parameters():
-        p.requires_grad_(True)
+    # Fixed-point function
+    def fixed_point_fn(z, args):
+        """f(z) = z - step_size * (A^T(Az - y) + grad_R(z))"""
+        physics_grad = physics_scale * (physics_scale * z - y)
+        reg_grad = regularizer.grad(z)
+        return z - step_size * (physics_grad + reg_grad)
     
-    data_fidelity = L2DataFidelity()
-    physics = IdentityPhysics()
-    
-    # Create test data
-    x_true = torch.randn(1, 1, image_size, image_size, dtype=model_dtype, device=device) * 0.5
-    y = physics(x_true) + torch.randn_like(x_true) * 0.1
-    z0 = physics.A_dagger(y).clone()
-    
-    def fixed_point_function(z, args):
-        y_arg, physics_arg, data_fidelity_arg, regularizer_arg, lamda_arg, step_size_arg = args
-        grad_data = data_fidelity_arg.grad(z, y_arg, physics_arg)
-        grad_reg = lamda_arg * regularizer_arg.grad(z)
-        return z - step_size_arg * (grad_data + grad_reg)
-    
-    args = (y, physics, data_fidelity, regularizer, lamda, step_size)
     params = list(regularizer.parameters())
     
-    # === Unrolled (reference) ===
-    for p in params:
-        if p.grad is not None:
-            p.grad.zero_()
-    
-    z_unroll = unroll_reversible_forward(fixed_point_function, z0, args, beta=beta, max_steps=num_steps)
-    loss_unroll = ((z_unroll - x_true) ** 2).sum()
-    loss_unroll.backward()
-    grads_unroll = [p.grad.detach().clone() for p in params]
-    
-    # === RevDEQ ===
-    for p in params:
-        p.grad = None
-    
-    z_revdeq, steps, error = solve_reversible_adjoint(
-        fixed_point_function, z0.clone(), args, params=params,
-        beta=beta, tol=-1.0, max_steps=num_steps, use_float64=use_float64_bwd
+    print("\n--- Forward Pass Test ---")
+    z0 = x.clone().requires_grad_(True)
+    z1, steps, error = solve_reversible_adjoint(
+        fixed_point_fn, z0, args=None, params=params,
+        beta=0.5, tol=1e-4, max_steps=10,
+        use_float64=True
     )
-    loss_revdeq = ((z_revdeq - x_true) ** 2).sum()
-    loss_revdeq.backward()
-    grads_revdeq = [p.grad.detach().clone() for p in params]
     
-    # Compute max relative difference
-    max_rel_diff = 0
-    for gu, gr in zip(grads_unroll, grads_revdeq):
-        diff = (gu - gr).abs().max().item()
-        rel_diff = diff / (gu.abs().max().item() + 1e-10)
-        max_rel_diff = max(max_rel_diff, rel_diff)
+    print(f"Input z0 dtype: {z0.dtype}")
+    print(f"Output z1 dtype: {z1.dtype}")
+    print(f"Steps: {steps}, Error: {error:.2e}")
     
-    return max_rel_diff
+    assert z1.dtype == torch.float32, "Output should be float32"
+    
+    print("\n--- Backward Pass Test ---")
+    loss = z1.sum()
+    loss.backward()
+    
+    print(f"z0.grad dtype: {z0.grad.dtype if z0.grad is not None else None}")
+    for i, p in enumerate(params):
+        print(f"params[{i}].grad dtype: {p.grad.dtype if p.grad is not None else None}")
+        if p.grad is not None:
+            assert p.grad.dtype == torch.float32, f"Parameter gradient should be float32"
+    
+    if z0.grad is not None:
+        assert z0.grad.dtype == torch.float32, "Input gradient should be float32"
+    
+    print("\n[OK] All dtype checks passed!")
+    return True
 
 
-def main():
-    print("=" * 75)
-    print("RevDEQ Gradient Accuracy Test: float64 Backward Pass")
-    print("=" * 75)
-    print(f"RevDEQ backward dtype: {REVDEQ_DTYPE}")
-    print()
-    print("Comparing RevDEQ gradients against unrolled backpropagation")
-    print("with the same model dtype (fair comparison).")
-    print()
+def test_gradient_accuracy():
+    """Compare RevDEQ vs unrolled gradients with float64 fixed-point ops."""
+    print("\n" + "=" * 60)
+    print("Testing Gradient Accuracy: RevDEQ vs Unrolled")
+    print("=" * 60)
     
-    results = []
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    for model_dtype, dtype_name in [(torch.float32, 'float32'), (torch.float64, 'float64')]:
-        print(f"Model dtype: {dtype_name}")
-        print("-" * 75)
+    regularizer = SimpleRegularizer(channels=1).to(device)
+    
+    x = torch.randn(1, 1, 16, 16, device=device, dtype=torch.float32)
+    physics_scale = 0.9
+    y = x * physics_scale
+    step_size = 0.1
+    
+    def fixed_point_fn(z, args):
+        physics_grad = physics_scale * (physics_scale * z - y)
+        reg_grad = regularizer.grad(z)
+        return z - step_size * (physics_grad + reg_grad)
+    
+    test_configs = [
+        {"steps": 5, "beta": 0.5},
+        {"steps": 10, "beta": 0.5},
+        {"steps": 20, "beta": 0.5},
+        {"steps": 30, "beta": 0.5},
+    ]
+    
+    print("\n" + "-" * 60)
+    print(f"{'Steps':<10} {'Max Error':<15} {'Mean Error':<15} {'Status':<10}")
+    print("-" * 60)
+    
+    for config in test_configs:
+        steps = config["steps"]
+        beta = config["beta"]
         
-        for steps in [5, 10, 15, 20]:
-            for beta in [0.5, 0.8]:
-                for use_f64 in [False, True]:
-                    err = test_gradient_accuracy(beta, steps, model_dtype, use_f64)
-                    bwd_str = 'f64_bwd' if use_f64 else 'f32_bwd'
-                    status = 'OK' if err < 0.01 else 'WARN' if err < 0.1 else 'FAIL'
-                    print(f"  Steps={steps:2d}, beta={beta}, {bwd_str}: rel_err={err:.2e} [{status}]")
-                    
-                    results.append({
-                        'model_dtype': dtype_name,
-                        'steps': steps,
-                        'beta': beta,
-                        'use_float64_bwd': use_f64,
-                        'rel_err': err,
-                        'status': status
-                    })
-            print()
+        # --- RevDEQ forward + backward ---
+        regularizer.zero_grad()
+        z0 = x.clone()
+        params = list(regularizer.parameters())
+        
+        z_rev, _, _ = solve_reversible_adjoint(
+            fixed_point_fn, z0, args=None, params=params,
+            beta=beta, tol=1e-10, max_steps=steps,
+            use_float64=True
+        )
+        loss_rev = z_rev.sum()
+        loss_rev.backward()
+        
+        grad_rev = [p.grad.clone() if p.grad is not None else None for p in params]
+        
+        # --- Unrolled forward + backward ---
+        regularizer.zero_grad()
+        z = x.clone()
+        y_state = z.clone()
+        fz = fixed_point_fn(z, None)
+        
+        for _ in range(steps):
+            y_state = (1 - beta) * y_state + beta * fz
+            f_y = fixed_point_fn(y_state, None)
+            z = (1 - beta) * z + beta * f_y
+            fz = fixed_point_fn(z, None)
+        
+        loss_unroll = z.sum()
+        loss_unroll.backward()
+        
+        grad_unroll = [p.grad.clone() if p.grad is not None else None for p in params]
+        
+        # Compare gradients
+        max_errors = []
+        mean_errors = []
+        for g_rev, g_unroll in zip(grad_rev, grad_unroll):
+            if g_rev is not None and g_unroll is not None:
+                err = torch.abs(g_rev - g_unroll)
+                max_errors.append(err.max().item())
+                mean_errors.append(err.mean().item())
+        
+        max_err = max(max_errors) if max_errors else 0
+        mean_err = sum(mean_errors) / len(mean_errors) if mean_errors else 0
+        
+        status = "OK" if max_err < 1e-4 else "~" if max_err < 1e-2 else "!"
+        print(f"{steps:<10} {max_err:<15.2e} {mean_err:<15.2e} {status:<10}")
     
-    # Summary
-    print("=" * 75)
-    print("SUMMARY")
-    print("=" * 75)
+    print("-" * 60)
+    print("Legend: OK = excellent (<1e-4), ~ = good (<1e-2), ! = check needed")
     
-    # Check improvement from float64 backward
-    print("\nImprovement from float64 backward (comparing f32_bwd vs f64_bwd):")
-    print("-" * 75)
-    
-    for model_dtype in ['float32', 'float64']:
-        print(f"\n  Model dtype: {model_dtype}")
-        for steps in [5, 10, 15, 20]:
-            for beta in [0.5, 0.8]:
-                f32_result = [r for r in results if r['model_dtype'] == model_dtype 
-                              and r['steps'] == steps and r['beta'] == beta 
-                              and not r['use_float64_bwd']][0]
-                f64_result = [r for r in results if r['model_dtype'] == model_dtype 
-                              and r['steps'] == steps and r['beta'] == beta 
-                              and r['use_float64_bwd']][0]
-                
-                improvement = f32_result['rel_err'] / (f64_result['rel_err'] + 1e-15)
-                better = "BETTER" if improvement > 1.1 else "SAME" if improvement > 0.9 else "WORSE"
-                print(f"    Steps={steps:2d}, beta={beta}: f32={f32_result['rel_err']:.2e}, "
-                      f"f64={f64_result['rel_err']:.2e}, ratio={improvement:.1f}x [{better}]")
-    
-    print("\n" + "=" * 75)
-    print("CONCLUSION")
-    print("=" * 75)
-    print("""
-Key findings:
-1. With float64 model: Gradients are accurate to ~1e-12 for low steps, growing
-   with more steps due to reconstruction error amplification (expected).
+    return True
 
-2. With float32 model: Precision is limited by float32 function evaluations.
-   The float64 backward helps with reconstruction but can't overcome the
-   fundamental float32 limitation in forward pass function evaluations.
 
-3. For best gradient accuracy: Use float64 model dtype when possible.
-   
-4. For practical training with float32 models: The gradient error is typically
-   acceptable for training (similar to JFB approximation error).
-""")
+def compare_float32_vs_float64():
+    """Compare gradient accuracy with and without float64."""
+    print("\n" + "=" * 60)
+    print("Comparing float32 vs float64 Fixed-Point Operations")
+    print("=" * 60)
+    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    x = torch.randn(1, 1, 16, 16, device=device, dtype=torch.float32)
+    physics_scale = 0.9
+    y = x * physics_scale
+    step_size = 0.1
+    
+    steps = 30
+    beta = 0.5
+    
+    for use_float64 in [False, True]:
+        regularizer = SimpleRegularizer(channels=1).to(device)
+        
+        def fixed_point_fn(z, args):
+            physics_grad = physics_scale * (physics_scale * z - y)
+            reg_grad = regularizer.grad(z)
+            return z - step_size * (physics_grad + reg_grad)
+        
+        # RevDEQ
+        regularizer.zero_grad()
+        params = list(regularizer.parameters())
+        z_rev, _, _ = solve_reversible_adjoint(
+            fixed_point_fn, x.clone(), args=None, params=params,
+            beta=beta, tol=1e-10, max_steps=steps,
+            use_float64=use_float64
+        )
+        z_rev.sum().backward()
+        grad_rev = [p.grad.clone() for p in params]
+        
+        # Unrolled
+        regularizer.zero_grad()
+        z = x.clone()
+        y_state = z.clone()
+        fz = fixed_point_fn(z, None)
+        for _ in range(steps):
+            y_state = (1 - beta) * y_state + beta * fz
+            f_y = fixed_point_fn(y_state, None)
+            z = (1 - beta) * z + beta * f_y
+            fz = fixed_point_fn(z, None)
+        z.sum().backward()
+        grad_unroll = [p.grad.clone() for p in params]
+        
+        # Compare
+        max_errors = []
+        for g_rev, g_unroll in zip(grad_rev, grad_unroll):
+            err = torch.abs(g_rev - g_unroll)
+            max_errors.append(err.max().item())
+        
+        max_err = max(max_errors)
+        mode = "float64" if use_float64 else "float32"
+        print(f"{mode} fixed-point ops: max gradient error = {max_err:.2e}")
+    
+    return True
 
 
 if __name__ == "__main__":
-    main()
+    print("Testing RevDEQ with float64 fixed-point operations")
+    print("Neural network stays in float32\n")
+    
+    verify_dtype_handling()
+    test_gradient_accuracy()
+    compare_float32_vs_float64()
+    
+    print("\n" + "=" * 60)
+    print("All tests completed!")
+    print("=" * 60)

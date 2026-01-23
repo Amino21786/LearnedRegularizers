@@ -1,0 +1,58 @@
+2026-01-23 11:21:49,444: Dataset: LoDoPaB
+2026-01-23 11:21:49,445: Train set size: 5, Val set size: 5
+2026-01-23 11:21:49,503: Loaded pretrained weights from weights/score_for_CT/CRR_score_training_for_CT.pt
+2026-01-23 11:21:49,504: ======================================================================
+2026-01-23 11:21:49,504: HYPERGRADIENT METHOD COMPARISON (CT)
+2026-01-23 11:21:49,504: ======================================================================
+2026-01-23 11:21:49,505: Run ID: 20260123_run1
+2026-01-23 11:21:49,505: Problem: CT
+2026-01-23 11:21:49,506: Regularizer: CRR
+2026-01-23 11:21:49,507: Epochs: 1
+2026-01-23 11:21:49,507: Validation epochs: 1
+2026-01-23 11:21:49,507: Load pretrained weights: True
+2026-01-23 11:21:49,508: Load parameter-fitted weights: False
+2026-01-23 11:21:49,508: RevDEQ beta: 0.5
+2026-01-23 11:21:49,508: Function evaluations per batch:
+2026-01-23 11:21:49,508:   JFB: 20 steps x 1 = 20 f-evals
+2026-01-23 11:21:49,509:   RevDEQ: 10 steps x 2 = 20 f-evals
+2026-01-23 11:21:49,510: ======================================================================
+2026-01-23 11:21:49,510: 
+======================================================================
+2026-01-23 11:21:49,510: Running JFB
+2026-01-23 11:21:49,512: ======================================================================
+2026-01-23 11:21:49,522: Using pretrained base regularizer
+2026-01-23 11:22:29,845: [Epoch 1] Train Loss: 1.62E+00, PSNR: 35.52
+2026-01-23 11:23:08,846: [Epoch 1] Val Loss: 4.36E+00, PSNR: 31.64
+2026-01-23 11:23:08,852: 
+JFB training completed in 79.3s
+2026-01-23 11:23:08,853:   Final Train Loss: 1.6227
+2026-01-23 11:23:08,853:   Final Train PSNR: 35.52 dB
+2026-01-23 11:23:08,853:   Final Val Loss: 4.3574
+2026-01-23 11:23:08,853:   Final Val PSNR: 31.64 dB
+2026-01-23 11:23:08,868:   Saved weights to weights/bilevel_CT\CRR_bilevel_JFB_for_CT_20260123_run1.pt
+2026-01-23 11:23:08,868: 
+======================================================================
+2026-01-23 11:23:08,868: Running RevDEQ
+2026-01-23 11:23:08,869: ======================================================================
+2026-01-23 11:23:08,872: Using pretrained base regularizer
+2026-01-23 11:23:43,320: Step 5, Train PSNR nan, RevDEQ steps 10, RevDEQ err nan
+2026-01-23 11:23:43,322: [Epoch 1] Train Loss: NAN, PSNR: nan
+2026-01-23 11:23:52,305: [Epoch 1] Val Loss: NAN, PSNR: nan
+2026-01-23 11:23:52,307: 
+RevDEQ training completed in 43.4s
+2026-01-23 11:23:52,308:   Final Train Loss: nan
+2026-01-23 11:23:52,308:   Final Train PSNR: nan dB
+2026-01-23 11:23:52,309:   Final Val Loss: nan
+2026-01-23 11:23:52,309:   Final Val PSNR: nan dB
+2026-01-23 11:23:52,318:   Saved weights to weights/bilevel_CT\CRR_bilevel_RevDEQ_for_CT_20260123_run1.pt
+2026-01-23 11:23:52,318: 
+======================================================================
+2026-01-23 11:23:52,318: SUMMARY
+2026-01-23 11:23:52,318: ======================================================================
+2026-01-23 11:23:52,318: Method | Max Iter | F-Evals/Batch | Train PSNR | Val PSNR | Train Time (s)
+2026-01-23 11:23:52,320: --------------------------------------------------------------------------
+2026-01-23 11:23:52,320: JFB    | 20       | 20            | 35.52      | 31.64    | 79.3          
+2026-01-23 11:23:52,320: RevDEQ | 10       | 20            | nan        | nan      | 43.4          
+2026-01-23 11:23:52,324: 
+Results saved to: comparison_logs\comparison_results_CT_CRR_20260123_run1.json
+2026-01-23 11:23:52,324: Log saved to: comparison_logs\comparison_CT_CRR_20260123_run1.log

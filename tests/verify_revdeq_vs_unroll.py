@@ -111,7 +111,8 @@ def unroll_reversible_forward(
         error: Final residual
         trajectory: List of (z, y) pairs if store_trajectory=True
     """
-    solver = ReversibleSolver(beta=beta)
+    # use_float64=False for unrolled version - we want standard autograd to work in float32
+    solver = ReversibleSolver(beta=beta, use_float64=False)
     y, fz = solver.init(function, z0, args)
     z = z0.clone()
     
@@ -233,16 +234,17 @@ def verify_revdeq_vs_unroll(
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = "cpu"  # Use CPU for numerical stability in testing
-    dtype = torch.float64  # Use double precision for accurate comparison
+    # Neural network stays in float32; RevDEQ handles float64 internally for fixed-point ops
+    dtype = torch.float32
     
     print("=" * 70)
     print("RevDEQ vs Unrolled Backpropagation Verification")
     print("=" * 70)
     print(f"Settings: num_steps={num_steps}, beta={beta}, step_size={step_size}, lambda={lamda}")
-    print(f"Image size: {image_size}x{image_size}, dtype={dtype}")
+    print(f"Image size: {image_size}x{image_size}, dtype={dtype} (RevDEQ uses float64 internally)")
     print()
     
-    # Create regularizer
+    # Create regularizer (stays in float32)
     regularizer = SimpleConvRegularizer(in_channels=1, hidden_channels=4, kernel_size=3)
     regularizer = regularizer.to(dtype).to(device)
     for p in regularizer.parameters():
@@ -252,7 +254,7 @@ def verify_revdeq_vs_unroll(
     data_fidelity = SimpleL2DataFidelity()
     physics = IdentityPhysics()
     
-    # Create test image and observation
+    # Create test image and observation (float32)
     x_true = torch.randn(1, 1, image_size, image_size, dtype=dtype, device=device) * 0.5
     y = physics(x_true) + torch.randn_like(x_true) * 0.1  # Add noise
     z0 = physics.A_dagger(y).clone()
@@ -379,13 +381,14 @@ def verify_revdeq_vs_unroll(
     # Check forward pass equivalence
     z_diff = (z_unroll.detach() - z_revdeq.detach()).abs().max().item()
     print(f"Forward z difference (max abs): {z_diff:.2e}")
-    assert z_diff < 1e-8, f"Forward pass mismatch: {z_diff}"
+    # Tolerance relaxed for float32 vs float64 comparison (RevDEQ uses float64 internally)
+    assert z_diff < 1e-5, f"Forward pass mismatch: {z_diff}"
     print("  [OK] Forward passes match")
     
-    # Check loss equivalence
+    # Check loss equivalence (tolerance relaxed for float32 vs float64)
     loss_diff = abs(loss_unroll.item() - loss_revdeq.item())
     print(f"Loss difference: {loss_diff:.2e}")
-    assert loss_diff < 1e-10, f"Loss mismatch: {loss_diff}"
+    assert loss_diff < 1e-5, f"Loss mismatch: {loss_diff}"
     print("  [OK] Losses match")
     
     # Check gradient equivalence
@@ -427,7 +430,7 @@ def verify_with_complex_loss(num_steps=5, beta=0.8):
     
     torch.manual_seed(123)
     device = "cpu"
-    dtype = torch.float64
+    dtype = torch.float32  # NN stays in float32
     
     # Setup (same as main test)
     regularizer = SimpleConvRegularizer(in_channels=1, hidden_channels=4, kernel_size=3)
