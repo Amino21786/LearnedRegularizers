@@ -30,17 +30,27 @@ class Solution:
     error: float
 
 
-def _call_function_fp64(function: Callable, z: torch.Tensor, args: Any) -> torch.Tensor:
+def _call_function_fp64(function: Callable, z: torch.Tensor, args: Any, nn_dtype: Optional[torch.dtype] = NN_DTYPE) -> torch.Tensor:
     """
     Call the fixed-point function with proper dtype handling.
     
-    - Input z is in float64 (fixed-point precision)
-    - Convert to float32 for neural network evaluation
+    - Convert input to nn_dtype (default: float32) for neural network evaluation
     - Convert output back to float64 for fixed-point math
+    
+    Args:
+        function: The fixed-point function
+        z: Input tensor (typically float64 for fixed-point precision)
+        args: Additional arguments
+        nn_dtype: The dtype expected by the neural network (default: float32)
     """
-    z_nn = z.to(NN_DTYPE)
-    result = function(z_nn, args)
-    return result.to(FP_DTYPE)
+    if z.dtype != nn_dtype:
+        z_nn = z.to(nn_dtype)
+        result = function(z_nn, args)
+        return result.to(FP_DTYPE)
+    else:
+        # Already in correct dtype - call directly
+        result = function(z, args)
+        return result.to(FP_DTYPE) if result.dtype != FP_DTYPE else result
 
 
 class ReversibleSolver:
@@ -52,14 +62,18 @@ class ReversibleSolver:
     for the reversible updates.
     """
     
-    def __init__(self, beta: float = 0.8, use_float64: bool = True):
+    def __init__(self, beta: float = 0.8, use_float64: bool = True, nn_dtype: Optional[torch.dtype] = None):
         """
         Args:
             beta: Relaxation parameter for reversible updates (0 < beta < 1)
             use_float64: Use float64 for fixed-point operations
+            nn_dtype: Dtype for neural network calls. If None, defaults to float32 when use_float64=True,
+                      or no conversion when use_float64=False.
         """
         self.beta = beta
         self.use_float64 = use_float64
+        # Default to float32 for NN calls when using float64 fixed-point (mixed precision)
+        self.nn_dtype = nn_dtype if nn_dtype is not None else (NN_DTYPE if use_float64 else None)
     
     def init(self, function: Callable, z0: torch.Tensor, args: Any) -> Tuple[torch.Tensor, torch.Tensor]:
         """
@@ -77,7 +91,7 @@ class ReversibleSolver:
         # state is (y0, f(z0)) with y0 initialized to z0.
         y0 = z0.clone()
         if self.use_float64:
-            f0 = _call_function_fp64(function, z0, args)
+            f0 = _call_function_fp64(function, z0, args, nn_dtype=self.nn_dtype)
         else:
             f0 = function(z0, args)
         return y0, f0
@@ -115,7 +129,7 @@ class ReversibleSolver:
         
         # f(y_{k+1}) - call neural network
         if self.use_float64:
-            f_y1 = _call_function_fp64(function, y1, args)
+            f_y1 = _call_function_fp64(function, y1, args, nn_dtype=self.nn_dtype)
         else:
             f_y1 = function(y1, args)
         
@@ -124,7 +138,7 @@ class ReversibleSolver:
         
         # f(z_{k+1}) - call neural network
         if self.use_float64:
-            f_z1 = _call_function_fp64(function, z1, args)
+            f_z1 = _call_function_fp64(function, z1, args, nn_dtype=self.nn_dtype)
         else:
             f_z1 = function(z1, args)
 
@@ -158,12 +172,14 @@ class _ReversibleDEQFunction(torch.autograd.Function):
         function = getattr(_ReversibleDEQFunction, "_py_function", None)
         args = getattr(_ReversibleDEQFunction, "_py_args", None)
         use_float64 = getattr(_ReversibleDEQFunction, "_use_float64", True)
+        nn_dtype = getattr(_ReversibleDEQFunction, "_nn_dtype", NN_DTYPE)
         if function is None:
             raise RuntimeError("RevDEQ autograd: missing python `function` (internal wiring bug).")
 
         # Store original dtype for output conversion
         original_dtype = z0.dtype
         ctx.original_dtype = original_dtype
+        ctx.nn_dtype = nn_dtype
 
         # Convert to float64 for fixed-point iterations if requested
         if use_float64:
@@ -171,7 +187,7 @@ class _ReversibleDEQFunction(torch.autograd.Function):
         else:
             z0_fp = z0
 
-        solver = ReversibleSolver(beta=beta, use_float64=use_float64)
+        solver = ReversibleSolver(beta=beta, use_float64=use_float64, nn_dtype=nn_dtype)
 
         with torch.no_grad():
             y, fz = solver.init(function, z0_fp, args)
@@ -231,18 +247,21 @@ class _ReversibleDEQFunction(torch.autograd.Function):
         else:
             grad_params = [torch.zeros_like(p) for p in params]
 
+        # Use nn_dtype stored in context (set from solve_reversible_adjoint)
+        nn_dtype = ctx.nn_dtype if hasattr(ctx, 'nn_dtype') else (params[0].dtype if params else original_dtype)
+        
         # Reverse-time loop - all state reconstruction in float64
         for _ in range(steps):
             with torch.enable_grad():
-                # Convert y1 to float32 for neural network call
-                y1_nn = y1.to(NN_DTYPE).detach().requires_grad_(True)
+                # Convert y1 to neural network dtype for function call
+                y1_nn = y1.to(nn_dtype).detach().requires_grad_(True)
                 fy1 = function(y1_nn, args)
 
                 # VJP at y1: apply to grad_z1
                 grads_y = torch.autograd.grad(
                     fy1,
                     (y1_nn, *params),
-                    grad_outputs=grad_z1.to(NN_DTYPE),
+                    grad_outputs=grad_z1.to(nn_dtype),
                     retain_graph=False,
                     create_graph=False,
                     allow_unused=True,
@@ -262,15 +281,15 @@ class _ReversibleDEQFunction(torch.autograd.Function):
                 fy1_fp = fy1.detach().to(FP_DTYPE) if use_float64 else fy1.detach()
                 z0 = (z1 - beta * fy1_fp) / (1 - beta)
 
-                # Convert z0 to float32 for neural network call
-                z0_nn = z0.to(NN_DTYPE).detach().requires_grad_(True)
+                # Convert z0 to neural network dtype for function call
+                z0_nn = z0.to(nn_dtype).detach().requires_grad_(True)
                 fz0 = function(z0_nn, args)
 
                 # VJP at z0: apply to grad_y1
                 grads_z = torch.autograd.grad(
                     fz0,
                     (z0_nn, *params),
-                    grad_outputs=grad_y1.to(NN_DTYPE),
+                    grad_outputs=grad_y1.to(nn_dtype),
                     retain_graph=False,
                     create_graph=False,
                     allow_unused=True,
@@ -373,6 +392,7 @@ def solve_reversible_adjoint(
     tol: float = 1e-3,
     max_steps: int = 50,
     use_float64: bool = True,
+    nn_dtype: Optional[torch.dtype] = None,
 ) -> Tuple[torch.Tensor, int, float]:
     """
     Reversible DEQ solve with a custom backward pass (RevDEQ-style adjoint).
@@ -387,7 +407,8 @@ def solve_reversible_adjoint(
         max_steps: Maximum number of iterations
         use_float64: Use float64 for fixed-point operations (default: True)
                      All state updates and reconstructions use float64.
-                     Neural network evaluations remain in float32.
+        nn_dtype: Dtype for neural network calls. If None, defaults to float32 when use_float64=True
+                  (mixed precision mode), or uses params dtype for float64 NNs in verification.
 
     Returns:
         z1: fixed point tensor (with custom gradient)
@@ -398,10 +419,15 @@ def solve_reversible_adjoint(
     tol_t = torch.tensor(tol, device=z0.device, dtype=z0.dtype)
     max_steps_t = torch.tensor(max_steps, device=z0.device, dtype=torch.int64)
 
+    # Determine nn_dtype: use provided value, or default to float32 for mixed precision
+    if nn_dtype is None:
+        nn_dtype = NN_DTYPE if use_float64 else None
+
     # Attach python objects for forward/backward
     _ReversibleDEQFunction._py_function = function
     _ReversibleDEQFunction._py_args = args
     _ReversibleDEQFunction._use_float64 = use_float64
+    _ReversibleDEQFunction._nn_dtype = nn_dtype
 
     z1, steps_t, err_t = _ReversibleDEQFunction.apply(z0, beta_t, tol_t, max_steps_t, *params)
     return z1, int(steps_t.item()), float(err_t.item())

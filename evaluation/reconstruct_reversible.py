@@ -14,7 +14,6 @@ This can be reversed for memory-efficient backpropagation.
 
 import torch
 from typing import Optional
-from training_methods.reversible_deq import solve_reversible_adjoint
 
 
 def reconstruct_reversible(
@@ -76,6 +75,9 @@ def reconstruct_reversible(
     Returns:
         Reconstructed image tensor (and stats if return_stats=True)
     """
+    
+    # Lazy import to avoid circular dependency with training_methods
+    from training_methods.reversible_deq import solve_reversible_adjoint
     
     if x_init is not None:
         x = torch.clone(x_init).detach()
@@ -211,7 +213,7 @@ def reconstruct_reversible(
             f"Reversible solver converged in {steps_taken} steps with error {error:.6e}"
         )
 
-    stats = dict(steps=steps_taken, error=error, L=1.0 / step_size)
+    stats = dict(steps=steps_taken, error=error, L=torch.tensor(1.0 / step_size))
     
     if return_stats:
         return z1, stats

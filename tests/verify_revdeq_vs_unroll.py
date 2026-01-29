@@ -111,8 +111,9 @@ def unroll_reversible_forward(
         error: Final residual
         trajectory: List of (z, y) pairs if store_trajectory=True
     """
-    # use_float64=False for unrolled version - we want standard autograd to work in float32
-    solver = ReversibleSolver(beta=beta, use_float64=False)
+    # Use float64 for fixed-point operations (matches RevDEQ)
+    # nn_dtype=torch.float64 since NN is in float64 for verification
+    solver = ReversibleSolver(beta=beta, nn_dtype=torch.float64)
     y, fz = solver.init(function, z0, args)
     z = z0.clone()
     
@@ -234,17 +235,16 @@ def verify_revdeq_vs_unroll(
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = "cpu"  # Use CPU for numerical stability in testing
-    # Neural network stays in float32; RevDEQ handles float64 internally for fixed-point ops
-    dtype = torch.float32
+    dtype = torch.float64  # Use float64 for maximum precision in verification
     
     print("=" * 70)
     print("RevDEQ vs Unrolled Backpropagation Verification")
     print("=" * 70)
     print(f"Settings: num_steps={num_steps}, beta={beta}, step_size={step_size}, lambda={lamda}")
-    print(f"Image size: {image_size}x{image_size}, dtype={dtype} (RevDEQ uses float64 internally)")
+    print(f"Image size: {image_size}x{image_size}, dtype={dtype}")
     print()
     
-    # Create regularizer (stays in float32)
+    # Create regularizer
     regularizer = SimpleConvRegularizer(in_channels=1, hidden_channels=4, kernel_size=3)
     regularizer = regularizer.to(dtype).to(device)
     for p in regularizer.parameters():
@@ -254,7 +254,7 @@ def verify_revdeq_vs_unroll(
     data_fidelity = SimpleL2DataFidelity()
     physics = IdentityPhysics()
     
-    # Create test image and observation (float32)
+    # Create test image and observation
     x_true = torch.randn(1, 1, image_size, image_size, dtype=dtype, device=device) * 0.5
     y = physics(x_true) + torch.randn_like(x_true) * 0.1  # Add noise
     z0 = physics.A_dagger(y).clone()
@@ -312,9 +312,11 @@ def verify_revdeq_vs_unroll(
         p.grad = None
     
     # Forward + backward via solve_reversible_adjoint
+    # nn_dtype=torch.float64 since NN is in float64 for verification
     z_revdeq, steps_r, err_r = solve_reversible_adjoint(
         fixed_point_function, z0.clone(), args, params=params, 
-        beta=beta, tol=-1.0, max_steps=num_steps  # tol=-1 forces exact num_steps
+        beta=beta, tol=-1.0, max_steps=num_steps,  # tol=-1 forces exact num_steps
+        nn_dtype=torch.float64
     )
     
     loss_revdeq = ((z_revdeq - x_true) ** 2).sum()
@@ -381,14 +383,13 @@ def verify_revdeq_vs_unroll(
     # Check forward pass equivalence
     z_diff = (z_unroll.detach() - z_revdeq.detach()).abs().max().item()
     print(f"Forward z difference (max abs): {z_diff:.2e}")
-    # Tolerance relaxed for float32 vs float64 comparison (RevDEQ uses float64 internally)
-    assert z_diff < 1e-5, f"Forward pass mismatch: {z_diff}"
+    assert z_diff < 1e-10, f"Forward pass mismatch: {z_diff}"
     print("  [OK] Forward passes match")
     
-    # Check loss equivalence (tolerance relaxed for float32 vs float64)
+    # Check loss equivalence
     loss_diff = abs(loss_unroll.item() - loss_revdeq.item())
     print(f"Loss difference: {loss_diff:.2e}")
-    assert loss_diff < 1e-5, f"Loss mismatch: {loss_diff}"
+    assert loss_diff < 1e-12, f"Loss mismatch: {loss_diff}"
     print("  [OK] Losses match")
     
     # Check gradient equivalence
@@ -430,7 +431,7 @@ def verify_with_complex_loss(num_steps=5, beta=0.8):
     
     torch.manual_seed(123)
     device = "cpu"
-    dtype = torch.float32  # NN stays in float32
+    dtype = torch.float64  # Use float64 for maximum precision
     
     # Setup (same as main test)
     regularizer = SimpleConvRegularizer(in_channels=1, hidden_channels=4, kernel_size=3)
@@ -491,7 +492,8 @@ def verify_with_complex_loss(num_steps=5, beta=0.8):
     
     z_revdeq, _, _ = solve_reversible_adjoint(
         fixed_point_function, z0.clone(), args, params=params,
-        beta=beta, tol=-1.0, max_steps=num_steps
+        beta=beta, tol=-1.0, max_steps=num_steps,
+        nn_dtype=torch.float64
     )
     loss_r = complex_loss(z_revdeq, x_true)
     loss_r.backward()

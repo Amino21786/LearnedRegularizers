@@ -1,0 +1,62 @@
+{
+  "IFT": {
+    "loss_train": [
+      12.166185462474823,
+      9.258676457405091
+    ],
+    "loss_val": [
+      7.175274658203125
+    ],
+    "psnr_train": [
+      25.980766582489014,
+      27.08518590927124
+    ],
+    "psnr_val": [
+      27.91365776062012
+    ],
+    "duration_seconds": 88.450556,
+    "max_iter": 20,
+    "f_evals_per_step": 1,
+    "total_f_evals_per_batch": 20
+  },
+  "JFB": {
+    "loss_train": [
+      13.555362486839295,
+      8.062392795085907
+    ],
+    "loss_val": [
+      7.5867525100708
+    ],
+    "psnr_train": [
+      25.419345951080324,
+      27.654057121276857
+    ],
+    "psnr_val": [
+      27.595078659057616
+    ],
+    "duration_seconds": 38.198128,
+    "max_iter": 20,
+    "f_evals_per_step": 1,
+    "total_f_evals_per_batch": 20
+  },
+  "RevDEQ": {
+    "loss_train": [
+      19.340031766891478,
+      11.076254534721375
+    ],
+    "loss_val": [
+      8.619860744476318
+    ],
+    "psnr_train": [
+      23.454291248321532,
+      25.927031230926513
+    ],
+    "psnr_val": [
+      26.9162540435791
+    ],
+    "duration_seconds": 50.163369,
+    "max_iter": 10,
+    "f_evals_per_step": 2,
+    "total_f_evals_per_batch": 20
+  }
+}

@@ -53,6 +53,9 @@ parser.add_argument("--problem", type=str, default="Denoising")
 parser.add_argument("--regularizer_name", type=str, default="CRR")
 parser.add_argument("--only_first", type=bool, default=False)
 parser.add_argument("--save_results", type=bool, default=False)
+parser.add_argument("--use_reversible", action="store_true", help="Use reversible DEQ solver instead of nmAPG")
+parser.add_argument("--reversible_beta", type=float, default=0.8, help="Relaxation parameter for reversible solver (0 < beta <= 1)")
+parser.add_argument("--reversible_use_float64", type=bool, default=True, help="Use float64 for internal reversible computations")
 inp = parser.parse_args()
 
 problem = inp.problem  # Denoising or CT
@@ -62,6 +65,9 @@ regularizer_name = (
 )  # CRR, WCRR, ICNN, IDCNN, TDV, LAR, LSR and NETT
 only_first = inp.only_first
 save_results = inp.save_results  # If True, save the first 10 image reconstructions
+use_reversible = inp.use_reversible  # If True, use reversible DEQ solver instead of nmAPG
+reversible_beta = inp.reversible_beta  # Relaxation parameter for reversible solver
+reversible_use_float64 = inp.reversible_use_float64  # Use float64 for reversible computations
 
 if save_results:
     save_path = f"savings/{problem}/{regularizer_name}/{evaluation_mode}"
@@ -246,10 +252,13 @@ mean_psnr, x_out, y_out, recon_out = evaluate(
     step_size=step_size,
     max_iter=max_iter,
     tol=tol,
+    adam=regularizer_name in ["EPLL", "PatchNR"],
+    reversible=use_reversible,
+    reversible_beta=reversible_beta,
+    reversible_use_float64=reversible_use_float64,
     only_first=only_first,
     adaptive_range=problem == "CT",
     device=device,
-    adam=regularizer_name in ["EPLL", "PatchNR"],
     verbose=True,
     save_path=save_path if save_results else None,
     logger=logger if save_results else None,

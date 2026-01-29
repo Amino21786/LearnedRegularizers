@@ -9,6 +9,7 @@ import numpy as np
 from torch.utils.data import DataLoader
 from .nmAPG import reconstruct_nmAPG
 from .adam import reconstruct_adam
+from .reconstruct_reversible import reconstruct_reversible
 import torch
 from deepinv.loss.metric import PSNR
 from tqdm import tqdm
@@ -25,10 +26,13 @@ def evaluate(
     dataset,  # torch dataset object defining the used dataset on which we evaluate the regularizer
     regularizer,  # used regularizer
     lmbd,  # regularization parameter
-    step_size,  # initial step size of the nmAPG (or Adam)
-    max_iter,  # maximum number of iterations in the nmAPG (or Adam)
-    tol,  # tolerance used in the stopping criterion of the nmAPG (or Adam)
+    step_size,  # initial step size of the nmAPG (or Adam or reversible solver)
+    max_iter,  # maximum number of iterations in the nmAPG (or Adam or reversible solver)
+    tol,  # tolerance used in the stopping criterion of the nmAPG (or Adam or reversible solver)
     adam=False,  # set to True for using Adam instead of nmAPG
+    reversible=False,  # set to True for using reversible DEQ solver instead of nmAPG
+    reversible_beta=0.8,  # relaxation parameter for reversible solver (0 < beta <= 1)
+    reversible_use_float64=True,  # use float64 for internal reversible computations
     only_first=False,  # set to True for only evaluating the first image
     adaptive_range=False,  # set to True to use a PSNR where the range is choosen adaptively (commenly used for CT)
     device="cuda" if torch.cuda.is_available() else "cpu",  # device
@@ -76,6 +80,21 @@ def evaluate(
                 return_stats=True,
             )
             stats["L"] = torch.tensor(0.0, dtype=torch.float, device=device)
+        elif reversible:
+            recon, stats = reconstruct_reversible(
+                y,
+                physics,
+                data_fidelity,
+                regularizer,
+                lmbd,
+                step_size,
+                max_iter,
+                tol,
+                beta=reversible_beta,
+                verbose=verbose,
+                return_stats=True,
+                use_float64=reversible_use_float64,
+            )
         else:
             recon, stats = reconstruct_nmAPG(
                 y,
@@ -121,7 +140,7 @@ def evaluate(
     mean_iters = np.mean(iters)
     print_iters = "Mean iterations over the test set: {0:.2f}".format(mean_iters)
     print(print_iters)
-    if not adam:
+    if not adam and not reversible:
         mean_Lip = np.mean(Lip)
         print_Lip = "Mean L over the test set: {0:.2f}".format(mean_Lip)
         print(print_Lip)
@@ -134,7 +153,7 @@ def evaluate(
     if logger is not None:
         logger.info(print_psnr)
         logger.info(print_iters)
-        if not adam:
+        if not adam and not reversible:
             logger.info(print_Lip)
         logger.info(print_time)
 

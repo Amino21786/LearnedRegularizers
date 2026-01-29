@@ -1,0 +1,41 @@
+{
+  "IFT": {
+    "loss_train": [
+      16.477805137634277
+    ],
+    "loss_val": [
+      8.235389041900635
+    ],
+    "psnr_train": [
+      24.567881965637206
+    ],
+    "psnr_val": [
+      27.212283325195312
+    ],
+    "duration_seconds": 45.820302,
+    "max_iter": 20,
+    "f_evals_per_step": 1,
+    "total_f_evals_per_batch": 20
+  },
+  "JFB": {
+    "loss_train": [
+      17.07156410217285
+    ],
+    "loss_val": [
+      8.524275588989259
+    ],
+    "psnr_train": [
+      24.28474369049072
+    ],
+    "psnr_val": [
+      26.994305419921876
+    ],
+    "duration_seconds": 28.393569,
+    "max_iter": 20,
+    "f_evals_per_step": 1,
+    "total_f_evals_per_batch": 20
+  },
+  "RevDEQ": {
+    "error": "expected scalar type Double but found Float"
+  }
+}
