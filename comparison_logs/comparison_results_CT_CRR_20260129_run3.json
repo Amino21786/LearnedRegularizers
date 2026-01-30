@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "problem": "CT",
+    "regularizer": "CRR",
+    "run_id": "20260129_run3",
+    "epochs": 1,
+    "validation_epochs": 1,
+    "train_set_size": 5,
+    "val_set_size": 3,
+    "eval_limit": 2,
+    "revdeq_beta": 0.5,
+    "timestamp": "2026-01-29T13:53:08.243516"
+  },
+  "results": {
+    "JFB": {
+      "loss_train": [
+        1.2217129826545716
+      ],
+      "loss_val": [
+        5.526871244112651
+      ],
+      "psnr_train": [
+        34.21693229675293
+      ],
+      "psnr_val": [
+        31.148788452148438
+      ],
+      "training_duration_seconds": 88.639409,
+      "max_iter": 20,
+      "f_evals_per_step": 1,
+      "total_f_evals_per_batch": 20,
+      "weights_path": "weights/bilevel_CT\\CRR_bilevel_JFB_for_CT_20260129_run3.pt",
+      "duration_seconds": 88.639409
+    },
+    "RevDEQ": {
+      "loss_train": [
+        26.479132843017577
+      ],
+      "loss_val": [
+        27.009178161621094
+      ],
+      "psnr_train": [
+        20.741827392578124
+      ],
+      "psnr_val": [
+        20.495253880818684
+      ],
+      "training_duration_seconds": 46.57118,
+      "max_iter": 10,
+      "f_evals_per_step": 2,
+      "total_f_evals_per_batch": 20,
+      "weights_path": "weights/bilevel_CT\\CRR_bilevel_RevDEQ_for_CT_20260129_run3.pt",
+      "duration_seconds": 46.57118
+    }
+  }
+}

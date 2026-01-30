@@ -204,7 +204,7 @@ def verify_with_crr(
 # =============================================================================
 # Additional test: Gradient accumulation visualization
 # =============================================================================
-def visualize_gradient_accumulation(num_steps=3, beta=0.8):
+def visualize_gradient_accumulation(num_steps=3, beta=0.5):
     """
     Visualize how gradients accumulate step-by-step in RevDEQ backward pass.
     This helps understand the mechanics of the reversible adjoint method.
@@ -330,15 +330,15 @@ if __name__ == "__main__":
     
     # Test 1: CRR with small number of steps
     print("\n### Test 1: CRR Regularizer (5 steps) ###\n")
-    success1 = verify_with_crr(num_steps=5, beta=0.8)
+    success1 = verify_with_crr(num_steps=5, beta=0.5)
     
     # Test 2: CRR with more steps
     print("\n### Test 2: CRR Regularizer (10 steps) ###\n")
-    success2 = verify_with_crr(num_steps=10, beta=0.8)
+    success2 = verify_with_crr(num_steps=10, beta=0.5)
     
     # Test 3: Gradient accumulation visualization
     print("\n### Test 3: Gradient Accumulation Visualization ###")
-    visualize_gradient_accumulation(num_steps=3, beta=0.8)
+    visualize_gradient_accumulation(num_steps=3, beta=0.5)
     
     # Summary
     print("\n" + "=" * 70)

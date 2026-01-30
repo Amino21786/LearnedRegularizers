@@ -6,8 +6,14 @@ This script runs bilevel training with each method using normalized function eva
 - IFT/JFB (nmAPG): 20 steps × 1 f-eval/step = 20 function evaluations
 
 Usage:
-    # Using pretrained weights (default)
+    # Compare all three methods (default)
     python compare_hypergradient_methods.py --epochs 5 --problem Denoising --regularizer_name CRR
+    
+    # Compare only JFB and RevDEQ
+    python compare_hypergradient_methods.py --epochs 5 --methods JFB,RevDEQ
+    
+    # Compare only IFT and JFB
+    python compare_hypergradient_methods.py --epochs 5 --methods IFT,JFB
     
     # Train from scratch (no pretrained weights)
     python compare_hypergradient_methods.py --epochs 5 --no_load_pretrain --pretrain_epochs 10
@@ -248,13 +254,19 @@ def run_comparison(args):
         else:
             logger.info("Skipping pretraining (pretrain_epochs=0)")
     
-    # Methods to compare with their lower-level max iterations
+    # All available methods with their lower-level max iterations
     # RevDEQ: 2 f-evals per step, IFT/JFB: 1 f-eval per step
-    methods = {
+    all_methods = {
         "IFT": {"max_iter": args.ift_jfb_max_iter, "f_evals_per_step": 1},
         "JFB": {"max_iter": args.ift_jfb_max_iter, "f_evals_per_step": 1},
         "RevDEQ": {"max_iter": args.revdeq_max_iter, "f_evals_per_step": 2},
     }
+    
+    # Filter to only selected methods
+    methods = {k: v for k, v in all_methods.items() if k in args.methods}
+    
+    if not methods:
+        raise ValueError(f"No valid methods selected. Choose from: {list(all_methods.keys())}")
     
     results = {}
     
@@ -262,14 +274,16 @@ def run_comparison(args):
     logger.info("HYPERGRADIENT METHOD COMPARISON")
     logger.info("=" * 70)
     logger.info(f"Run ID: {run_id}")
+    logger.info(f"Methods: {list(methods.keys())}")
     logger.info(f"Problem: {args.problem}")
     logger.info(f"Regularizer: {args.regularizer_name}")
     logger.info(f"Epochs: {args.epochs}")
     logger.info(f"Validation epochs: {args.validation_epochs}")
     logger.info(f"Load pretrained weights: {args.load_pretrain}")
     logger.info(f"Load parameter-fitted weights: {args.load_param_fit}")
-    logger.info(f"RevDEQ beta: {args.revdeq_beta}")
-    logger.info(f"Use embedded beta: {args.use_embedded_beta}")
+    if "RevDEQ" in methods:
+        logger.info(f"RevDEQ beta: {args.revdeq_beta}")
+        logger.info(f"Use embedded beta: {args.use_embedded_beta}")
     logger.info(f"Function evaluations per batch:")
     for method, config in methods.items():
         f_evals = config["max_iter"] * config["f_evals_per_step"]
@@ -410,9 +424,24 @@ def run_comparison(args):
     return results
 
 
+def parse_methods(methods_str):
+    """Parse comma-separated methods string into a list."""
+    valid_methods = {"IFT", "JFB", "RevDEQ"}
+    methods = [m.strip() for m in methods_str.split(",")]
+    invalid = set(methods) - valid_methods
+    if invalid:
+        raise argparse.ArgumentTypeError(
+            f"Invalid method(s): {invalid}. Valid options: {valid_methods}"
+        )
+    return methods
+
+
 if __name__ == "__main__":
     rev_deq_max_iter = 10
     parser = argparse.ArgumentParser(description="Compare IFT, JFB, and RevDEQ hypergradient methods")
+    parser.add_argument("--methods", type=parse_methods, default=["IFT", "JFB", "RevDEQ"],
+                        help="Comma-separated list of methods to compare (default: IFT,JFB,RevDEQ). "
+                             "Options: IFT, JFB, RevDEQ")
     parser.add_argument("--problem", type=str, default="Denoising", choices=["Denoising", "CT"])
     parser.add_argument("--regularizer_name", type=str, default="CRR", 
                         choices=["CRR", "WCRR", "ICNN", "IDCNN", "LAR", "TDV", "LSR"])
@@ -433,8 +462,8 @@ if __name__ == "__main__":
                         help="Load parameter-fitted weights instead of just pretrained")
     parser.add_argument("--pretrain_epochs", type=int, default=None,
                         help="Number of score pretraining epochs if training from scratch (uses hyperparams default if not set)")
-    parser.add_argument("--revdeq_beta", type=float, default=0.8,
-                        help="Relaxation parameter for RevDEQ reversible iterations (0 < beta <= 1)")
+    parser.add_argument("--revdeq_beta", type=float, default=0.5,
+                        help="Relaxation parameter for RevDEQ reversible iterations (default 0.5 for numerical stability)")
     parser.add_argument("--use_embedded_beta", action="store_true",
                         help="Embed beta directly into fixed-point function (experimental)")
     parser.add_argument("--validation_epochs", type=int, default=None,

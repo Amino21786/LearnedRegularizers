@@ -1,0 +1,90 @@
+2026-01-29 15:35:46,758: Dataset: LoDoPaB
+2026-01-29 15:35:46,758: Train set size: 5, Val set size: 2
+2026-01-29 15:35:46,769: Loaded pretrained weights from weights/score_for_CT/CRR_score_training_for_CT.pt
+2026-01-29 15:35:46,769: ======================================================================
+2026-01-29 15:35:46,770: HYPERGRADIENT METHOD COMPARISON (CT)
+2026-01-29 15:35:46,771: ======================================================================
+2026-01-29 15:35:46,771: Run ID: 20260129_run6
+2026-01-29 15:35:46,772: Problem: CT
+2026-01-29 15:35:46,772: Regularizer: CRR
+2026-01-29 15:35:46,773: Epochs: 10
+2026-01-29 15:35:46,773: Validation epochs: 3
+2026-01-29 15:35:46,774: Load pretrained weights: True
+2026-01-29 15:35:46,774: Load parameter-fitted weights: False
+2026-01-29 15:35:46,774: RevDEQ beta: 0.5
+2026-01-29 15:35:46,775: RevDEQ step size: 0.0005
+2026-01-29 15:35:46,775: Function evaluations per batch:
+2026-01-29 15:35:46,775:   JFB: 40 steps x 1 = 40 f-evals, step_size=0.1
+2026-01-29 15:35:46,777:   RevDEQ: 20 steps x 2 = 40 f-evals, step_size=0.0005
+2026-01-29 15:35:46,779: ======================================================================
+2026-01-29 15:35:46,780: 
+======================================================================
+2026-01-29 15:35:46,780: Running JFB
+2026-01-29 15:35:46,781: ======================================================================
+2026-01-29 15:35:46,786: Using pretrained base regularizer
+2026-01-29 15:37:19,988: [Epoch 1] Train Loss: 1.20E+00, PSNR: 34.84
+2026-01-29 15:38:20,357: [Epoch 2] Train Loss: 1.57E+00, PSNR: 33.74
+2026-01-29 15:39:11,107: [Epoch 3] Train Loss: 1.75E+00, PSNR: 33.31
+2026-01-29 15:39:28,385: [Epoch 3] Val Loss: 9.25E+00, PSNR: 29.65
+2026-01-29 15:40:22,224: [Epoch 4] Train Loss: 1.33E+00, PSNR: 32.24
+2026-01-29 15:41:10,213: [Epoch 5] Train Loss: 1.84E+00, PSNR: 32.83
+2026-01-29 15:41:55,141: [Epoch 6] Train Loss: 1.05E+00, PSNR: 36.38
+2026-01-29 15:42:13,759: [Epoch 6] Val Loss: 9.08E+00, PSNR: 29.86
+2026-01-29 15:43:08,561: [Epoch 7] Train Loss: 1.52E+00, PSNR: 35.81
+2026-01-29 15:43:57,088: [Epoch 8] Train Loss: 1.27E+00, PSNR: 33.71
+2026-01-29 15:44:43,919: [Epoch 9] Train Loss: 1.27E+00, PSNR: 34.32
+2026-01-29 15:45:00,407: [Epoch 9] Val Loss: 9.03E+00, PSNR: 29.92
+2026-01-29 15:45:53,534: [Epoch 10] Train Loss: 1.33E+00, PSNR: 32.70
+2026-01-29 15:45:53,539: 
+JFB training completed in 606.7s
+2026-01-29 15:45:53,539:   Final Train Loss: 1.3295
+2026-01-29 15:45:53,541:   Final Train PSNR: 32.70 dB
+2026-01-29 15:45:53,541:   Final Val Loss: 9.0298
+2026-01-29 15:45:53,542:   Final Val PSNR: 29.92 dB
+2026-01-29 15:45:53,558:   Saved weights to weights/bilevel_CT\CRR_bilevel_JFB_for_CT_20260129_run6.pt
+2026-01-29 15:45:53,559: 
+======================================================================
+2026-01-29 15:45:53,565: Running RevDEQ
+2026-01-29 15:45:53,616: ======================================================================
+2026-01-29 15:45:53,660: Using pretrained base regularizer
+2026-01-29 15:46:51,966: Step 5, Train PSNR 26.323978, RevDEQ steps 20, RevDEQ err 4.614442e-03
+2026-01-29 15:46:51,968: [Epoch 1] Train Loss: 5.87E+00, PSNR: 26.32
+2026-01-29 15:47:54,005: Step 5, Train PSNR 25.754412, RevDEQ steps 20, RevDEQ err 4.498275e-03
+2026-01-29 15:47:54,006: [Epoch 2] Train Loss: 6.80E+00, PSNR: 25.75
+2026-01-29 15:48:44,760: Step 5, Train PSNR 26.607351, RevDEQ steps 20, RevDEQ err 4.495002e-03
+2026-01-29 15:48:44,762: [Epoch 3] Train Loss: 5.60E+00, PSNR: 26.61
+2026-01-29 15:48:50,002: [Epoch 3] Val Loss: 1.40E+01, PSNR: 25.61
+2026-01-29 15:49:40,624: Step 5, Train PSNR 26.144669, RevDEQ steps 20, RevDEQ err 1.015764e-02
+2026-01-29 15:49:40,626: [Epoch 4] Train Loss: 6.52E+00, PSNR: 26.14
+2026-01-29 15:50:27,729: Step 5, Train PSNR 27.316710, RevDEQ steps 20, RevDEQ err 3.349641e-03
+2026-01-29 15:50:27,731: [Epoch 5] Train Loss: 6.33E+00, PSNR: 27.32
+2026-01-29 15:51:16,776: Step 5, Train PSNR 27.649435, RevDEQ steps 20, RevDEQ err 7.503016e-03
+2026-01-29 15:51:16,779: [Epoch 6] Train Loss: 7.71E+00, PSNR: 27.65
+2026-01-29 15:51:21,762: [Epoch 6] Val Loss: 1.39E+01, PSNR: 25.62
+2026-01-29 15:52:16,405: Step 5, Train PSNR 28.293180, RevDEQ steps 20, RevDEQ err 5.019105e-03
+2026-01-29 15:52:16,409: [Epoch 7] Train Loss: 6.15E+00, PSNR: 28.29
+2026-01-29 15:53:08,750: Step 5, Train PSNR 26.609120, RevDEQ steps 20, RevDEQ err 5.881591e-03
+2026-01-29 15:53:08,752: [Epoch 8] Train Loss: 7.09E+00, PSNR: 26.61
+2026-01-29 15:54:07,086: Step 5, Train PSNR 25.671489, RevDEQ steps 20, RevDEQ err 5.396433e-03
+2026-01-29 15:54:07,088: [Epoch 9] Train Loss: 6.93E+00, PSNR: 25.67
+2026-01-29 15:54:12,996: [Epoch 9] Val Loss: 1.39E+01, PSNR: 25.63
+2026-01-29 15:55:13,429: Step 5, Train PSNR 27.708506, RevDEQ steps 20, RevDEQ err 6.047836e-03
+2026-01-29 15:55:13,431: [Epoch 10] Train Loss: 6.81E+00, PSNR: 27.71
+2026-01-29 15:55:13,434: 
+RevDEQ training completed in 559.7s
+2026-01-29 15:55:13,434:   Final Train Loss: 6.8120
+2026-01-29 15:55:13,436:   Final Train PSNR: 27.71 dB
+2026-01-29 15:55:13,436:   Final Val Loss: 13.9196
+2026-01-29 15:55:13,436:   Final Val PSNR: 25.63 dB
+2026-01-29 15:55:13,448:   Saved weights to weights/bilevel_CT\CRR_bilevel_RevDEQ_for_CT_20260129_run6.pt
+2026-01-29 15:55:13,450: 
+======================================================================
+2026-01-29 15:55:13,451: SUMMARY
+2026-01-29 15:55:13,452: ======================================================================
+2026-01-29 15:55:13,452: Method | Max Iter | F-Evals/Batch | Train Loss | Val Loss | Train PSNR | Val PSNR | Duration (s)
+2026-01-29 15:55:13,453: ------------------------------------------------------------------------------------------------
+2026-01-29 15:55:13,454: JFB    | 40       | 40            | 1.33       | 9.03     | 32.70      | 29.92    | 606.7       
+2026-01-29 15:55:13,454: RevDEQ | 20       | 40            | 6.81       | 13.92    | 27.71      | 25.63    | 559.7       
+2026-01-29 15:55:13,461: 
+Results saved to: comparison_logs\comparison_results_CT_CRR_20260129_run6.json
+2026-01-29 15:55:13,463: Log saved to: comparison_logs\comparison_CT_CRR_20260129_run6.log

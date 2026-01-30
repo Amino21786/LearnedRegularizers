@@ -51,7 +51,7 @@ def bilevel_training(
     upper_loss=lambda x, y: torch.sum(
         ((x - y) ** 2).view(x.shape[0], -1), -1
     ),  # loss function used in the upper level problem
-    revdeq_beta=0.8,  # relaxation parameter for RevDEQ reversible iterations (0 < beta <= 1)
+    revdeq_beta=0.5,  # relaxation parameter for RevDEQ (default 0.5 for numerical stability, higher values cause gradient errors)
     use_embedded_beta=False,  # if True, embed beta directly into fixed-point function (experimental)
     revdeq_use_float64=True,  # use float64 for RevDEQ fixed-point operations (NN stays in float32)
 ):
@@ -295,6 +295,11 @@ def bilevel_training(
             elif mode == "RevDEQ":
                 # RevDEQ: backpropagate through the reversible fixed-point solve using
                 # the custom reversible adjoint implemented in `reconstruct_reversible`.
+                L = x_stats["L"]
+                grad = data_fidelity.grad(
+                    x_recon, y, physics
+                ) + lmbd * regularizer.grad(x_recon)
+                x_recon = x_recon - jfb_step_size_factor / L * grad
                 loss = upper_loss(x_recon, x).mean()
                 loss.backward()
             else:

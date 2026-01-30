@@ -7,7 +7,20 @@ bilevel training of learned regularizers.
 The key idea is to use a reversible fixed-point solver that allows efficient
 backpropagation without storing intermediate states.
 
-NOTE: When use_float64=True, all fixed-point operations (state updates, reconstructions)
+NUMERICAL STABILITY:
+===================
+The backward pass reconstructs states using: z0 = (z1 - beta * f(y1)) / (1 - beta)
+
+This introduces error amplification of (1/(1-beta))^N over N steps:
+  - beta=0.5: amplification = 2^N  (recommended, matches JAX default)
+  - beta=0.8: amplification = 5^N  (unstable for N > ~10)
+  - beta=0.9: amplification = 10^N (highly unstable)
+
+Recommended parameters:
+  - For verification (float64 NN): beta=0.5, steps<=15 → gradient error <1e-9
+  - For training (float32 NN): beta=0.5, steps<=20 → gradient error <1e-6
+
+When use_float64=True, all fixed-point operations (state updates, reconstructions)
 are performed in float64 for numerical stability, matching JAX defaults. The neural
 network evaluations remain in float32 for compatibility with pretrained weights.
 """
@@ -62,10 +75,12 @@ class ReversibleSolver:
     for the reversible updates.
     """
     
-    def __init__(self, beta: float = 0.8, use_float64: bool = True, nn_dtype: Optional[torch.dtype] = None):
+    def __init__(self, beta: float = 0.5, use_float64: bool = True, nn_dtype: Optional[torch.dtype] = None):
         """
         Args:
-            beta: Relaxation parameter for reversible updates (0 < beta < 1)
+            beta: Relaxation parameter for reversible updates (0 < beta < 1).
+                  Default 0.5 matches JAX implementation and provides good numerical stability.
+                  Higher values (e.g., 0.8) can cause gradient errors to explode.
             use_float64: Use float64 for fixed-point operations
             nn_dtype: Dtype for neural network calls. If None, defaults to float32 when use_float64=True,
                       or no conversion when use_float64=False.
@@ -340,7 +355,7 @@ def solve_reversible(
     function: Callable,
     z0: torch.Tensor,
     args: Any,
-    beta: float = 0.8,
+    beta: float = 0.5,
     tol: float = 1e-3,
     max_steps: int = 50,
     use_float64: bool = True,
@@ -352,7 +367,7 @@ def solve_reversible(
         function: The fixed-point function f(z, args)
         z0: Initial guess
         args: Additional arguments for the function
-        beta: Relaxation parameter (0 < beta < 1)
+        beta: Relaxation parameter (0 < beta < 1). Default 0.5 for numerical stability.
         tol: Convergence tolerance
         max_steps: Maximum number of iterations
         use_float64: Use float64 for fixed-point operations (default: True)
@@ -388,7 +403,7 @@ def solve_reversible_adjoint(
     z0: torch.Tensor,
     args: Any,
     params: List[torch.Tensor],
-    beta: float = 0.8,
+    beta: float = 0.5,
     tol: float = 1e-3,
     max_steps: int = 50,
     use_float64: bool = True,
@@ -397,12 +412,16 @@ def solve_reversible_adjoint(
     """
     Reversible DEQ solve with a custom backward pass (RevDEQ-style adjoint).
 
+    IMPORTANT: Use beta=0.5 (default) for numerical stability. Higher values (e.g., 0.8)
+    can cause gradient errors to explode exponentially with the number of steps.
+
     Args:
         function: The fixed-point function f(z, args)
         z0: Initial guess
         args: Additional arguments for the function
         params: List of parameters to compute gradients for
-        beta: Relaxation parameter (0 < beta < 1)
+        beta: Relaxation parameter (0 < beta < 1). Default 0.5 for numerical stability.
+              Error amplification is (1/(1-beta))^N over N steps.
         tol: Convergence tolerance
         max_steps: Maximum number of iterations
         use_float64: Use float64 for fixed-point operations (default: True)

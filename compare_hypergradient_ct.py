@@ -184,7 +184,7 @@ def run_comparison(args):
         noise_model=deepinv.physics.GaussianNoise(sigma=noise_level),
         device=device,
     )
-    lmbd = 150.0
+    lmbd = 1
     data_fidelity = deepinv.optim.L2()
     
     # Load datasets
@@ -284,9 +284,11 @@ def run_comparison(args):
     
     # Methods to compare with their lower-level max iterations
     # RevDEQ: 2 f-evals per step, JFB: 1 f-eval per step
+    # NOTE: RevDEQ uses fixed step size, while nmAPG (JFB) uses backtracking.
+    # For CT with lmbd=150, RevDEQ needs a much smaller step size to avoid divergence.
     methods = {
-        "JFB": {"max_iter": args.jfb_max_iter, "f_evals_per_step": 1},
-        "RevDEQ": {"max_iter": args.revdeq_max_iter, "f_evals_per_step": 2},
+        "JFB": {"max_iter": args.jfb_max_iter, "f_evals_per_step": 1, "step_size": 1e-1},
+        "RevDEQ": {"max_iter": args.revdeq_max_iter, "f_evals_per_step": 2, "step_size": args.revdeq_step_size},
     }
     
     results = {}
@@ -303,10 +305,11 @@ def run_comparison(args):
     logger.info(f"Load pretrained weights: {args.load_pretrain}")
     logger.info(f"Load parameter-fitted weights: {args.load_param_fit}")
     logger.info(f"RevDEQ beta: {args.revdeq_beta}")
+    logger.info(f"RevDEQ step size: {args.revdeq_step_size}")
     logger.info(f"Function evaluations per batch:")
     for method, config in methods.items():
         f_evals = config["max_iter"] * config["f_evals_per_step"]
-        logger.info(f"  {method}: {config['max_iter']} steps x {config['f_evals_per_step']} = {f_evals} f-evals")
+        logger.info(f"  {method}: {config['max_iter']} steps x {config['f_evals_per_step']} = {f_evals} f-evals, step_size={config['step_size']}")
     logger.info("=" * 70)
     
     for method_name, config in methods.items():
@@ -342,7 +345,7 @@ def run_comparison(args):
                 val_dataloader,
                 epochs=args.epochs,
                 mode=method_name,
-                lower_level_step_size=1e-1,
+                lower_level_step_size=config["step_size"],
                 lower_level_max_iter=config["max_iter"],
                 lower_level_tol_train=1e-4,
                 lower_level_tol_val=1e-4,
@@ -453,9 +456,11 @@ def run_comparison(args):
                 "Method": method_name,
                 "Max Iter": r["max_iter"],
                 "F-Evals/Batch": r["total_f_evals_per_batch"],
+                "Train Loss": f"{r['loss_train'][-1]:.2f}",
+                "Val Loss": f"{r['loss_val'][-1]:.2f}",
                 "Train PSNR": f"{r['psnr_train'][-1]:.2f}",
                 "Val PSNR": f"{r['psnr_val'][-1]:.2f}",
-                "Train Time (s)": f"{r['training_duration_seconds']:.1f}",
+                "Duration (s)": f"{r['duration_seconds']:.1f}",
             }
             if "evaluation" in r and "test_psnr" in r["evaluation"]:
                 row["Test PSNR"] = f"{r['evaluation']['test_psnr']:.2f}"
@@ -518,7 +523,7 @@ def run_comparison(args):
 
 
 if __name__ == "__main__":
-    rev_deq_max_iter = 10
+    rev_deq_max_iter = 20
     parser = argparse.ArgumentParser(description="Compare JFB and RevDEQ hypergradient methods on CT")
     parser.add_argument("--problem", type=str, default="CT", choices=["CT"],
                         help="Problem type (CT only for this script)")
@@ -543,8 +548,10 @@ if __name__ == "__main__":
                         help="Load parameter-fitted weights instead of just pretrained")
     parser.add_argument("--pretrain_epochs", type=int, default=None,
                         help="Number of score pretraining epochs if training from scratch")
-    parser.add_argument("--revdeq_beta", type=float, default=0.8,
-                        help="Relaxation parameter for RevDEQ reversible iterations (0 < beta <= 1)")
+    parser.add_argument("--revdeq_beta", type=float, default=0.5,
+                        help="Relaxation parameter for RevDEQ reversible iterations (default 0.5 for numerical stability)")
+    parser.add_argument("--revdeq_step_size", type=float, default=5e-4,
+                        help="Step size for RevDEQ fixed-point iterations (default 1e-4, smaller than JFB due to fixed step)")
     parser.add_argument("--use_embedded_beta", action="store_true",
                         help="Embed beta directly into fixed-point function (experimental)")
     parser.add_argument("--validation_epochs", type=int, default=None,
